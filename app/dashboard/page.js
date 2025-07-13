@@ -1,26 +1,23 @@
-// DashBoard/page.js
-
 "use client";
-import HeroSection from '/components/HeroSection'
-import { useEffect, useState } from 'react';
+
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import HeroSection from '/components/HeroSection';
 
-
-
-export default function HomePage() {
+function DashboardContent() {
   const [profileData, setProfileData] = useState(null);
+
   const stats = [
     { title: 'Active Users', value: '2,847', color: 'primary' },
     { title: 'Courses Completed', value: '1,234', color: 'green' },
     { title: 'Badges Earned', value: '5,678', color: 'orange' },
     { title: 'Total Points', value: '89,234', color: 'purple' },
-  ]
-  const searchParams = useSearchParams();
-  const profileId = searchParams.get('profile_id');
+  ];
 
-  
+  const searchParams = useSearchParams();
+  const profileId = searchParams.get('profile_id') || 'schinj98'; // fallback if null
+
   useEffect(() => {
-    // Direct backend se fetch karo
     async function fetchProfile() {
       try {
         const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -34,7 +31,7 @@ export default function HomePage() {
       }
     }
     fetchProfile();
-  }, []);
+  }, [profileId]);
 
   if (!profileData) {
     return (
@@ -65,14 +62,22 @@ export default function HomePage() {
       description: 'Connect with fellow learners and get help from our supportive community.',
       icon: '👥'
     }
-  ]
+  ];
 
   return (
     <div>
-      <HeroSection 
-        profileData={profileData} 
-        incompleteBadges={profileData?.incompleteBadges} 
+      <HeroSection
+        profileData={profileData}
+        incompleteBadges={profileData?.incompleteBadges}
       />
     </div>
-  )
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={<div className="text-center py-10 text-gray-600 text-xl">Loading Dashboard...</div>}>
+      <DashboardContent />
+    </Suspense>
+  );
 }
