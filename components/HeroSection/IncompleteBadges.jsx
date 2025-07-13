@@ -117,7 +117,7 @@ export default function IncompleteBadges({ badges }) {
             <button
               key={filter}
               onClick={() => setActiveFilter(filter)}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
+              className={`px-6 py-3 cursor-pointer rounded-xl font-medium transition-all duration-200 ${
                 activeFilter === filter
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
                   : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 hover:border-gray-300'
@@ -136,7 +136,7 @@ export default function IncompleteBadges({ badges }) {
           {filteredBadges.slice(0, visibleCount).map((badge) => (
             <div
               key={badge.id}
-              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 overflow-hidden group"
+              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 overflow-hidden group flex flex-col"
             >
               {/* Badge Image */}
               <div className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
@@ -158,7 +158,7 @@ export default function IncompleteBadges({ badges }) {
               </div>
 
               {/* Badge Content */}
-              <div className="p-6 flex flex-col h-full">
+              <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3 line-clamp-2 leading-tight">
                   {badge.title}
                 </h3>
@@ -179,11 +179,11 @@ export default function IncompleteBadges({ badges }) {
                       </code>
                       <button
                         onClick={() => copyToClipboard(badge.id)}
-                        className="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        className="p-2 cursor-pointer text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                         title="Copy ID"
                       >
                         {copiedId === badge.id ? (
-                          <CheckCircle size={16} className="text-green-500" />
+                          <CheckCircle size={16} className="cursor-pointer text-green-500" />
                         ) : (
                           <Copy size={16} />
                         )}
@@ -195,7 +195,7 @@ export default function IncompleteBadges({ badges }) {
                 {/* Action Button */}
                 <button
                   onClick={() => window.open(badge.badgeLink, '_blank')}
-                  className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 group/btn"
+                  className="w-full mt-4 bg-blue-500 cursor-pointer hover:bg-blue-700 text-white py-3 px-4 rounded-md font-medium transition-all duration-200 flex items-center justify-center gap-2 group/btn"
                 >
                   Start Challenge
                   <ExternalLink size={16} className="group-hover/btn:translate-x-0.5 transition-transform" />
@@ -210,7 +210,7 @@ export default function IncompleteBadges({ badges }) {
           <div className="flex justify-center mt-12">
             <button
               onClick={() => setVisibleCount((prev) => prev + itemsPerLoad)}
-              className="px-8 py-4 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium shadow-sm"
+              className="px-8 py-4 cursor-pointer bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-200 font-medium shadow-sm"
             >
               Load More Badges ({filteredBadges.length - visibleCount} remaining)
             </button>
@@ -229,7 +229,7 @@ export default function IncompleteBadges({ badges }) {
         {/* Toast Notification */}
         {copiedId && (
           <div className="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4">
-            <CheckCircle size={20} />
+            <CheckCircle size={20}/>
             Badge ID copied!
           </div>
         )}
