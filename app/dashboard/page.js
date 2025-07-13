@@ -23,8 +23,8 @@ function DashboardContent() {
         const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
         const res = await fetch(`${apiBase}/api/profile?profile_id=${profileId}`);
         const json = await res.json();
-        if (json?.data) {
-          setProfileData(json);
+        if (json?.data?.data) {
+          setProfileData(json.data.data);
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
@@ -66,11 +66,10 @@ function DashboardContent() {
 
   return (
     <div>
-      {/* <HeroSection
-        profileData={profileData?.data}
-        incompleteBadges={profileData?.data?.incompleteBadges}
-      /> */}
-      <h2>Sk janig</h2>
+      <HeroSection
+        profileData={profileData}
+        incompleteBadges={profileData?.incompleteBadges}
+      />
     </div>
   );
 }
