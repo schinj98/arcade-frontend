@@ -24,7 +24,7 @@ function DashboardContent() {
         const res = await fetch(`${apiBase}/api/profile?profile_id=${profileId}`);
         const json = await res.json();
         if (json?.data) {
-          setProfileData(json.data);
+          setProfileData(json);
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
@@ -67,8 +67,8 @@ function DashboardContent() {
   return (
     <div>
       <HeroSection
-        profileData={profileData}
-        incompleteBadges={profileData?.incompleteBadges}
+        profileData={profileData?.data}
+        incompleteBadges={profileData?.data?.incompleteBadges}
       />
     </div>
   );
