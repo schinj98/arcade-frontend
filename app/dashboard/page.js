@@ -3,6 +3,7 @@
 "use client";
 import HeroSection from '/components/HeroSection'
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 
 
@@ -14,16 +15,19 @@ export default function HomePage() {
     { title: 'Badges Earned', value: '5,678', color: 'orange' },
     { title: 'Total Points', value: '89,234', color: 'purple' },
   ]
+  const searchParams = useSearchParams();
+  const profileId = searchParams.get('profile_id');
+
   
   useEffect(() => {
     // Direct backend se fetch karo
     async function fetchProfile() {
       try {
         const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-      const res = await fetch(`${apiBase}/api/profile?profile_id=schinj98`);
+        const res = await fetch(`${apiBase}/api/profile?profile_id=${profileId}`);
         const json = await res.json();
         if (json?.data) {
-          setProfileData(json.data); // ✅ Store in session-only state
+          setProfileData(json.data);
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
