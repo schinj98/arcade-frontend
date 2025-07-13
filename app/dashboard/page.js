@@ -66,10 +66,11 @@ function DashboardContent() {
 
   return (
     <div>
-      <HeroSection
+      {/* <HeroSection
         profileData={profileData?.data}
         incompleteBadges={profileData?.data?.incompleteBadges}
-      />
+      /> */}
+      <h2>Sk janig</h2>
     </div>
   );
 }
