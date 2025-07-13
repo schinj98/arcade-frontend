@@ -53,14 +53,14 @@ export default function Footer() {
             </p>
             <div className="flex space-x-3">
               {socialLinks.map((social) => (
-                <a
+                <Link
                   key={social.name}
                   href={social.href}
                   className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
                   aria-label={social.name}
                 >
                   {social.icon}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -110,9 +110,9 @@ export default function Footer() {
             </div>
             <div className="text-sm text-gray-600">
               Made by{' '}
-              <a href="/" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="/" className="text-blue-600 hover:text-blue-700 font-medium">
                 Sachin Jangid
-              </a>
+              </Link>
             </div>
           </div>
         </div>

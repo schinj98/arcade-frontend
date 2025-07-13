@@ -115,7 +115,7 @@ export default function AboutPage() {
             <div className="space-y-4 text-gray-600">
               <p>
                 As a GCP learner myself, I found it difficult to track my Arcade badge progress
-                quickly. Google's dashboard didn't offer enough flexibility or clarity.
+                quickly. Google&apos;s dashboard didn&apos;t offer enough flexibility or clarity.
               </p>
               <p>
                 So I built ArcadeTrack — a fast, clean, and no-login tool that helps thousands of
@@ -123,7 +123,7 @@ export default function AboutPage() {
                 even compare with friends.
               </p>
               <p>
-                Today, the platform serves 50K+ learners and counting — and it's all driven by
+                Today, the platform serves 50K+ learners and counting — and it&apos;s all driven by
                 feedback from the community.
               </p>
             </div>
@@ -178,7 +178,7 @@ export default function AboutPage() {
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-3">Our Values</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Simplicity. Speed. Support. These values drive ArcadeTrack's mission to empower every GCP learner.
+              Simplicity. Speed. Support. These values drive ArcadeTrack&apos;s mission to empower every GCP learner.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
