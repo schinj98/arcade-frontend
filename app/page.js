@@ -24,7 +24,7 @@ function ProfileUrlInputSection() {
 
     } catch (error) {
       console.error('❌ Error:', error);
-      alert('Failed to fetch profile data');
+      alert('Failed to fetch the profile data');
     }
 
     setProfileUrl('');
