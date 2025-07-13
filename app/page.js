@@ -13,7 +13,7 @@ function ProfileUrlInputSection() {
     const profile_id = profileUrl.split('/').pop();
 
     try {
-      const response = await fetch(`http://localhost:5000/api/profile?profile_id=${profile_id}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/profile?profile_id=${profile_id}`);
       const data = await response.json();
       localStorage.setItem('profileData', JSON.stringify(data.data));
       if (data.success) {
