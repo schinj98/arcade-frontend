@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import HeroSection from '/components/HeroSection';
@@ -8,58 +7,56 @@ function DashboardContent() {
   const [profileData, setProfileData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [urlInput, setUrlInput] = useState("");
+  const [isReady, setIsReady] = useState(false); // ✅ new flag
 
   const searchParams = useSearchParams();
   const profileId = searchParams.get('profile_id');
 
-
-
-
-  
   useEffect(() => {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
     let finalProfileId = profileId;
-  
+
     // ✅ Step 1: Store profile_id in localStorage if present in URL
     if (profileId) {
       localStorage.setItem("profile_id", profileId);
     }
-  
+
     // ✅ Step 2: If profile_id not in URL, try to get from localStorage
     if (!profileId) {
       const storedId = localStorage.getItem("profile_id");
       if (storedId) {
         finalProfileId = storedId;
-  
-        // Optional: Clean up URL (still stays /dashboard)
+
+        // ✅ Clean URL immediately
         const newUrl = window.location.pathname;
         window.history.replaceState(null, "", newUrl);
       } else {
-        // ✅ Neither in URL nor localStorage, show modal
         setShowModal(true);
+        setIsReady(true);
         return;
       }
     }
-  
+
     async function fetchProfile() {
       try {
         const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`);
         const json = await res.json();
         if (json?.data?.data) {
           setProfileData(json.data.data);
-  
+
           // ✅ Clean URL (if profileId was from query param)
           const newUrl = window.location.pathname;
           window.history.replaceState(null, "", newUrl);
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
+      } finally {
+        setIsReady(true); // ✅ Ready to render now
       }
     }
-  
+
     fetchProfile();
   }, [profileId]);
-  
 
   const handleSubmit = () => {
     try {
@@ -74,6 +71,8 @@ function DashboardContent() {
       alert("Invalid URL format.");
     }
   };
+
+  if (!isReady) return null;
 
   return (
     <div className="relative">
