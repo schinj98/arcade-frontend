@@ -12,22 +12,8 @@ function ProfileUrlInputSection() {
     e.preventDefault();
     const profile_id = profileUrl.split('/').pop();
 
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/profile?profile_id=${profile_id}`);
-      const data = await response.json();
-      localStorage.setItem('profileData', JSON.stringify(data.data));
-      if (data.success) {
-        router.push(`/dashboard?profile_id=${profile_id}`);
-      } else {
-        alert("❌ Invalid profile or error: " + data.message);
-      }
-
-    } catch (error) {
-      console.error('❌ Error:', error);
-      alert('Failed to fetch the profile data');
-    }
-
-    setProfileUrl('');
+      router.push(`/dashboard?profile_id=${profile_id}`);
+      setProfileUrl('');
   };
 
   return (
