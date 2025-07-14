@@ -15,19 +15,15 @@ function DashboardContent() {
   useEffect(() => {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
     let finalProfileId = profileId;
-
-    // ✅ Step 1: Store profile_id in localStorage if present in URL
+  
     if (profileId) {
       localStorage.setItem("profile_id", profileId);
     }
-
-    // ✅ Step 2: If profile_id not in URL, try to get from localStorage
+  
     if (!profileId) {
       const storedId = localStorage.getItem("profile_id");
       if (storedId) {
         finalProfileId = storedId;
-
-        // ✅ Clean URL immediately
         const newUrl = window.location.pathname;
         window.history.replaceState(null, "", newUrl);
       } else {
@@ -36,25 +32,41 @@ function DashboardContent() {
         return;
       }
     }
-
+  
+    const dashboardAlreadyLoaded = sessionStorage.getItem("dashboardLoadedOnce");
+  
+    // ✅ Use cached data if session already visited this page
+    if (dashboardAlreadyLoaded) {
+      const cached = localStorage.getItem("cachedProfileData");
+      if (cached) {
+        setProfileData(JSON.parse(cached));
+        setIsReady(true);
+        return;
+      }
+    }
+  
+    // ✅ Fresh fetch from API (e.g. on reload)
     async function fetchProfile() {
       try {
         const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`);
         const json = await res.json();
         if (json?.data?.data) {
           setProfileData(json.data.data);
-
-          // ✅ Clean URL (if profileId was from query param)
+  
+          // ✅ Store to cache
+          localStorage.setItem("cachedProfileData", JSON.stringify(json.data.data));
+          sessionStorage.setItem("dashboardLoadedOnce", "true");
+  
           const newUrl = window.location.pathname;
           window.history.replaceState(null, "", newUrl);
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
       } finally {
-        setIsReady(true); // ✅ Ready to render now
+        setIsReady(true);
       }
     }
-
+  
     fetchProfile();
   }, [profileId]);
 
