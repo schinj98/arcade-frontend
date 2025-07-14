@@ -33,15 +33,16 @@ function DashboardContent() {
       }
     }
   
-    const dashboardAlreadyLoaded = sessionStorage.getItem("dashboardLoadedOnce");
-  
-    // ✅ Use cached data if session already visited this page
-    if (dashboardAlreadyLoaded) {
+    const isReload =
+    performance.getEntriesByType("navigation")[0]?.type === "reload";
+
+    if (!isReload) {
+      // ✅ Use cached data if user came for the first time
       const cached = localStorage.getItem("cachedProfileData");
       if (cached) {
         setProfileData(JSON.parse(cached));
         setIsReady(true);
-        // ✅ Clean URL even when using cached data
+
         const newUrl = window.location.pathname;
         window.history.replaceState(null, "", newUrl);
         return;
