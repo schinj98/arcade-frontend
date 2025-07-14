@@ -12,27 +12,54 @@ function DashboardContent() {
   const searchParams = useSearchParams();
   const profileId = searchParams.get('profile_id');
 
-  useEffect(() => {
-    if (!profileId) {
-      setShowModal(true);
-      return;
-    }
 
+
+
+  
+  useEffect(() => {
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+    let finalProfileId = profileId;
+  
+    // ✅ Step 1: Store profile_id in localStorage if present in URL
+    if (profileId) {
+      localStorage.setItem("profile_id", profileId);
+    }
+  
+    // ✅ Step 2: If profile_id not in URL, try to get from localStorage
+    if (!profileId) {
+      const storedId = localStorage.getItem("profile_id");
+      if (storedId) {
+        finalProfileId = storedId;
+  
+        // Optional: Clean up URL (still stays /dashboard)
+        const newUrl = window.location.pathname;
+        window.history.replaceState(null, "", newUrl);
+      } else {
+        // ✅ Neither in URL nor localStorage, show modal
+        setShowModal(true);
+        return;
+      }
+    }
+  
     async function fetchProfile() {
       try {
-        const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-        const res = await fetch(`${apiBase}/api/profile?profile_id=${profileId}`);
+        const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`);
         const json = await res.json();
         if (json?.data?.data) {
           setProfileData(json.data.data);
+  
+          // ✅ Clean URL (if profileId was from query param)
+          const newUrl = window.location.pathname;
+          window.history.replaceState(null, "", newUrl);
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
       }
     }
-
+  
     fetchProfile();
   }, [profileId]);
+  
 
   const handleSubmit = () => {
     try {
