@@ -37,15 +37,19 @@ function DashboardContent() {
 
     // 📦 Smart cache key (supporting multiple profiles if needed)
     const cachedKey = `cachedProfileData-${finalProfileId}`;
-    const cached = localStorage.getItem(cachedKey);
+    const isReload = window.performance?.navigation?.type === 1;
 
-    if (cached) {
-      setProfileData(JSON.parse(cached));
-      setIsReady(true);
-      const newUrl = window.location.pathname;
-      window.history.replaceState(null, "", newUrl);
-      return; // 🛑 Skip API call
+    if (!isReload) {
+      const cached = localStorage.getItem(cachedKey);
+      if (cached) {
+        setProfileData(JSON.parse(cached));
+        setIsReady(true);
+        const newUrl = window.location.pathname;
+        window.history.replaceState(null, "", newUrl);
+        return; // 🛑 Skip API call
+      }
     }
+
 
     // 🌐 Fetch fresh data
     async function fetchProfile() {
