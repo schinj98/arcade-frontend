@@ -7,7 +7,7 @@ function DashboardContent() {
   const [profileData, setProfileData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [urlInput, setUrlInput] = useState("");
-  const [isReady, setIsReady] = useState(false); // ✅ new flag
+  const [isReady, setIsReady] = useState(false);
 
   const searchParams = useSearchParams();
   const profileId = searchParams.get('profile_id');
@@ -41,6 +41,9 @@ function DashboardContent() {
       if (cached) {
         setProfileData(JSON.parse(cached));
         setIsReady(true);
+        // ✅ Clean URL even when using cached data
+        const newUrl = window.location.pathname;
+        window.history.replaceState(null, "", newUrl);
         return;
       }
     }
