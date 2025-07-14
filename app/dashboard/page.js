@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import HeroSection from '/components/HeroSection';
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import HeroSection from "/components/HeroSection";
 
 function DashboardContent() {
   const [profileData, setProfileData] = useState(null);
@@ -10,16 +10,18 @@ function DashboardContent() {
   const [isReady, setIsReady] = useState(false);
 
   const searchParams = useSearchParams();
-  const profileId = searchParams.get('profile_id');
+  const profileId = searchParams.get("profile_id");
 
   useEffect(() => {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
     let finalProfileId = profileId;
-  
+
+    // 🔐 Save profile_id to localStorage
     if (profileId) {
       localStorage.setItem("profile_id", profileId);
     }
-  
+
+    // 🔁 If profile_id not in URL, try from localStorage
     if (!profileId) {
       const storedId = localStorage.getItem("profile_id");
       if (storedId) {
@@ -32,35 +34,27 @@ function DashboardContent() {
         return;
       }
     }
-  
-    const isReload =
-    performance.getEntriesByType("navigation")[0]?.type === "reload";
 
-    if (!isReload) {
-      // ✅ Use cached data if user came for the first time
-      const cached = localStorage.getItem("cachedProfileData");
-      if (cached) {
-        setProfileData(JSON.parse(cached));
-        setIsReady(true);
+    // 📦 Smart cache key (supporting multiple profiles if needed)
+    const cachedKey = `cachedProfileData-${finalProfileId}`;
+    const cached = localStorage.getItem(cachedKey);
 
-        const newUrl = window.location.pathname;
-        window.history.replaceState(null, "", newUrl);
-        return;
-      }
+    if (cached) {
+      setProfileData(JSON.parse(cached));
+      setIsReady(true);
+      const newUrl = window.location.pathname;
+      window.history.replaceState(null, "", newUrl);
+      return; // 🛑 Skip API call
     }
-  
-    // ✅ Fresh fetch from API (e.g. on reload)
+
+    // 🌐 Fetch fresh data
     async function fetchProfile() {
       try {
         const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`);
         const json = await res.json();
         if (json?.data?.data) {
           setProfileData(json.data.data);
-  
-          // ✅ Store to cache
-          localStorage.setItem("cachedProfileData", JSON.stringify(json.data.data));
-          sessionStorage.setItem("dashboardLoadedOnce", "true");
-  
+          localStorage.setItem(cachedKey, JSON.stringify(json.data.data));
           const newUrl = window.location.pathname;
           window.history.replaceState(null, "", newUrl);
         }
@@ -70,9 +64,9 @@ function DashboardContent() {
         setIsReady(true);
       }
     }
-  
+
     fetchProfile();
-  }, [profileId]);
+  }, [profileId]); // ✅ Effect depends on profileId only
 
   const handleSubmit = () => {
     try {
@@ -92,26 +86,22 @@ function DashboardContent() {
 
   return (
     <div className="relative">
-      {/* Always show HeroSection and other components */}
+      {/* Hero Section */}
       <HeroSection
         profileData={profileData}
         incompleteBadges={profileData?.incompleteBadges}
       />
 
-      {/* Conditionally show Modal */}
+      {/* Modal if profile ID not found */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-8">
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/40 to-indigo-900/30 backdrop-blur-md" />
-
-          {/* Effects */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-ping"></div>
             <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-blue-400/30 rounded-full animate-pulse delay-300"></div>
             <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-purple-400/20 rounded-full animate-bounce delay-500"></div>
           </div>
 
-          {/* Modal */}
           <div className="relative bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl shadow-2xl w-full max-w-lg transform transition-all duration-500 hover:scale-[1.03] hover:shadow-3xl hover:shadow-blue-500/20 hover:border-white/40">
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/10 rounded-3xl"></div>
             <div className="absolute inset-0 bg-gradient-to-tl from-purple-500/5 via-transparent to-pink-500/5 rounded-3xl"></div>
