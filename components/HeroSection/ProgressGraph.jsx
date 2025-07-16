@@ -1,18 +1,17 @@
 import React from 'react';
 import { Award, Star, TrendingUp, Activity } from 'lucide-react';
-
 const ProgressGraph = ({ totalPoints, badgesCompletedInAWeek }) => {
   const level = Math.floor(totalPoints / 10) + 1;
   const progressToNextLevel = ((totalPoints % 10) / 10) * 100;
 
   const dayShortFormMap = {
-    "Monday": "Mon",
-    "Tuesday": "Tue",
-    "Wednesday": "Wed",
-    "Thursday": "Thu",
-    "Friday": "Fri",
-    "Saturday": "Sat",
-    "Sunday": "Sun"
+    Monday: 'Mon',
+    Tuesday: 'Tue',
+    Wednesday: 'Wed',
+    Thursday: 'Thu',
+    Friday: 'Fri',
+    Saturday: 'Sat',
+    Sunday: 'Sun'
   };
 
   const weeklyProgress = Object.entries(badgesCompletedInAWeek || {}).map(([day, points]) => ({
@@ -20,7 +19,7 @@ const ProgressGraph = ({ totalPoints, badgesCompletedInAWeek }) => {
     points
   }));
 
-  const maxWeeklyPoints = Math.max(...weeklyProgress.map(d => d.points), 1); // avoid divide by zero
+  const maxWeeklyPoints = Math.max(...weeklyProgress.map(d => d.points), 1);
 
   return (
     <div className="bg-gray-50 rounded-xl shadow p-3 sm:p-4">
