@@ -34,8 +34,6 @@ function DashboardContent() {
         return;
       }
     }
-
-    // 📦 Smart cache key (supporting multiple profiles if needed)
     const cachedKey = `cachedProfileData-${finalProfileId}`;
     const isReload = window.performance?.navigation?.type === 1;
 
@@ -46,7 +44,7 @@ function DashboardContent() {
         setIsReady(true);
         const newUrl = window.location.pathname;
         window.history.replaceState(null, "", newUrl);
-        return; // 🛑 Skip API call
+        return; 
       }
     }
 
@@ -56,9 +54,9 @@ function DashboardContent() {
       try {
         const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`);
         const json = await res.json();
-        if (json?.data?.data) {
-          setProfileData(json.data.data);
-          localStorage.setItem(cachedKey, JSON.stringify(json.data.data));
+        if (json?.data) {
+          setProfileData(json.data);
+          localStorage.setItem(cachedKey, JSON.stringify(json.data));
           const newUrl = window.location.pathname;
           window.history.replaceState(null, "", newUrl);
         }
