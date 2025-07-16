@@ -1,82 +1,11 @@
 "use client";
-import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useContext, useState, Suspense } from "react";
 import HeroSection from "/components/HeroSection";
+import { ProfileContext } from "/context/ProfileContext";
 
 function DashboardContent() {
-  const [profileData, setProfileData] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const { profileData, showModal, setShowModal, isReady } = useContext(ProfileContext);
   const [urlInput, setUrlInput] = useState("");
-  const [isReady, setIsReady] = useState(false);
-
-  const searchParams = useSearchParams();
-  const profileId = searchParams.get("profile_id");
-
-  useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-    let finalProfileId = profileId;
-
-    // 🔐 Save profile_id to localStorage
-    if (profileId) {
-      localStorage.setItem("profile_id", profileId);
-    }
-
-    // 🔁 If profile_id not in URL, try from localStorage
-    if (!profileId) {
-      const storedId = localStorage.getItem("profile_id");
-      if (storedId) {
-        finalProfileId = storedId;
-        const newUrl = window.location.pathname;
-        window.history.replaceState(null, "", newUrl);
-      } else {
-        setShowModal(true);
-        setIsReady(true);
-        return;
-      }
-    }
-    const cachedKey = `cachedProfileData-${finalProfileId}`;
-    const isReload = window.performance?.navigation?.type === 1;
-
-    if (!isReload) {
-      const cached = localStorage.getItem(cachedKey);
-      if (cached) {
-        setProfileData(JSON.parse(cached));
-        setIsReady(true);
-        const newUrl = window.location.pathname;
-        window.history.replaceState(null, "", newUrl);
-        return; 
-      }
-    }
-
-
-    // 🌐 Fetch fresh data
-    async function fetchProfile() {
-      try {
-        const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            ...(process.env.NEXT_PUBLIC_API_KEY && {
-              "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY,
-            }),
-          },
-        });
-        const json = await res.json();
-        if (json?.data) {
-          setProfileData(json.data);
-          localStorage.setItem(cachedKey, JSON.stringify(json.data));
-          const newUrl = window.location.pathname;
-          window.history.replaceState(null, "", newUrl);
-        }
-      } catch (err) {
-        console.error("Error fetching profile:", err);
-      } finally {
-        setIsReady(true);
-      }
-    }
-
-    fetchProfile();
-  }, [profileId]); // ✅ Effect depends on profileId only
 
   const handleSubmit = () => {
     try {

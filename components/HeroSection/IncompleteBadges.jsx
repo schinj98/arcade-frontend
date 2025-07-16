@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
+import { ProfileContext } from '@/context/ProfileContext';
 
 const typeColors = {
   Trivia: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -32,12 +33,15 @@ function getTypeFromCategory(category) {
 
 const filters = ['All', 'Trivia', 'Game', 'Skill'];
 
-export default function IncompleteBadges({ badges }) {
+export default function IncompleteBadges() {
   const [visibleCount, setVisibleCount] = useState(12);
   const itemsPerLoad = 12;
   const [activeFilter, setActiveFilter] = useState('All');
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
+
+  const {profileData} = useContext(ProfileContext)
+  const badges = profileData?.incompleteBadges
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);

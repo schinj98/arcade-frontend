@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Trophy, Target, Crown, Star, Flame, TrendingUp, Award, ChevronRight } from 'lucide-react';
+import { ProfileContext } from '@/context/ProfileContext';
 
-export default function BadgesSection({ completed_total_points }) {
+export default function BadgesSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
+  const {profileData} = useContext(ProfileContext)
+  const completed_total_points = profileData?.completed_totalPoints
   
   const tiers = [
     { 

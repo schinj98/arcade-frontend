@@ -3,12 +3,18 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useContext } from "react";
+import { ProfileContext } from "/context/ProfileContext";
 import { Home, LayoutDashboard, Info, MessageSquare, PlayCircle, Menu, X, User, Sparkles } from 'lucide-react'
 
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { profileData } = useContext(ProfileContext);
+  const profileImage = profileData?.userDetails?.profileImage;
+
+
 
 
   const navItems = [
@@ -69,12 +75,23 @@ export default function Navbar() {
             
             {/* User Profile Button */}
             <button className="relative group">
-              <div className="p-2.5 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200">
-                <User size={18} className="text-gray-600" />
+              <div className=" w-10 h-10 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 overflow-hidden">
+                {profileImage ? (
+                  <img
+                    src={profileImage}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User size={36} className="text-gray-600" />
+                )}
               </div>
+
               {/* Online indicator */}
               <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
             </button>
+
+
           </div>
 
           {/* Mobile menu button */}
@@ -127,8 +144,20 @@ export default function Navbar() {
                   <PlayCircle size={16} />
                   Play Now
                 </a>
-                <button className="relative p-3 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200">
-                  <User size={18} className="text-gray-600" />
+                <button className="relative group">
+                  <div className=" w-10 h-10 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 overflow-hidden">
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <User size={36} className="text-gray-600" />
+                    )}
+                  </div>
+
+                  {/* Online indicator */}
                   <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
                 </button>
               </div>

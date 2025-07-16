@@ -21,16 +21,12 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
       `}</style>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="space-y-6 flex flex-col">
-          <ProfileCard user={user} totalPoints={completed_totalPoints} />
-
-          <ProgressGraph 
-            totalPoints={completed_totalPoints} 
-            badgesCompletedInAWeek={profileData?.badgesCompletedInAWeek}
-          />
+          <ProfileCard />
+          <ProgressGraph />
         </div>
 
         <div className="md:col-span-2">
-          <BadgesSection completed_total_points={completed_totalPoints} />
+          <BadgesSection />
         </div>
       </div>
       <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,7 +34,7 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
       </div>
 
       <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <IncompleteBadges2 badges={profileData?.incompleteBadges} />
+        <IncompleteBadges />
       </div>
     </div>
   );

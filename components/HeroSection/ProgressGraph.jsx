@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Award, Star, TrendingUp, Activity, Calendar, Target, Flame } from 'lucide-react';
 
-const ProgressGraph = ({ totalPoints, badgesCompletedInAWeek }) => {
+
+import React, { useState, useEffect, useContext } from 'react';
+import { Award, Star, TrendingUp, Activity, Calendar, Target, Flame } from 'lucide-react';
+import { ProfileContext } from '@/context/ProfileContext';
+
+const ProgressGraph = () => {
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [animationProgress, setAnimationProgress] = useState(0);
   const [activeTab, setActiveTab] = useState('chart');
   const [hoverX, setHoverX] = useState(null);
   const [nearestIndex, setNearestIndex] = useState(null);
+
+  const {profileData} = useContext(ProfileContext)
+  const badgesCompletedInAWeek = profileData?.badgesCompletedInAWeek
+  const totalPoints = profileData?.completed_totalPoints
   
-  totalPoints = 64
   // calculating level for progres section
   let progressToNextLevel = 0;
   let forprogressToNextLevel = 0;

@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { User, Star, BadgeCheck, Award, Calendar, TrendingUp } from 'lucide-react';
+import { ProfileContext } from '@/context/ProfileContext';
 
-export default function ProfileCard({ user, totalPoints }) {
+export default function ProfileCard() {
+
+  const {profileData} = useContext(ProfileContext)
+  const user = profileData?.userDetails
+  const totalPoints = profileData?.completed_totalPoints
   
   if (!user) {
     return (
@@ -28,7 +33,7 @@ export default function ProfileCard({ user, totalPoints }) {
         <div className="relative flex-shrink-0">
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
             <img 
-              src={user.profileImage} 
+              src={profileData?.userDetails?.profileImage} 
               alt="User Profile" 
               className="object-cover w-full h-full"
               onError={(e) => { 
