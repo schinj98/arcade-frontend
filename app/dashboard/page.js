@@ -52,7 +52,15 @@ function DashboardContent() {
     // 🌐 Fetch fresh data
     async function fetchProfile() {
       try {
-        const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`);
+        const res = await fetch(`${apiBase}/api/profile?profile_id=${finalProfileId}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            ...(process.env.NEXT_PUBLIC_API_KEY && {
+              "X-API-KEY": process.env.NEXT_PUBLIC_API_KEY,
+            }),
+          },
+        });
         const json = await res.json();
         if (json?.data) {
           setProfileData(json.data);
