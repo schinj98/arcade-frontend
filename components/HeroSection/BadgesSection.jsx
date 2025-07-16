@@ -20,28 +20,24 @@ export default function BadgesSection() {
       current: completed_total_points, 
       total: 40, 
       icon: Star, 
-      description: 'Rising through ranks'
     },
     { 
       name: 'Arcade Ranger', 
       current: completed_total_points, 
       total: 65, 
       icon: Flame, 
-      description: 'Mastering challenges'
     },
     { 
       name: 'Arcade Champion', 
       current: completed_total_points, 
       total: 75, 
       icon: Trophy, 
-      description: 'Among the elite'
     },
     { 
       name: 'Arcade Legend', 
       current: completed_total_points, 
       total: 85, 
       icon: Crown, 
-      description: 'Legendary status achieved'
     },
   ];
 
@@ -84,10 +80,10 @@ export default function BadgesSection() {
             </div>
 
             {/* Overall Progress Card */}
-            <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-4 rounded-xl border border-blue-200">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <svg className="w-16 h-16 transform -rotate-90">
+            <div className="bg-gradient-to-r from-blue-50  to-blue-100 px-6 py-4 rounded-xl border border-blue-200">
+              <div className="flex items-center gap-4 ">
+                <div className="relative ">
+                  <svg className="w-16 h-16  transform -rotate-90 ">
                     <circle
                       cx="32"
                       cy="32"
@@ -95,7 +91,7 @@ export default function BadgesSection() {
                       stroke="currentColor"
                       strokeWidth="4"
                       fill="none"
-                      className="text-gray-200"
+                      className="text-gray-200 "
                     />
                     <circle
                       cx="32"
@@ -109,12 +105,12 @@ export default function BadgesSection() {
                       className="text-blue-600 transition-all duration-500"
                     />
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-lg font-bold text-gray-900">{overallPercentage.toFixed(0)}%</span>
+                  <div className=" absolute inset-0 flex items-center justify-center">
+                    <span className=" text-lg font-bold text-gray-900">{overallPercentage.toFixed(0)}%</span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Overall Progress</p>
+                  <p className=" text-sm text-gray-600">Overall Progress</p>
                   <p className="font-semibold text-gray-900">{totalPoints} / {maxPoints} pts</p>
                 </div>
               </div>
@@ -195,9 +191,6 @@ export default function BadgesSection() {
                   <h3 className="text-lg font-semibold text-gray-900 text-center mb-1">
                     {tier.name.replace('Arcade ', '')}
                   </h3>
-                  <p className="text-sm text-gray-600 text-center mb-3">
-                    {tier.description}
-                  </p>
 
                   {/* Progress Bar */}
                   <div className="space-y-2">

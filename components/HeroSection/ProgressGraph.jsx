@@ -153,60 +153,7 @@ const ProgressGraph = () => {
 
 
   return (
-    <div className="rounded-xl bg-gray-50 py-6 sm:py-5.5 px-3 sm:px-4">
-
-      {/* Total Points Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 border border-blue-200">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-600 mb-0.5">Total Arcade Points</p>
-            <p className="text-xl font-bold text-gray-900 truncate">{totalPoints}</p>
-          </div>
-          <div className="p-2 bg-blue-600 rounded-xl text-white flex-shrink-0 ml-2">
-            <Award size={18} />
-          </div>
-        </div>
-        <div className="mt-2">
-          <div className="flex justify-between items-center mb-1">
-            <span className="text-xs text-gray-600">Level {level}</span>
-            <span className="text-xs text-gray-600">Level {level + 1}</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-1">
-            <div
-              className="h-1 rounded-full bg-blue-600 transition-all duration-500"
-              style={{ width: `${progressToNextLevel}%` }}
-            />
-          </div>
-          <p className="text-xs text-gray-500 mt-1 text-center">
-            {Math.max((basePoints + forprogressToNextLevel) - totalPoints, 0)} points to next level
-          </p>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-3 sm:mb-4">
-        <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-between mb-1">
-            <Star size={16} className="text-yellow-500 flex-shrink-0" />
-            <span className="text-lg font-bold text-gray-900 ml-2">{level}</span>
-          </div>
-          <p className="text-xs text-gray-600">Level</p>
-        </div>
-        <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-between mb-1">
-            <Flame size={16} className="text-red-500 flex-shrink-0" />
-            <span className="text-lg font-bold text-gray-900 ml-2">{streak}</span>
-          </div>
-          <p className="text-xs text-gray-600">Streak</p>
-        </div>
-        <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-200 shadow-sm">
-          <div className="flex items-center justify-between mb-1">
-            <Target size={16} className="text-green-500 flex-shrink-0" />
-            <span className="text-lg font-bold text-gray-900 ml-2">{activeDays}</span>
-          </div>
-          <p className="text-xs text-gray-600">Active Days</p>
-        </div>
-      </div>
+    <div className="rounded-xl bg-gray-50 py-6 sm:py-10.5 px-3 sm:px-4">
 
       {/* Weekly Progress Chart */}
       {activeTab === 'chart' ? (
