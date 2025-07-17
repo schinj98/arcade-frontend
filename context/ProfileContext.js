@@ -5,33 +5,36 @@ export const ProfileContext = createContext();
 
 export const ProfileProvider = ({ children }) => {
   const [profileData, setProfileData] = useState(null);
-  const [urlVisited, setUrlVisited] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-
-    let profileId;
+  // ✅ Get profile_id from URL or localStorage
+  function getProfileIdFromUrlOrStorage() {
+    if (typeof window === "undefined") return null;
 
     const urlParams = new URLSearchParams(window.location.search);
     const idFromUrl = urlParams.get("profile_id");
 
     if (idFromUrl) {
-      profileId = idFromUrl;
-      localStorage.setItem("profile_id", profileId);
-    } else {
-      const storedId = localStorage.getItem("profile_id");
-      if (storedId) {
-        profileId = storedId;
-        const newUrl = window.location.pathname;
-        window.history.replaceState(null, "", newUrl);
-      } else {
-        setShowModal(true);
-        setIsReady(true);
-        return;
-      }
+      localStorage.setItem("profile_id", idFromUrl);
+      return idFromUrl;
+    }
+
+    return localStorage.getItem("profile_id");
+  }
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+
+    const profileId = getProfileIdFromUrlOrStorage();
+
+    if (!profileId) {
+      setShowModal(true);
+      setIsReady(true);
+      return;
     }
 
     const cachedKey = `cachedProfileData-${profileId}`;
@@ -42,8 +45,7 @@ export const ProfileProvider = ({ children }) => {
       if (cached) {
         setProfileData(JSON.parse(cached));
         setIsReady(true);
-        const newUrl = window.location.pathname;
-        window.history.replaceState(null, "", newUrl);
+        window.history.replaceState(null, "", window.location.pathname);
         return;
       }
     }
@@ -59,28 +61,32 @@ export const ProfileProvider = ({ children }) => {
           },
           body: JSON.stringify({ profile_id: profileId }),
         });
-        
 
         const json = await res.json();
         console.log("API response is this:", json);
+
         if (json?.data) {
           setProfileData(json.data);
           localStorage.setItem(cachedKey, JSON.stringify(json.data));
-          const newUrl = window.location.pathname;
-          window.history.replaceState(null, "", newUrl);
+          window.history.replaceState(null, "", window.location.pathname);
+        } else {
+          setShowModal(true); // API didn't return expected data
         }
       } catch (err) {
         console.error("Error fetching profile:", err);
+        setShowModal(true);
       } finally {
         setIsReady(true);
       }
     }
 
     fetchProfile();
-  }, []);
+  }, [typeof window !== "undefined" ? window.location.search : ""]);
 
   return (
-    <ProfileContext.Provider value={{ profileData, setProfileData, showModal, setShowModal, isReady }}>
+    <ProfileContext.Provider
+      value={{ profileData, setProfileData, showModal, setShowModal, isReady }}
+    >
       {children}
     </ProfileContext.Provider>
   );
