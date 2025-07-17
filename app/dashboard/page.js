@@ -12,7 +12,7 @@ function DashboardContent() {
       const match = urlInput.match(/public_profiles\/([a-z0-9-]+)/i);
       if (match && match[1]) {
         const id = match[1];
-        window.location.href = `/dashboard?profile_id=${id}`;
+        window.location.assign(`/dashboard?profile_id=${id}`);
       } else {
         alert("Please enter a valid Google Arcade profile URL.");
       }
