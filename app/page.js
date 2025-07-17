@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Head from 'next/head';
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 
 // Custom Alert/Message component
 function MessageModal({ message, onClose }) {
@@ -146,56 +148,71 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      <ProfileUrlInputSection />
+    <>
+      <Head>
+        <title>Arcade Points Calculator | Personalized Score Tracker</title>
+        <meta name="description" content="Calculate and Cloud Arcade Points using our accurate and user-friendly platform. Checkout the Swags you're Eligible for." />
+        <meta name="keywords" content="arcade calculator, arcade profile, cloud skill badge tracker, facilitator Points calculate, calculate arcade points, learning tracker" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Arcade Points Calculator" />
+        <meta property="og:description" content="calculate your cloud arcade points easily!" />
+        <meta property="og:image" content="https://arcadetrack.com/" />
+        <meta property="og:url" content="https://arcadetrack.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Arcade Points Calculator" />
+        <meta name="twitter:description" content="Calculate google cloud arcade points fast!" />
+        <meta name="twitter:image" content="https://arcadetrack.com/" />
+      </Head>
 
-      {/* Hero Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Welcome to Arcade Platform
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Transform your learning experience with our comprehensive platform designed for modern professionals
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
-                <div className="text-3xl mb-3">{stat.icon}</div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-gray-600 font-medium">{stat.title}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <div className="min-h-screen bg-white">
+        <ProfileUrlInputSection />
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Arcade?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Discover the features that make learning engaging and effective for professionals
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-xl">{feature.icon}</span>
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Welcome to Arcade Platform
+              </h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Transform your learning experience with our comprehensive platform designed for modern professionals
+              </p>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {stats.map((stat, index) => (
+                <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
+                  <div className="text-3xl mb-3">{stat.icon}</div>
+                  <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                  <div className="text-gray-600 font-medium">{stat.title}</div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        <section className="py-16 bg-gray-50" aria-labelledby="features">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <header id="features" className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Arcade?</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Discover the features that make learning engaging and effective for professionals
+              </p>
+            </header>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <article key={index} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                  <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
+                    <span className="text-xl">{feature.icon}</span>
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }

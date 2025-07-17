@@ -5,9 +5,33 @@ import Footer from '../components/Footer'
 import { ProfileProvider } from "@/context/ProfileContext";
 
 export const metadata = {
-  title: 'Arcade Track',
-  description: 'Modern and Accurate Arcade Calculating / trackign Platform',
-}
+  title: 'Arcade Points Calculator | Track Your Learning & Progress',
+  description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',
+  keywords: 'arcade points calculator, GCP points facilitator points check, arcade tracking, learning badges, google cloud arcade points calculator, profile tracker',
+  openGraph: {
+    title: 'Arcade Points Calculator',
+    description: 'Track your learning achievements and progress with Arcade Track!',
+    url: 'https://arcadetrack.com',
+    siteName: 'Arcade Track',
+    images: [
+      {
+        url: 'https://arcadetrack.com/',
+        width: 1200,
+        height: 630,
+        alt: 'Arcade Track Banner',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Arcade Track - Points Calculator',
+    description: 'A smart way to calculate and track arcade points!',
+    images: ['https://arcadetrack.com'],
+  },
+};
+
 
 export default function RootLayout({ children }) {
   return (

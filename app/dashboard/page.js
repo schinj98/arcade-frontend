@@ -3,6 +3,7 @@ import { useContext, useState, useEffect, Suspense } from "react";
 import HeroSection from "/components/HeroSection"; // Assuming this path is correct
 import { ProfileContext } from "/context/ProfileContext";
 
+
 // Custom Alert/Message component (reused from homepage for consistency)
 function MessageModal({ message, onClose }) {
   if (!message) return null;
