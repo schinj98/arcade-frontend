@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { ProfileProvider } from "@/context/ProfileContext";
 
+
 export const metadata = {
   title: 'Arcade Points Calculator | Track Your Learning & Progress',
   description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',

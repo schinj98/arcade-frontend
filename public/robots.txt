@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.arcadetrack.com
+
+# Sitemaps
+Sitemap: https://www.arcadetrack.com/sitemap.xml

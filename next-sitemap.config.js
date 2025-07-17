@@ -1,5 +1,6 @@
+/** @type {import('next-sitemap').IConfig} */
 module.exports = {
-    siteUrl: 'https://arcadetrack.com',
-    generateRobotsTxt: true,
-  };
-  
+  siteUrl: 'https://www.arcadetrack.com',
+  generateRobotsTxt: true,
+  sitemapSize: 5000,
+};

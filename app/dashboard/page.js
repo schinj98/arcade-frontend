@@ -45,7 +45,7 @@ function MessageModal({ message, onClose }) {
           
           {/* Title */}
           <h3 className="text-2xl font-bold text-center bg-gradient-to-r from-white to-indigo-600 bg-clip-text text-white mb-4">
-            Oops! Something's Not Right
+            Oops! Something&apos;s Not Right
           </h3>
           
           {/* Message */}
