@@ -62,6 +62,7 @@ export const ProfileProvider = ({ children }) => {
         
 
         const json = await res.json();
+        console.log("API response is this:", json);
         if (json?.data) {
           setProfileData(json.data);
           localStorage.setItem(cachedKey, JSON.stringify(json.data));
