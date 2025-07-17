@@ -8,19 +8,31 @@ function ProfileUrlInputSection() {
   const [profileUrl, setProfileUrl] = useState('');
   const router = useRouter();
 
+  const extractProfileId = (url) => {
+    try {
+      const match = url.match(/public_profiles\/([a-z0-9-]+)/i);
+      return match ? match[1] : null;
+    } catch {
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const profile_id = profileUrl.split('/').pop();
-  
-    if (profile_id) {
-      sessionStorage.setItem('temp_profile_id', profile_id); // 🔥 store without query param
-      router.push("/dashboard"); // 🔥 no profile_id in URL
+    const profileId = extractProfileId(profileUrl);
+
+    if (profileId) {
+      // Store profile ID in sessionStorage for dashboard to pick up
+      sessionStorage.setItem("temp_profile_id", profileId);
+      
+      // Redirect to dashboard without URL parameters
+      router.push('/dashboard');
       setProfileUrl('');
     } else {
       alert("Please enter a valid profile URL.");
     }
   };
-  
+
   return (
     <section className="py-16 bg-gray-50 border-b border-gray-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,10 +112,8 @@ export default function HomePage() {
     }
   ];
 
-
   return (
     <div className="min-h-screen bg-white">
-      
       <ProfileUrlInputSection />
 
       {/* Hero Section */}
@@ -153,8 +163,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      
     </div>
   );
 }

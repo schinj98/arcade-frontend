@@ -1,26 +1,42 @@
 "use client";
-import { useContext,useEffect, useState, Suspense } from "react";
+import { useContext, useState, useEffect, Suspense } from "react";
 import HeroSection from "/components/HeroSection";
 import { ProfileContext } from "/context/ProfileContext";
 
 function DashboardContent() {
   const { profileData, showModal, setShowModal, isReady } = useContext(ProfileContext);
   const [urlInput, setUrlInput] = useState("");
+
+  // Check if there's a profile ID from homepage when component mounts
   useEffect(() => {
-    const tempId = sessionStorage.getItem("temp_profile_id");
-    if (tempId) {
-      setUrlInput(`https://www.cloudskillsboost.google/public_profiles/${tempId}`);
-      sessionStorage.removeItem("temp_profile_id"); // optional: clear after using
+    const tempProfileId = sessionStorage.getItem("temp_profile_id");
+    if (tempProfileId) {
+      // Convert profile ID back to URL format for display in input
+      const profileUrl = `https://www.cloudskillsboost.google/public_profiles/${tempProfileId}`;
+      setUrlInput(profileUrl);
+      
+      // The ProfileContext will handle the API call automatically
+      // since temp_profile_id is in sessionStorage
     }
   }, []);
-  
+
+  const extractProfileId = (url) => {
+    try {
+      const match = url.match(/public_profiles\/([a-z0-9-]+)/i);
+      return match ? match[1] : null;
+    } catch {
+      return null;
+    }
+  };
 
   const handleSubmit = () => {
     try {
-      const match = urlInput.match(/public_profiles\/([a-z0-9-]+)/i);
-      if (match && match[1]) {
-        const id = match[1];
-        window.location.assign(`/dashboard?profile_id=${id}`);
+      const profileId = extractProfileId(urlInput);
+      if (profileId) {
+        // Store in sessionStorage and reload page to trigger API call
+        sessionStorage.setItem("temp_profile_id", profileId);
+        // Force page reload to trigger ProfileContext useEffect
+        window.location.href = window.location.href;
       } else {
         alert("Please enter a valid Google Arcade profile URL.");
       }

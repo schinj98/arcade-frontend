@@ -14,25 +14,36 @@ export const ProfileProvider = ({ children }) => {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
     const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
+    // Check for profile ID in different sources
     const urlParams = new URLSearchParams(window.location.search);
     const urlProfileId = urlParams.get("profile_id");
+    const tempProfileId = sessionStorage.getItem("temp_profile_id");
+    const storedProfileId = localStorage.getItem("profile_id");
 
-    let profileId = urlProfileId || sessionStorage.getItem("temp_profile_id");
+    let profileId = null;
+    let shouldCallApi = false;
 
-    if (profileId) {
-      localStorage.setItem("profile_id", profileId); // persist
-      sessionStorage.removeItem("temp_profile_id"); // cleanup
-    }
-
-    // 1️⃣ agar URL me profile_id hai, toh usko use karo
+    // Priority order for profile ID selection and API call decision
     if (urlProfileId) {
+      // Case 1: Direct URL with profile_id parameter
       profileId = urlProfileId;
-      localStorage.setItem("profile_id", profileId); // store karo
-    } else {
-      // 2️⃣ agar nahi hai toh localStorage se lo
-      profileId = localStorage.getItem("profile_id");
+      shouldCallApi = true;
+      localStorage.setItem("profile_id", profileId);
+    } else if (tempProfileId) {
+      // Case 2: Coming from homepage or modal submission
+      profileId = tempProfileId;
+      shouldCallApi = true;
+      localStorage.setItem("profile_id", profileId);
+      sessionStorage.removeItem("temp_profile_id"); // cleanup
+    } else if (storedProfileId) {
+      // Case 3: User returning, check if we need fresh data
+      profileId = storedProfileId;
+      const isReload = performance?.navigation?.type === 1 || 
+                      performance?.getEntriesByType("navigation")[0]?.type === "reload";
+      shouldCallApi = isReload; // Only call API on page reload
     }
 
+    // If no profile ID found anywhere, show modal
     if (!profileId) {
       setShowModal(true);
       setIsReady(true);
@@ -40,12 +51,9 @@ export const ProfileProvider = ({ children }) => {
     }
 
     const cachedKey = `cachedProfileData-${profileId}`;
-    const isReload = performance?.navigation?.type === 1 || performance?.getEntriesByType("navigation")[0]?.type === "reload";
 
-    const shouldCallApi = urlProfileId || isReload;
-
-    // ✅ agar API call karni hai toh karo
     if (shouldCallApi) {
+      // Call API for fresh data
       async function fetchProfile() {
         try {
           const res = await fetch(`${apiBase}/api/v1/computedProfile`, {
@@ -70,18 +78,28 @@ export const ProfileProvider = ({ children }) => {
           setShowModal(true);
         } finally {
           setIsReady(true);
-          window.history.replaceState(null, "", window.location.pathname); // URL clean
+          // Clean URL parameters if they exist
+          if (urlProfileId) {
+            window.history.replaceState(null, "", window.location.pathname);
+          }
         }
       }
 
       fetchProfile();
     } else {
-      // ❌ API call nahi karni, cache use karo
+      // Use cached data (user returning from another tab/page)
       const cached = localStorage.getItem(cachedKey);
       if (cached) {
-        setProfileData(JSON.parse(cached));
-        setIsReady(true);
+        try {
+          setProfileData(JSON.parse(cached));
+          setIsReady(true);
+        } catch (err) {
+          console.error("Error parsing cached data:", err);
+          setShowModal(true);
+          setIsReady(true);
+        }
       } else {
+        // No cached data found, show modal
         setShowModal(true);
         setIsReady(true);
       }
