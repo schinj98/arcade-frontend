@@ -11,15 +11,16 @@ function ProfileUrlInputSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const profile_id = profileUrl.split('/').pop();
-
+  
     if (profile_id) {
-      router.push(`/dashboard?profile_id=${profile_id}`);
+      sessionStorage.setItem('temp_profile_id', profile_id); // 🔥 store without query param
+      router.push("/dashboard"); // 🔥 no profile_id in URL
       setProfileUrl('');
     } else {
       alert("Please enter a valid profile URL.");
     }
   };
-
+  
   return (
     <section className="py-16 bg-gray-50 border-b border-gray-200">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

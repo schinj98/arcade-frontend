@@ -17,7 +17,12 @@ export const ProfileProvider = ({ children }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const urlProfileId = urlParams.get("profile_id");
 
-    let profileId = null;
+    let profileId = urlProfileId || sessionStorage.getItem("temp_profile_id");
+
+    if (profileId) {
+      localStorage.setItem("profile_id", profileId); // persist
+      sessionStorage.removeItem("temp_profile_id"); // cleanup
+    }
 
     // 1️⃣ agar URL me profile_id hai, toh usko use karo
     if (urlProfileId) {

@@ -6,6 +6,14 @@ import { ProfileContext } from "/context/ProfileContext";
 function DashboardContent() {
   const { profileData, showModal, setShowModal, isReady } = useContext(ProfileContext);
   const [urlInput, setUrlInput] = useState("");
+  useEffect(() => {
+    const tempId = sessionStorage.getItem("temp_profile_id");
+    if (tempId) {
+      setUrlInput(`https://www.cloudskillsboost.google/public_profiles/${tempId}`);
+      sessionStorage.removeItem("temp_profile_id"); // optional: clear after using
+    }
+  }, []);
+  
 
   const handleSubmit = () => {
     try {
