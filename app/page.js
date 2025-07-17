@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 function ProfileUrlInputSection() {
   const [profileUrl, setProfileUrl] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const extractProfileId = (url) => {
@@ -19,17 +20,23 @@ function ProfileUrlInputSection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    
     const profileId = extractProfileId(profileUrl);
 
     if (profileId) {
       // Store profile ID in sessionStorage for dashboard to pick up
       sessionStorage.setItem("temp_profile_id", profileId);
       
+      // Clear any existing cached data for this profile to force fresh API call
+      localStorage.removeItem(`cachedProfileData-${profileId}`);
+      
       // Redirect to dashboard without URL parameters
       router.push('/dashboard');
       setProfileUrl('');
     } else {
       alert("Please enter a valid profile URL.");
+      setIsSubmitting(false);
     }
   };
 
@@ -58,15 +65,17 @@ function ProfileUrlInputSection() {
                 value={profileUrl}
                 onChange={(e) => setProfileUrl(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors"
+                disabled={isSubmitting}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
 
             <button
               type="submit"
-              className="cursor-pointer w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              disabled={isSubmitting}
+              className="cursor-pointer w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Connect Profile
+              {isSubmitting ? 'Connecting...' : 'Connect Profile'}
             </button>
           </form>
 
