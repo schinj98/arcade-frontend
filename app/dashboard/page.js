@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useState, Suspense } from "react";
+import { useContext,useEffect, useState, Suspense } from "react";
 import HeroSection from "/components/HeroSection";
 import { ProfileContext } from "/context/ProfileContext";
 
