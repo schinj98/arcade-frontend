@@ -20,6 +20,13 @@ export const ProfileProvider = ({ children }) => {
     const tempProfileId = sessionStorage.getItem("temp_profile_id");
     const storedProfileId = localStorage.getItem("profile_id");
 
+    console.log("ProfileContext Debug:", {
+      urlProfileId,
+      tempProfileId,
+      storedProfileId,
+      pathname: window.location.pathname
+    });
+
     let profileId = null;
     let shouldCallApi = false;
 
@@ -32,7 +39,7 @@ export const ProfileProvider = ({ children }) => {
     } else if (tempProfileId) {
       // Case 2: Coming from homepage or modal submission
       profileId = tempProfileId;
-      shouldCallApi = true;
+      shouldCallApi = true; // Always call API when tempProfileId exists
       localStorage.setItem("profile_id", profileId);
       sessionStorage.removeItem("temp_profile_id"); // cleanup
     } else if (storedProfileId) {
@@ -42,6 +49,8 @@ export const ProfileProvider = ({ children }) => {
                       performance?.getEntriesByType("navigation")[0]?.type === "reload";
       shouldCallApi = isReload; // Only call API on page reload
     }
+
+    console.log("Final decision:", { profileId, shouldCallApi });
 
     // If no profile ID found anywhere, show modal
     if (!profileId) {
@@ -53,6 +62,7 @@ export const ProfileProvider = ({ children }) => {
     const cachedKey = `cachedProfileData-${profileId}`;
 
     if (shouldCallApi) {
+      console.log("Calling API for profileId:", profileId);
       // Call API for fresh data
       async function fetchProfile() {
         try {
@@ -67,6 +77,7 @@ export const ProfileProvider = ({ children }) => {
           });
 
           const json = await res.json();
+          console.log("API Response:", json);
           if (json?.data) {
             setProfileData(json.data);
             localStorage.setItem(cachedKey, JSON.stringify(json.data));
@@ -87,6 +98,7 @@ export const ProfileProvider = ({ children }) => {
 
       fetchProfile();
     } else {
+      console.log("Using cached data for profileId:", profileId);
       // Use cached data (user returning from another tab/page)
       const cached = localStorage.getItem(cachedKey);
       if (cached) {
