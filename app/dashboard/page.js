@@ -1,12 +1,24 @@
 "use client";
+import { useContext, useState, useEffect, Suspense } from "react";
+import HeroSection from "/components/HeroSection";
+import { ProfileContext } from "/context/ProfileContext";
 
-import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+function DashboardContent() {
+  const { profileData, showModal, setShowModal, isReady } = useContext(ProfileContext);
+  const [urlInput, setUrlInput] = useState("");
 
-function ProfileUrlInputSection() {
-  const [profileUrl, setProfileUrl] = useState('');
-  const router = useRouter();
+  // Check if there's a profile ID from homepage when component mounts
+  useEffect(() => {
+    const tempProfileId = sessionStorage.getItem("temp_profile_id");
+    if (tempProfileId) {
+      // Convert profile ID back to URL format for display in input
+      const profileUrl = `https://www.cloudskillsboost.google/public_profiles/${tempProfileId}`;
+      setUrlInput(profileUrl);
+      
+      // The ProfileContext will handle the API call automatically
+      // since temp_profile_id is in sessionStorage
+    }
+  }, []);
 
   const extractProfileId = (url) => {
     try {
@@ -17,155 +29,87 @@ function ProfileUrlInputSection() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const profileId = extractProfileId(profileUrl);
-
-    console.log("Homepage submit:", { profileUrl, profileId });
-
-    if (profileId) {
-      // Store profile ID in sessionStorage for dashboard to pick up
-      sessionStorage.setItem("temp_profile_id", profileId);
-      console.log("Stored in sessionStorage:", profileId);
-      
-      // Redirect to dashboard without URL parameters
-      router.push('/dashboard');
-      setProfileUrl('');
-    } else {
-      alert("Please enter a valid profile URL.");
+  const handleSubmit = () => {
+    try {
+      const profileId = extractProfileId(urlInput);
+      if (profileId) {
+        // Store in sessionStorage and reload page to trigger API call
+        sessionStorage.setItem("temp_profile_id", profileId);
+        // Force page reload to trigger ProfileContext useEffect
+        window.location.href = window.location.href;
+      } else {
+        alert("Please enter a valid Google Arcade profile URL.");
+      }
+    } catch {
+      alert("Invalid URL format.");
     }
   };
 
+  if (!isReady) return null;
+
   return (
-    <section className="py-16 bg-gray-50 border-b border-gray-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-semibold text-gray-900 mb-3">
-            Connect Your Public Profile
-          </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Link your achievements and progress to personalize your learning experience.
-          </p>
-        </div>
+    <div className="relative">
+      {/* Hero Section */}
+      <HeroSection
+        profileData={profileData}
+        incompleteBadges={profileData?.incompleteBadges}
+      />
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="profile-url" className="block text-sm font-medium text-gray-700 mb-2">
-                Profile URL
-              </label>
-              <input
-                id="profile-url"
-                type="url"
-                placeholder="e.g., https://www.cloudskillsboost.google/public_profiles/xxxx.xx"
-                value={profileUrl}
-                onChange={(e) => setProfileUrl(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-900 placeholder-gray-400 transition-colors"
-              />
+      {/* Modal if profile ID not found */}
+      {!profileData && showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-8">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/40 to-indigo-900/30 backdrop-blur-md" />
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-ping"></div>
+            <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-blue-400/30 rounded-full animate-pulse delay-300"></div>
+            <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-purple-400/20 rounded-full animate-bounce delay-500"></div>
+          </div>
+
+          <div className="relative bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl shadow-2xl w-full max-w-lg transform transition-all duration-500 hover:scale-[1.03] hover:shadow-3xl hover:shadow-blue-500/20 hover:border-white/40">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/10 rounded-3xl"></div>
+            <div className="absolute inset-0 bg-gradient-to-tl from-purple-500/5 via-transparent to-pink-500/5 rounded-3xl"></div>
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm animate-pulse"></div>
+
+            <div className="relative p-8 text-center">
+              <h2 className="text-3xl font-bold mb-3 bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent drop-shadow-lg">
+                Enter Your Arcade Profile
+              </h2>
+              <p className="text-white/70 text-sm mb-8 leading-relaxed">
+                Connect your Google Arcade profile to get started
+              </p>
+
+              <div className="relative mb-8 group overflow-hidden">
+                <input
+                  type="text"
+                  placeholder="eg. https://www.cloudskillsboost.google/public_profiles/....."
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  className="w-full px-5 py-4 bg-white/10 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-400/50 transition-all duration-300 hover:bg-white/15 hover:border-white/40 text-sm"
+                />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none blur-sm"></div>
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-focus-within:translate-x-full transition-transform duration-700 pointer-events-none"></div>
+              </div>
+
+              <button
+                onClick={handleSubmit}
+                className="w-full relative overflow-hidden bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-md text-white font-semibold px-6 py-4 rounded-2xl transition-all duration-300 hover:from-blue-600 hover:to-purple-600 hover:shadow-xl hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60 group hover:scale-[1.02] border border-white/20 hover:border-white/30"
+              >
+                <span className="relative z-10 text-sm tracking-wide">Submit</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-600"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
             </div>
-
-            <button
-              type="submit"
-              className="cursor-pointer w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-            >
-              Connect Profile
-            </button>
-          </form>
-
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 text-center">
-              Your profile information is secure and will only be used to enhance your learning experience.
-            </p>
           </div>
         </div>
-      </div>
-    </section>
+      )}
+    </div>
   );
 }
 
 export default function HomePage() {
-  const stats = [
-    { title: 'Active Users', value: '2,847', icon: '👥' },
-    { title: 'Courses Completed', value: '1,234', icon: '📚' },
-    { title: 'Badges Earned', value: '5,678', icon: '🏆' },
-    { title: 'Total Points', value: '89,234', icon: '⭐' },
-  ];
-
-  const features = [
-    {
-      title: 'Interactive Learning',
-      description: 'Engage with hands-on courses and practical exercises designed to enhance your skills through real-world applications.',
-      icon: '📚'
-    },
-    {
-      title: 'Progress Tracking',
-      description: 'Monitor your learning journey with detailed analytics and personalized insights to track your improvement.',
-      icon: '📊'
-    },
-    {
-      title: 'Achievement System',
-      description: 'Earn badges and unlock rewards as you complete challenges and reach new milestones in your learning path.',
-      icon: '🏆'
-    },
-    {
-      title: 'Community Support',
-      description: 'Connect with fellow learners and get help from our supportive community of professionals and experts.',
-      icon: '👥'
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-white">
-      <ProfileUrlInputSection />
-
-      {/* Hero Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Welcome to Arcade Platform
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Transform your learning experience with our comprehensive platform designed for modern professionals
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:shadow-md transition-shadow">
-                <div className="text-3xl mb-3">{stat.icon}</div>
-                <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
-                <div className="text-gray-600 font-medium">{stat.title}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose Arcade?</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Discover the features that make learning engaging and effective for professionals
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center mb-4">
-                  <span className="text-xl">{feature.icon}</span>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    </div>
+    <Suspense fallback={<div className="text-center py-10 text-gray-600 text-xl">Loading Dashboard...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
