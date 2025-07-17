@@ -1,24 +1,51 @@
 "use client";
 import { useContext, useState, useEffect, Suspense } from "react";
-import HeroSection from "/components/HeroSection";
+import HeroSection from "/components/HeroSection"; // Assuming this path is correct
 import { ProfileContext } from "/context/ProfileContext";
 
-function DashboardContent() {
-  const { profileData, showModal, setShowModal, isReady } = useContext(ProfileContext);
-  const [urlInput, setUrlInput] = useState("");
+// Custom Alert/Message component (reused from homepage for consistency)
+function MessageModal({ message, onClose }) {
+  if (!message) return null;
 
-  // Check if there's a profile ID from homepage when component mounts
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+      <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full relative z-10">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Notification</h3>
+        <p className="text-gray-700 mb-6">{message}</p>
+        <button
+          onClick={onClose}
+          className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function DashboardContent() {
+  const { profileData, showModal, setShowModal, isReady, isLoading, triggerProfileFetch } = useContext(ProfileContext);
+  const [urlInput, setUrlInput] = useState("");
+  const [message, setMessage] = useState(''); // State for custom message
+
+  // Effect to handle profile ID from homepage via sessionStorage
   useEffect(() => {
     const tempProfileId = sessionStorage.getItem("temp_profile_id");
     if (tempProfileId) {
       // Convert profile ID back to URL format for display in input
       const profileUrl = `https://www.cloudskillsboost.google/public_profiles/${tempProfileId}`;
       setUrlInput(profileUrl);
+
+      // Trigger the profile fetch using the context function
+      console.log("Dashboard: Found temp_profile_id, triggering fetch:", tempProfileId);
+      triggerProfileFetch(tempProfileId);
       
-      // The ProfileContext will handle the API call automatically
-      // since temp_profile_id is in sessionStorage
+      // IMPORTANT: Clear temp_profile_id immediately after triggering the fetch
+      // to prevent re-triggering on subsequent renders or accidental reloads.
+      sessionStorage.removeItem("temp_profile_id");
     }
-  }, []);
+  }, [triggerProfileFetch]); // Depend on triggerProfileFetch
 
   const extractProfileId = (url) => {
     try {
@@ -30,22 +57,32 @@ function DashboardContent() {
   };
 
   const handleSubmit = () => {
+    setMessage(''); // Clear previous messages
     try {
       const profileId = extractProfileId(urlInput);
       if (profileId) {
-        // Store in sessionStorage and reload page to trigger API call
-        sessionStorage.setItem("temp_profile_id", profileId);
-        // Force page reload to trigger ProfileContext useEffect
-        window.location.href = window.location.href;
+        // Trigger the profile fetch using the context function
+        console.log("Dashboard Modal: Submitting new profileId, triggering fetch:", profileId);
+        triggerProfileFetch(profileId);
+        setShowModal(false); // Close the modal after submission
       } else {
-        alert("Please enter a valid Google Arcade profile URL.");
+        setMessage("Please enter a valid Google Arcade profile URL.");
       }
     } catch {
-      alert("Invalid URL format.");
+      setMessage("Invalid URL format.");
     }
   };
 
-  if (!isReady) return null;
+  if (!isReady || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-700 text-lg">Loading Dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative">
@@ -55,7 +92,7 @@ function DashboardContent() {
         incompleteBadges={profileData?.incompleteBadges}
       />
 
-      {/* Modal if profile ID not found */}
+      {/* Modal if profile ID not found or data is missing */}
       {!profileData && showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-8">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/40 to-indigo-900/30 backdrop-blur-md" />
@@ -102,11 +139,12 @@ function DashboardContent() {
           </div>
         </div>
       )}
+      <MessageModal message={message} onClose={() => setMessage('')} />
     </div>
   );
 }
 
-export default function HomePage() {
+export default function DashboardPageWrapper() {
   return (
     <Suspense fallback={<div className="text-center py-10 text-gray-600 text-xl">Loading Dashboard...</div>}>
       <DashboardContent />

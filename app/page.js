@@ -4,9 +4,31 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Custom Alert/Message component
+function MessageModal({ message, onClose }) {
+  if (!message) return null;
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+      <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full relative z-10">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Notification</h3>
+        <p className="text-gray-700 mb-6">{message}</p>
+        <button
+          onClick={onClose}
+          className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function ProfileUrlInputSection() {
   const [profileUrl, setProfileUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState(''); // State for custom message
   const router = useRouter();
 
   const extractProfileId = (url) => {
@@ -21,6 +43,7 @@ function ProfileUrlInputSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setMessage(''); // Clear previous messages
     
     const profileId = extractProfileId(profileUrl);
 
@@ -33,9 +56,9 @@ function ProfileUrlInputSection() {
       
       // Redirect to dashboard without URL parameters
       router.push('/dashboard');
-      setProfileUrl('');
+      setProfileUrl(''); // Clear input after submission
     } else {
-      alert("Please enter a valid profile URL.");
+      setMessage("Please enter a valid profile URL.");
       setIsSubmitting(false);
     }
   };
@@ -86,6 +109,7 @@ function ProfileUrlInputSection() {
           </div>
         </div>
       </div>
+      <MessageModal message={message} onClose={() => setMessage('')} />
     </section>
   );
 }
