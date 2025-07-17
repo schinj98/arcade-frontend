@@ -14,7 +14,6 @@ export const ProfileProvider = ({ children }) => {
     const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL;
     const apiKey = process.env.NEXT_PUBLIC_API_KEY;
 
-    // Check for profile ID in different sources
     const urlParams = new URLSearchParams(window.location.search);
     const urlProfileId = urlParams.get("profile_id");
     const tempProfileId = sessionStorage.getItem("temp_profile_id");
@@ -24,35 +23,38 @@ export const ProfileProvider = ({ children }) => {
       urlProfileId,
       tempProfileId,
       storedProfileId,
-      pathname: window.location.pathname
+      pathname: window.location.pathname,
     });
 
     let profileId = null;
     let shouldCallApi = false;
 
-    // Priority order for profile ID selection and API call decision
+    // ✅ Step 1: Determine profileId
     if (urlProfileId) {
-      // Case 1: Direct URL with profile_id parameter
       profileId = urlProfileId;
-      shouldCallApi = true;
       localStorage.setItem("profile_id", profileId);
     } else if (tempProfileId) {
-      // Case 2: Coming from homepage or modal submission
       profileId = tempProfileId;
-      shouldCallApi = true; // Always call API when tempProfileId exists
       localStorage.setItem("profile_id", profileId);
       sessionStorage.removeItem("temp_profile_id"); // cleanup
     } else if (storedProfileId) {
-      // Case 3: User returning, check if we need fresh data
       profileId = storedProfileId;
-      const isReload = performance?.navigation?.type === 1 || 
-                      performance?.getEntriesByType("navigation")[0]?.type === "reload";
-      shouldCallApi = isReload; // Only call API on page reload
     }
 
-    console.log("Final decision:", { profileId, shouldCallApi });
+    // ✅ Step 2: Check if it's a reload
+    const navEntry = performance?.getEntriesByType("navigation")[0];
+    const isReload =
+      navEntry?.type === "reload" || performance?.navigation?.type === 1;
 
-    // If no profile ID found anywhere, show modal
+    // ✅ Step 3: Decide if we should call the API
+    shouldCallApi = !!urlProfileId || !!tempProfileId || isReload;
+
+    console.log("Final Decision:", {
+      profileId,
+      isReload,
+      shouldCallApi,
+    });
+
     if (!profileId) {
       setShowModal(true);
       setIsReady(true);
@@ -62,8 +64,7 @@ export const ProfileProvider = ({ children }) => {
     const cachedKey = `cachedProfileData-${profileId}`;
 
     if (shouldCallApi) {
-      console.log("Calling API for profileId:", profileId);
-      // Call API for fresh data
+      console.log("📡 Calling API for profileId:", profileId);
       async function fetchProfile() {
         try {
           const res = await fetch(`${apiBase}/api/v1/computedProfile`, {
@@ -78,6 +79,7 @@ export const ProfileProvider = ({ children }) => {
 
           const json = await res.json();
           console.log("API Response:", json);
+
           if (json?.data) {
             setProfileData(json.data);
             localStorage.setItem(cachedKey, JSON.stringify(json.data));
@@ -89,7 +91,6 @@ export const ProfileProvider = ({ children }) => {
           setShowModal(true);
         } finally {
           setIsReady(true);
-          // Clean URL parameters if they exist
           if (urlProfileId) {
             window.history.replaceState(null, "", window.location.pathname);
           }
@@ -98,28 +99,26 @@ export const ProfileProvider = ({ children }) => {
 
       fetchProfile();
     } else {
-      console.log("Using cached data for profileId:", profileId);
-      // Use cached data (user returning from another tab/page)
+      console.log("🗃️ Using cached data for profileId:", profileId);
       const cached = localStorage.getItem(cachedKey);
       if (cached) {
         try {
           setProfileData(JSON.parse(cached));
-          setIsReady(true);
         } catch (err) {
           console.error("Error parsing cached data:", err);
           setShowModal(true);
-          setIsReady(true);
         }
       } else {
-        // No cached data found, show modal
         setShowModal(true);
-        setIsReady(true);
       }
+      setIsReady(true);
     }
   }, []);
 
   return (
-    <ProfileContext.Provider value={{ profileData, setProfileData, showModal, setShowModal, isReady }}>
+    <ProfileContext.Provider
+      value={{ profileData, setProfileData, showModal, setShowModal, isReady }}
+    >
       {children}
     </ProfileContext.Provider>
   );
