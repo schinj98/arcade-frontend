@@ -12,8 +12,12 @@ function ProfileUrlInputSection() {
     e.preventDefault();
     const profile_id = profileUrl.split('/').pop();
 
-      router.push(`/dashboard`);
+    if (profile_id) {
+      router.push(`/dashboard?profile_id=${profile_id}`);
       setProfileUrl('');
+    } else {
+      alert("Please enter a valid profile URL.");
+    }
   };
 
   return (
