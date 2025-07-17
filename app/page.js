@@ -151,7 +151,7 @@ export default function HomePage() {
     <>
       <Head>
 
-      <meta name="google-site-verification" content="JOyjc_CM0VPz54VOGFsxreNldPVnZVuZXJv9qIl0Vjc" />
+      
         <title>Arcade Points Calculator | Personalized Score Tracker</title>
         <meta name="description" content="Calculate and Cloud Arcade Points using our accurate and user-friendly platform. Checkout the Swags you're Eligible for." />
         <meta name="keywords" content="arcade calculator, arcade profile, cloud skill badge tracker, facilitator Points calculate, calculate arcade points, learning tracker" />

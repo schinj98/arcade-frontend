@@ -14,6 +14,9 @@ export const metadata = {
     description: 'Track your learning achievements and progress with Arcade Track!',
     url: 'https://arcadetrack.com',
     siteName: 'Arcade Track',
+    verification: {
+      google: "JOyjc_CM0VPz54VOGFsxreNldPVnZVuZXJv9qIl0Vjc",
+    },
     images: [
       {
         url: 'https://arcadetrack.com/',
