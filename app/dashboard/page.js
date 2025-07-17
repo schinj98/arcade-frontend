@@ -8,17 +8,69 @@ function MessageModal({ message, onClose }) {
   if (!message) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
-      <div className="bg-white rounded-lg shadow-xl p-6 max-w-sm w-full relative z-10">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Notification</h3>
-        <p className="text-gray-700 mb-6">{message}</p>
-        <button
-          onClick={onClose}
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Close
-        </button>
+    <div className="fixed inset-0 flex items-start justify-center z-50 p-4 pointer-events-none">
+      {/* Backdrop with pointer events */}
+      <div 
+        className="fixed inset-0 bg-black/20 backdrop-blur-sm pointer-events-auto animate-fadeIn"
+        onClick={onClose}
+      ></div>
+      
+      {/* Popup notification */}
+      <div className="relative top-20 pointer-events-auto animate-bounceIn">
+        <div className="bg-gradient-to-br from-purple-900/30 via-blue-900/40 to-indigo-900/30 backdrop-blur-md rounded-3xl shadow-2xl p-8 max-w-md w-full relative overflow-hidden border-2 border-white">
+          {/* Decorative circles */}
+          <div className="absolute -top-10 -right-10 w-32 h-32 bg-yellow-200 rounded-full opacity-50 blur-2xl"></div>
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-200 rounded-full opacity-50 blur-2xl"></div>
+          
+          {/* Cute robot icon */}
+          <div className="flex justify-center mb-6 animate-wiggle">
+            <div className="relative">
+              <div className="w-24 h-24 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                {/* Robot face */}
+                <div className="relative">
+                  {/* Eyes */}
+                  <div className="absolute -top-2 left-0 w-3 h-3 bg-white rounded-full animate-blink"></div>
+                  <div className="absolute -top-2 right-0 w-3 h-3 bg-white rounded-full animate-blink"></div>
+                  {/* Mouth */}
+                  <div className="mt-2 w-8 h-1 bg-white rounded-full"></div>
+                </div>
+              </div>
+              {/* Alert badge */}
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-rose-400 rounded-full flex items-center justify-center animate-pulse shadow-md">
+                <span className="text-white text-sm font-bold">!</span>
+              </div>
+            </div>
+          </div>
+          
+          {/* Title */}
+          <h3 className="text-2xl font-bold text-center bg-gradient-to-r from-white to-indigo-600 bg-clip-text text-white mb-4">
+            Oops! Something's Not Right
+          </h3>
+          
+          {/* Message */}
+          <div className="bg-white/80 backdrop-blur rounded-2xl p-4 mb-6 shadow-inner">
+            <p className="text-gray-700 text-center leading-relaxed">
+              {message || "The URL seems to be incorrect or empty. Please check and try again!"}
+            </p>
+          </div>
+          
+          {/* Button */}
+          <button
+            onClick={onClose}
+            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-2xl font-semibold hover:from-purple-600 hover:to-pink-600 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-purple-300 animate-shimmer"
+          >
+            <span className="flex cursor-pointer items-center justify-center gap-2">
+              Got it! 
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </span>
+          </button>
+          
+          {/* Fun floating elements */}
+          <div className="absolute top-4 left-4 text-2xl animate-float">🌟</div>
+          <div className="absolute bottom-4 right-4 text-2xl animate-float-delayed">✨</div>
+        </div>
       </div>
     </div>
   );
@@ -129,7 +181,7 @@ function DashboardContent() {
 
               <button
                 onClick={handleSubmit}
-                className="w-full relative overflow-hidden bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-md text-white font-semibold px-6 py-4 rounded-2xl transition-all duration-300 hover:from-blue-600 hover:to-purple-600 hover:shadow-xl hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60 group hover:scale-[1.02] border border-white/20 hover:border-white/30"
+                className="w-full cursor-pointer  relative overflow-hidden bg-gradient-to-r from-blue-600/90 to-purple-600/90 backdrop-blur-md text-white font-semibold px-6 py-4 rounded-2xl transition-all duration-300 hover:from-blue-600 hover:to-purple-600 hover:shadow-xl hover:shadow-blue-500/30 focus:outline-none focus:ring-2 focus:ring-blue-400/60 group hover:scale-[1.02] border border-white/20 hover:border-white/30"
               >
                 <span className="relative z-10 text-sm tracking-wide">Submit</span>
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-600"></div>
