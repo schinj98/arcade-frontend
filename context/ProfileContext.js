@@ -50,13 +50,16 @@ export const ProfileProvider = ({ children }) => {
 
     async function fetchProfile() {
       try {
-        const res = await fetch(`${apiBase}/api/profile?profile_id=${profileId}`, {
-          method: "GET",
+        const res = await fetch(`${apiBase}/api/v1/computedProfile`, {
+          method: "POST",
           credentials: "include",
           headers: {
+            "Content-Type": "application/json",
             ...(apiKey && { "X-API-KEY": apiKey }),
           },
+          body: JSON.stringify({ profile_id: profileId }),
         });
+        
 
         const json = await res.json();
         if (json?.data) {

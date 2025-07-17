@@ -32,7 +32,7 @@ function DashboardContent() {
       />
 
       {/* Modal if profile ID not found */}
-      {showModal && (
+      {!profileData && showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 p-8">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-blue-900/40 to-indigo-900/30 backdrop-blur-md" />
           <div className="absolute inset-0 overflow-hidden">
