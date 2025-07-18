@@ -74,6 +74,8 @@ export const ProfileProvider = ({ children }) => {
     const urlProfileId = urlParams.get("profile_id");
     const tempProfileId = sessionStorage.getItem("temp_profile_id");
     const storedProfileId = localStorage.getItem("profile_id");
+    console.log("Profile ID from localStorage:", storedProfileId);
+
 
     console.log("ProfileContext Debug:", {
       urlProfileId,
@@ -101,12 +103,19 @@ export const ProfileProvider = ({ children }) => {
     }
 
     // ✅ Step 2: Check if it's a reload (for initial load behavior)
-    const navEntry = performance?.getEntriesByType("navigation")[0];
-    const isReload = navEntry?.type === "reload" || performance?.navigation?.type === 1;
+    const navEntry = performance?.getEntriesByType?.("navigation")?.[0];
+    const isReload = navEntry?.type === "reload" || window.performance?.navigation?.type === 1;
+
 
     // ✅ Step 3: Decide if we should call the API on initial load
     // We call API if it's a new URL param, a temp ID from session, or a full reload
     shouldCallApi = !!urlProfileId || !!tempProfileId || isReload;
+    console.log("🌐 Final profileId:", profileId);
+console.log("📦 localStorage.profile_id:", localStorage.getItem("profile_id"));
+console.log("📊 Cached data:", localStorage.getItem(`cachedProfileData-${profileId}`));
+console.log("🔁 isReload:", isReload);
+console.log("📞 Should call API?", shouldCallApi);
+
 
     console.log("Final Decision (initial useEffect):", {
       profileId,
