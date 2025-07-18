@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useContext } from "react";
 import { ProfileContext } from "/context/ProfileContext";
-import { Home, LayoutDashboard, Info, MessageSquare, PlayCircle, Menu, X, User, Sparkles } from 'lucide-react'
+import { Home, LayoutDashboard, Info, BookOpenCheck, MessageSquare, PlayCircle, Menu, X, User, Sparkles } from 'lucide-react'
 
 
 export default function Navbar() {
@@ -20,6 +20,7 @@ export default function Navbar() {
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/knowledge', label: 'Knowledge', icon: BookOpenCheck },
     { href: '/about', label: 'About', icon: Info },
     { href: '/contact', label: 'Contact', icon: MessageSquare }
   ]
