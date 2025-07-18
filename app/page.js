@@ -60,7 +60,7 @@ function ProfileUrlInputSection() {
       router.push('/dashboard');
       setProfileUrl(''); // Clear input after submission
     } else {
-      setMessage("Please enter a valid profile URL.");
+      setMessage("Please enter any valid profile URL.");
       setIsSubmitting(false);
     }
   };
