@@ -7,7 +7,7 @@ import { ProfileProvider } from "@/context/ProfileContext";
 
 
 export const metadata = {
-  title: 'Arcade Points Calculator | Track Your Learning & Progress',
+  title: 'Arcade Points Calculator | Track Your Points & Progress',
   description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',
   keywords: 'arcade points calculator, GCP points facilitator points check, arcade tracking, learning badges, google cloud arcade points calculator, profile tracker',
   openGraph: {

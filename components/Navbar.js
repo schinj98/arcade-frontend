@@ -63,7 +63,7 @@ export default function Navbar() {
           </div>
 
           {/* Right - Actions */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4 ">
             <a 
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200"
               href="https://go.cloudskillsboost.google/arcade" 
@@ -75,8 +75,9 @@ export default function Navbar() {
             </a>
             
             {/* User Profile Button */}
-            <button className="relative group">
-              <div className=" w-10 h-10 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 overflow-hidden">
+            <button className="relative group ">
+            <div className="w-10 h-10 bg-gray-100 rounded-xl border-2 border-white shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden">
+
                 {profileImage ? (
                   <img
                     src={profileImage}
