@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useContext } from "react";
 import { ProfileContext } from "/context/ProfileContext";
-import { Home, LayoutDashboard, Info, BookOpenCheck, MessageSquare, PlayCircle, Menu, X, User, Sparkles } from 'lucide-react'
+import { Home, LayoutDashboard, Gamepad2, Info, BookOpenCheck, MessageSquare, PlayCircle, Menu, X, User, Sparkles } from 'lucide-react'
 
 
 export default function Navbar() {
@@ -31,8 +31,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Left - Brand Name */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="p-2 bg-blue-600 rounded-xl group-hover:shadow-lg group-hover:shadow-blue-600/25 transition-all duration-200">
-              <Sparkles size={20} className="text-white" />
+            <div className=" bg-blue-600 rounded-full group-hover:shadow-lg group-hover:shadow-blue-600/25 transition-all duration-200">
+              <img src="/images/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
             </div>
             <span className="text-xl font-bold text-gray-900">
               Arcade Track
@@ -65,12 +65,12 @@ export default function Navbar() {
           {/* Right - Actions */}
           <div className="hidden md:flex items-center gap-4 ">
             <a 
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200"
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-100 hover:text-blue-500 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200"
               href="https://go.cloudskillsboost.google/arcade" 
               target="_blank"
               rel="noopener noreferrer"
             >
-              <PlayCircle size={16} />
+              <Gamepad2 size={16} />
               Play Now
             </a>
             

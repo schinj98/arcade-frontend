@@ -10,6 +10,9 @@ export const metadata = {
   title: 'Arcade Points Calculator | Track Your Points & Progress',
   description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',
   keywords: 'arcade points calculator, GCP points facilitator points check, arcade tracking, learning badges, google cloud arcade points calculator, profile tracker',
+  icons: {
+    icon: '/images/logo.png',
+  },
   openGraph: {
     title: 'Arcade Points Calculator',
     description: 'Track your learning achievements and progress with Arcade Track!',
@@ -42,6 +45,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+      <link rel="icon" href="/images/logo.png" type="image/png" />
         {/* Google Analytics Script */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ECCG3B88Q0"

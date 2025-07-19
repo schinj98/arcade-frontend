@@ -6,7 +6,7 @@ export default function BadgesSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
   const [animationDelay, setAnimationDelay] = useState(0);
   const {profileData} = useContext(ProfileContext)
-  const completed_total_points = profileData?.completed_totalPoints
+  const completed_total_points = 40
   
   
   useEffect(() => {
@@ -171,19 +171,15 @@ export default function BadgesSection() {
                     {/* Icon */}
                     <div className="relative mb-6">
                       <div className="w-16 h-16 mx-auto relative">
-                        <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                          isCompleted 
-                            ? 'bg-yellow-100 border-2 border-yellow-400' 
-                            : percentage > 0 
-                              ? 'bg-blue-100 border-2 border-blue-600' 
-                              : 'bg-gray-100 border-2 border-gray-300'
+                      <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                        isCompleted 
+                          ? 'bg-yellow-100 border-2 border-yellow-400' 
+                          : 'bg-gray-100 border-2 border-gray-300'
                         } group-hover:scale-110`}>
                           <Icon size={28} className={`transition-colors duration-300 ${
                             isCompleted 
                               ? 'text-yellow-600' 
-                              : percentage > 0 
-                                ? 'text-blue-600' 
-                                : 'text-gray-400'
+                              : 'text-gray-400'
                           }`} />
                         </div>
                       </div>

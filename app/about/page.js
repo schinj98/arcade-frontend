@@ -74,8 +74,8 @@ export default function AboutPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
           <div className="text-center max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="p-3 bg-blue-600 rounded-xl text-white">
-                <Sparkles size={24} />
+              <div className="rounded-full shadow-md text-white">
+              <img src="/images/logo.png" alt="Logo" className="w-15 h-15 object-contain" />
               </div>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About ArcadeTrack</h1>

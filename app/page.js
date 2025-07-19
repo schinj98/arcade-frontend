@@ -45,20 +45,15 @@ function ProfileUrlInputSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setMessage(''); // Clear previous messages
-    
+    setMessage(''); 
     const profileId = extractProfileId(profileUrl);
 
     if (profileId) {
-      // Store profile ID in sessionStorage for dashboard to pick up
       sessionStorage.setItem("temp_profile_id", profileId);
-      
-      // Clear any existing cached data for this profile to force fresh API call
       localStorage.removeItem(`cachedProfileData-${profileId}`);
       
-      // Redirect to dashboard without URL parameters
       router.push('/dashboard');
-      setProfileUrl(''); // Clear input after submission
+      setProfileUrl(''); 
     } else {
       setMessage("Please enter any valid profile URL.");
       setIsSubmitting(false);
