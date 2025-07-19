@@ -6,7 +6,7 @@ export default function BadgesSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
   const [animationDelay, setAnimationDelay] = useState(0);
   const {profileData} = useContext(ProfileContext)
-  const completed_total_points = 40
+  const completed_total_points = profileData?.completed_totalPoints
   
   
   useEffect(() => {
