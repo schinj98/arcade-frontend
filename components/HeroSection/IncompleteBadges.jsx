@@ -52,17 +52,28 @@ export default function IncompleteBadges() {
   const allBadges = [];
 
   if (badges) {
-    Object.entries(badges).forEach(([badgeCategory, badgeItems]) => {
-      Object.values(badgeItems).forEach((badge) => {
-        allBadges.push({
-          ...badge,
-          id: badge.accessToken || badge.badgeName || badge.badgeLink,
-          title: badge.badgeName,
-          type: getTypeFromCategory(badgeCategory),
-          points: getTypeFromCategory(badgeCategory) === 'Skill' ? 0.5 : (badge.points || 0),
-        });
-      });
+    const order = ['Game', 'Trivia', 'Skill'];
+
+order.forEach((type) => {
+  const categoryKey = {
+    'Game': 'gameBadges',
+    'Trivia': 'triviaBadges',
+    'Skill': 'skillBadges',
+  }[type];
+
+  const badgeItems = badges?.[categoryKey] || {};
+  
+  Object.values(badgeItems).forEach((badge) => {
+    allBadges.push({
+      ...badge,
+      id: badge.accessToken || badge.badgeName || badge.badgeLink,
+      title: badge.badgeName,
+      type,
+      points: type === 'Skill' ? 0.5 : (badge.points || 0),
     });
+  });
+});
+
   }
 
   const filteredBadges = allBadges.filter((badge) => {
