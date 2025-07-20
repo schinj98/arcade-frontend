@@ -137,7 +137,7 @@ export default function Navbar() {
               {/* Mobile Actions */}
               <div className="flex items-center gap-3 pt-4 mt-2 border-t border-gray-200">
                 <a 
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-100 hover:text-blue-500 text-white px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
                   href="https://go.cloudskillsboost.google/arcade" 
                   target="_blank"
                   rel="noopener noreferrer"

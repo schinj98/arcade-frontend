@@ -6,7 +6,8 @@ export default function BadgesSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
   const [animationDelay, setAnimationDelay] = useState(0);
   const {profileData} = useContext(ProfileContext)
-  const completed_total_points = profileData?.completed_totalPoints
+  // const completed_total_points = profileData?.completed_totalPoints
+  const completed_total_points = 45
   
   
   useEffect(() => {
@@ -59,17 +60,17 @@ export default function BadgesSection() {
     <div className="min-h-screen rounded-xl bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-8 mb-12 border border-blue-200 shadow-lg">
+        <div className="bg-blue-50 rounded-3xl p-8 mb-12 border border-blue-200 shadow-lg">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-6">
                 <div className="relative">
-                  <div className="p-4 bg-blue-600 rounded-2xl shadow-lg">
+                  <div className="p-4 bg-blue-400 rounded-2xl shadow-lg">
                     <Gamepad2 size={28} className="text-white" />
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900">
+                  <h1 className="text-4xl font-bold text-blue-400">
                     Tier Progress
                   </h1>
                   <p className="text-gray-600 mt-1">Track your journey through arcade tiers</p>
@@ -78,12 +79,12 @@ export default function BadgesSection() {
               
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl border border-blue-200 shadow-sm">
-                  <Zap size={16} className="text-blue-600" />
+                  <Zap size={16} className="text-blue-400" />
                   <span className="text-gray-900 font-semibold">{totalPoints}</span>
                   <span className="text-gray-600">points</span>
                 </div>
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl border border-blue-200 shadow-sm">
-                  <Sparkles size={16} className="text-blue-600" />
+                  <Sparkles size={16} className="text-blue-400" />
                   <span className="text-gray-900 font-semibold">{completedTiers}</span>
                   <span className="text-gray-600">tiers completed</span>
                 </div>
@@ -152,7 +153,7 @@ export default function BadgesSection() {
                 {/* Main card with water effect */}
                 <div className={`relative bg-white rounded-2xl border-2 transition-all duration-300 overflow-hidden shadow-lg group-hover:shadow-xl water-fill ${
                   isCurrentTier 
-                    ? 'border-blue-600 shadow-blue-200' 
+                    ? 'border-blue-500 shadow-blue-200' 
                     : isCompleted 
                       ? 'border-yellow-400 shadow-yellow-200 bg-yellow-50' 
                       : 'border-blue-200  group-hover:border-blue-300'
@@ -161,7 +162,7 @@ export default function BadgesSection() {
                   
                   {/* Status indicator */}
                   {isCurrentTier && (
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-blue-600 animate-pulse"></div>
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-blue-500 animate-pulse"></div>
                   )}
                   {isCompleted && !isCurrentTier && (
                     <div className="absolute top-0 left-0 right-0 h-1 bg-yellow-500"></div>
@@ -174,11 +175,15 @@ export default function BadgesSection() {
                       <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
                         isCompleted 
                           ? 'bg-yellow-100 border-2 border-yellow-400' 
+                          : isCurrentTier
+                          ? 'bg-blue-100 border-2 border-blue-200'
                           : 'bg-gray-100 border-2 border-gray-300'
                         } group-hover:scale-110`}>
                           <Icon size={28} className={`transition-colors duration-300 ${
                             isCompleted 
                               ? 'text-yellow-600' 
+                              : isCurrentTier
+                              ? 'text-blue-400'
                               : 'text-gray-400'
                           }`} />
                         </div>
@@ -204,13 +209,21 @@ export default function BadgesSection() {
                     {/* Progress info */}
                     <div className="space-y-3">
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600 font-medium">
+                        <span className={`text-sm font-medium ${
+                          isCompleted
+                            ? 'text-yellow-600'
+                            : isCurrentTier
+                            ? 'text-blue-400'
+                            : 'text-gray-400'
+                        }`}>
                           {tier.current}/{tier.total} pts
                         </span>
-                        <span className={`text-sm font-bold px-3 py-1 rounded-full transition-colors ${
+                        <span className={`text-sm font-bold px-3 py-1 rounded-full transition-colors text-blue-100 ${
                           isCompleted 
                             ? 'text-yellow-700 bg-yellow-100 border border-yellow-300' 
-                            : 'text-blue-700 bg-blue-100 border border-blue-300'
+                            : isCurrentTier
+                            ? 'text-blue-400 bg-blue-100 border border-blue-300'
+                            : 'text-gray-400 bg-gray-100 border border-gray-300'
                         }`}>
                           {percentage.toFixed(0)}%
                         </span>
@@ -237,7 +250,7 @@ export default function BadgesSection() {
               icon: Target,
               bgColor: 'bg-blue-50',
               borderColor: 'border-blue-200',
-              iconColor: 'bg-blue-600'
+              iconColor: 'bg-blue-400'
             },
             {
               title: 'Tiers Unlocked',
@@ -246,16 +259,16 @@ export default function BadgesSection() {
               icon: Trophy,
               bgColor: 'bg-yellow-50',
               borderColor: 'border-yellow-200',
-              iconColor: 'bg-yellow-500'
+              iconColor: 'bg-yellow-400'
             },
             {
               title: 'Achievement Rate',
-              value: `${((completedTiers / tiers.length) * 100).toFixed(0)}%`,
+              value: `${((completed_total_points / 85) * 100).toFixed(0)}%`,
               subtitle: 'completion rate',
               icon: Star,
               bgColor: 'bg-blue-50',
               borderColor: 'border-blue-200',
-              iconColor: 'bg-blue-600'
+              iconColor: 'bg-blue-400'
             }
           ].map((stat, index) => (
             <div key={stat.title} className="group relative">

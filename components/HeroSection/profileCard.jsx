@@ -62,8 +62,8 @@ export default function ProfileCard() {
       <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{user.name}</h3>
 
       {/* League Badge */}
-      <div className="inline-flex items-center gap-1.5 bg-blue-100 text-blue-800 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium border border-blue-200 mb-3">
-        <BadgeCheck size={14} className="text-amber-600" />
+      <div className="inline-flex items-center gap-1.5 bg-blue-100 text-blue-400 px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium border border-blue-200 mb-3">
+        <BadgeCheck size={14} className="text-blue-400" />
         <span>{user.leagueName}</span>
       </div>
 

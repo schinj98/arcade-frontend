@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Trophy, Gift, Sparkles, ChevronRight, Info } from 'lucide-react';
+import { Trophy, Gift, Sparkles, ChevronRight, Info, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function RewardsSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
+  const [selectedTier, setSelectedTier] = useState(null);
+  const [expandedSwag, setExpandedSwag] = useState(null);
 
   const tierImages = {
     Novice: "/images/arcade-swags-images/Novice.png",
@@ -19,16 +21,195 @@ export default function RewardsSection() {
     { name: 'Champion', points: 75, image: tierImages.Champion, color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', borderColor: 'border-orange-200' },
     { name: 'Legend', points: 85, image: tierImages.Legend, color: 'from-yellow-400 to-amber-500', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
   ];
+  
+
+  // Sample swag data for each tier
+  const tierSwags = {
+    Novice: [
+      {
+        id: 1,
+        title: "Arcade Novice T-Shirt",
+        image: "https://placehold.co/300x300?text=T-Shirt",
+        description: "A comfortable cotton t-shirt with the Arcade Novice logo. Perfect for casual wear and showing off your first achievement in the Arcade program."
+      },
+      {
+        id: 2,
+        title: "Sticker Pack",
+        image: "https://placehold.co/300x300?text=Stickers",
+        description: "A collection of 10 unique Arcade-themed stickers featuring various tech icons and motivational quotes to decorate your laptop or workspace."
+      },
+      {
+        id: 3,
+        title: "Digital Badge",
+        image: "https://placehold.co/300x300?text=Badge",
+        description: "An exclusive digital badge that you can display on your GitHub profile, LinkedIn, or personal website to showcase your Novice tier achievement."
+      }
+    ],
+    Trooper: [
+      {
+        id: 4,
+        title: "Arcade Hoodie",
+        image: "https://placehold.co/300x300?text=Hoodie",
+        description: "A premium quality hoodie with embroidered Arcade Trooper logo. Made from soft fleece material, perfect for coding sessions in cool weather."
+      },
+      {
+        id: 5,
+        title: "Tech Sticker Bomb",
+        image: "https://placehold.co/300x300?text=Tech+Stickers",
+        description: "An expanded collection of 25 premium vinyl stickers featuring programming languages, frameworks, and Arcade-exclusive designs."
+      },
+      {
+        id: 6,
+        title: "Water Bottle",
+        image: "https://placehold.co/300x300?text=Bottle",
+        description: "A sleek insulated water bottle with Arcade Trooper branding. Keeps drinks cold for 24 hours or hot for 12 hours, perfect for long coding sessions."
+      },
+      {
+        id: 7,
+        title: "Laptop Sleeve",
+        image: "https://placehold.co/300x300?text=Sleeve",
+        description: "A protective neoprene laptop sleeve with the Arcade logo. Fits most 13-15 inch laptops and provides excellent protection for your tech gear."
+      }
+    ],
+    Ranger: [
+      {
+        id: 8,
+        title: "Arcade Backpack",
+        image: "https://placehold.co/300x300?text=Backpack",
+        description: "A durable canvas backpack with multiple compartments designed for developers. Features a padded laptop compartment and organized pockets for all your tech essentials."
+      },
+      {
+        id: 9,
+        title: "Wireless Charger",
+        image: "https://placehold.co/300x300?text=Charger",
+        description: "A sleek Qi-compatible wireless charging pad with Arcade Ranger branding. Supports fast charging for compatible devices up to 15W."
+      },
+      {
+        id: 10,
+        title: "Mechanical Keyboard",
+        image: "https://placehold.co/300x300?text=Keyboard",
+        description: "A compact 60% mechanical keyboard with custom Arcade keycaps. Features Cherry MX switches and RGB backlighting for the ultimate coding experience."
+      },
+      {
+        id: 11,
+        title: "Premium Notebook Set",
+        image: "https://placehold.co/300x300?text=Notebook",
+        description: "A set of three high-quality notebooks with dotted pages, perfect for sketching ideas, taking notes, or planning your next big project."
+      },
+      {
+        id: 12,
+        title: "Coffee Mug",
+        image: "https://placehold.co/300x300?text=Mug",
+        description: "A ceramic mug with heat-changing technology. The Arcade Ranger logo appears when hot liquid is added, making your morning coffee more exciting."
+      }
+    ],
+    Champion: [
+      {
+        id: 13,
+        title: "Gaming Chair",
+        image: "https://placehold.co/300x300?text=Chair",
+        description: "An ergonomic gaming chair with Arcade Champion branding. Features lumbar support, adjustable height, and premium leather upholstery for maximum comfort during long coding sessions."
+      },
+      {
+        id: 14,
+        title: "Monitor Stand",
+        image: "https://placehold.co/300x300?text=Stand",
+        description: "A wooden monitor stand with built-in USB hub and wireless charging pad. Elevates your monitor to the perfect height while organizing your desk setup."
+      },
+      {
+        id: 15,
+        title: "Arcade Jacket",
+        image: "https://placehold.co/300x300?text=Jacket",
+        description: "A stylish bomber jacket with embroidered Arcade Champion patches. Made from premium materials with a comfortable fit perfect for any occasion."
+      },
+      {
+        id: 16,
+        title: "Desk Organizer Set",
+        image: "https://placehold.co/300x300?text=Organizer",
+        description: "A complete desk organization system including pen holders, cable management, and storage compartments, all branded with the Arcade Champion logo."
+      },
+      {
+        id: 17,
+        title: "Bluetooth Speaker",
+        image: "https://placehold.co/300x300?text=Speaker",
+        description: "A portable Bluetooth speaker with exceptional sound quality. Features custom Arcade sound effects and 20-hour battery life for all-day listening."
+      },
+      {
+        id: 18,
+        title: "Smart Watch Band",
+        image: "https://placehold.co/300x300?text=Watch+Band",
+        description: "A premium silicone watch band compatible with most smartwatches. Features the Arcade Champion logo and comes in multiple color options."
+      }
+    ],
+    Legend: [
+      {
+        id: 19,
+        title: "Custom Arcade Setup",
+        image: "https://placehold.co/300x300?text=Setup",
+        description: "A complete custom desk setup including monitor, keyboard, mouse pad, and accessories, all branded with exclusive Arcade Legend designs and your name."
+      },
+      {
+        id: 20,
+        title: "Arcade Legend Trophy",
+        image: "https://placehold.co/300x300?text=Trophy",
+        description: "A premium crystal trophy engraved with your name and achievement date. A prestigious award recognizing your dedication to the Arcade program."
+      },
+      {
+        id: 21,
+        title: "Exclusive Merchandise Bundle",
+        image: "https://placehold.co/300x300?text=Bundle",
+        description: "An exclusive bundle containing limited edition items never available to other tiers, including rare collectibles and signed memorabilia from the Arcade team."
+      },
+      {
+        id: 22,
+        title: "VIP Conference Pass",
+        image: "https://placehold.co/300x300?text=Pass",
+        description: "An all-access pass to major tech conferences, including accommodation and travel expenses. Network with industry leaders and expand your knowledge."
+      },
+      {
+        id: 23,
+        title: "Custom Artwork",
+        image: "https://placehold.co/300x300?text=Art",
+        description: "A commissioned digital artwork created specifically for you by renowned tech artists, featuring your coding journey and achievements in the Arcade program."
+      },
+      {
+        id: 24,
+        title: "Legend Certificate",
+        image: "https://placehold.co/300x300?text=Certificate",
+        description: "A beautifully crafted certificate recognizing your Legend status, signed by the Arcade team and suitable for framing in your office or workspace."
+      },
+      {
+        id: 25,
+        title: "Arcade Mentor Session",
+        image: "https://placehold.co/300x300?text=Mentorship",
+        description: "A one-on-one mentorship session with senior developers from top tech companies, providing career guidance and technical insights to help advance your journey."
+      }
+    ]
+  };
+
+  const handleTierClick = (tier) => {
+    setSelectedTier(tier);
+    setExpandedSwag(null);
+  };
+
+  const closePopup = () => {
+    setSelectedTier(null);
+    setExpandedSwag(null);
+  };
+
+  const toggleSwagDescription = (swagId) => {
+    setExpandedSwag(expandedSwag === swagId ? null : swagId);
+  };
 
   return (
     <div className="min-h-screen rounded-xl bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
+        <div className="bg-blue-100 rounded-2xl shadow-sm border border-blue-200 p-8 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl text-white">
+                <div className="p-3 bg-blue-500 rounded-xl text-white">
                   <Trophy size={24} />
                 </div>
                 <h1 className="text-3xl font-bold text-gray-900">Swag Rewards</h1>
@@ -38,7 +219,7 @@ export default function RewardsSection() {
               </p>
               <div className="flex items-center gap-4 mt-4">
                 <div className="flex items-center text-sm text-gray-500">
-                  <Gift size={16} className="text-indigo-500 mr-1" />
+                  <Gift size={16} className="text-blue-400 mr-1" />
                   <span className="font-medium text-gray-900">5</span>
                   <span className="ml-1">reward tiers</span>
                 </div>
@@ -51,7 +232,7 @@ export default function RewardsSection() {
             </div>
 
             {/* Season Badge */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-4 rounded-xl border border-indigo-200">
+            <div className="bg-transparent px-6 py-4 rounded-xl border border-blue-300">
               <div className="flex items-center gap-3">
                 <div className="text-2xl">🏆</div>
                 <div>
@@ -71,6 +252,7 @@ export default function RewardsSection() {
               className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 overflow-hidden group cursor-pointer"
               onMouseEnter={() => setHoveredTier(tier.name)}
               onMouseLeave={() => setHoveredTier(null)}
+              onClick={() => handleTierClick(tier)}
             >
               {/* Tier Image */}
               <div className={`relative h-48 ${tier.bgColor} flex items-center justify-center p-4 overflow-hidden`}>
@@ -135,6 +317,88 @@ export default function RewardsSection() {
           </div>
         </div>
 
+        {/* Popup Modal */}
+        {selectedTier && (
+          <div className="fixed inset-0  backdrop-blur-xs bg-black/30 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+              {/* Popup Header */}
+              <div className={`relative ${selectedTier.bgColor} p-2 px-4 border-b ${selectedTier.borderColor}`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={selectedTier.image}
+                      alt={`${selectedTier.name} Badge`}
+                      className="w-20 h-20 object-contain"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = 'https://placehold.co/64x64?text=Tier';
+                      }}
+                    />
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">{selectedTier.name} Tier Swags</h2>
+                      <p className="text-gray-600">{selectedTier.points} points required • {tierSwags[selectedTier.name]?.length || 0} items included</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={closePopup}
+                    className="p-2 cursor-pointer hover:bg-white  hover:bg-opacity-20 rounded-full transition-colors duration-200"
+                  >
+                    <X size={24} className="text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Popup Content */}
+              <div className="p-6 max-h-[calc(90vh-200px)] overflow-y-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {tierSwags[selectedTier.name]?.map((swag) => (
+                    <div key={swag.id} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                      <div className="flex flex-col gap-4">
+                        <img
+                          src={swag.image}
+                          alt={swag.title}
+                          className="w-full h-48 object-cover rounded-lg"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = 'https://placehold.co/300x300?text=Swag';
+                          }}
+                        />
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">{swag.title}</h3>
+                          
+                          {/* Description Toggle */}
+                          <div className="space-y-2">
+                            {expandedSwag === swag.id && (
+                              <p className="text-sm text-gray-600 leading-relaxed">
+                                {swag.description}
+                              </p>
+                            )}
+                            <button
+                              onClick={() => toggleSwagDescription(swag.id)}
+                              className="flex items-center gap-2 cursor-pointer text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-200"
+                            >
+                              {expandedSwag === swag.id ? (
+                                <>
+                                  <span>Read Less</span>
+                                  <ChevronUp size={16} />
+                                </>
+                              ) : (
+                                <>
+                                  <span>Read More</span>
+                                  <ChevronDown size={16} />
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
