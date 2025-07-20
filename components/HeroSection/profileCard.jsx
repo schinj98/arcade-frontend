@@ -1,7 +1,7 @@
 
 import React, { useContext } from 'react';
 import { BadgeCheck, Calendar } from 'lucide-react';
-import { ProfileContext } from '@/context/ProfileContext';
+import { ProfileContext } from '../../context/ProfileContext';
 
 export default function ProfileCard() {
   const {profileData} = useContext(ProfileContext)

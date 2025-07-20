@@ -37,8 +37,8 @@ export const ProfileProvider = ({ children }) => {
       const json = await res.json();
 
       if (json?.data) {
-        setProfileData(json);
-        localStorage.setItem(cachedKey, JSON.stringify(json));
+        setProfileData(json.data.data);
+        localStorage.setItem(cachedKey, JSON.stringify(json.data.data));
       } else {
         setProfileData(null);
         setShowModal(true);
