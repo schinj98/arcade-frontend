@@ -45,7 +45,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        
       <link rel="icon" href="/images/logo.png" type="image/png" />
+      <meta name="google-adsense-account" content="ca-pub-5183171666938196"></meta>
         {/* Google Analytics Script */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ECCG3B88Q0"
