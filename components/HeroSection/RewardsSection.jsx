@@ -21,7 +21,7 @@ export default function RewardsSection() {
   ];
 
   return (
-    <div className="min-h-screen rounded-xl bg-gray-50 p-6">
+    <div className=" rounded-xl bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
@@ -45,7 +45,6 @@ export default function RewardsSection() {
                 <div className="flex items-center text-sm text-gray-500">
                   <Sparkles size={16} className="text-amber-500 mr-1" />
                   <span className="font-medium text-gray-900">Season 1</span>
-                  <span className="ml-1">collection</span>
                 </div>
               </div>
             </div>

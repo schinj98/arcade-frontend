@@ -1,21 +1,23 @@
-// components/Navbar.js
 'use client'
-import { useState } from 'react'
+
+import { useState, useEffect, useRef, useContext } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useContext } from "react";
-import { ProfileContext } from "/context/ProfileContext";
-import { Home, LayoutDashboard, Gamepad2, Info, BookOpenCheck, MessageSquare, PlayCircle, Menu, X, User, Sparkles } from 'lucide-react'
-
+import { ProfileContext } from "/context/ProfileContext"
+import {
+  Home, LayoutDashboard, Gamepad2, Info,
+  BookOpenCheck, MessageSquare, PlayCircle,
+  Menu, X, User, LogOut
+} from 'lucide-react'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const pathname = usePathname()
-  const { profileData } = useContext(ProfileContext);
-  const profileImage = profileData?.userDetails?.profileImage;
-
-
-
+  const { profileData } = useContext(ProfileContext)
+  const profileImage = profileData?.userDetails?.profileImage
+  const profileName = profileData?.userDetails?.fullName || profileData?.userDetails?.name || "Guest"
+  const dropdownRef = useRef()
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
@@ -25,11 +27,29 @@ export default function Navbar() {
     { href: '/contact', label: 'Contact', icon: MessageSquare }
   ]
 
+  const handleLogout = () => {
+    localStorage.clear()
+    sessionStorage.clear()
+    window.location.href = "/"
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [])
+
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Left - Brand Name */}
+          {/* Left - Brand */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className=" bg-blue-600 rounded-full group-hover:shadow-lg group-hover:shadow-blue-600/25 transition-all duration-200">
               <img src="/images/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
@@ -39,12 +59,11 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Center - Navigation Items (Desktop) */}
+          {/* Center - Desktop Nav */}
           <div className="hidden md:flex items-center gap-2">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href
-              
               return (
                 <Link
                   key={item.href}
@@ -73,30 +92,50 @@ export default function Navbar() {
               <Gamepad2 size={16} />
               Play Now
             </a>
-            
-            {/* User Profile Button */}
-            <button className="relative group ">
-            <div className="w-10 h-10 bg-gray-100 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden">
 
-                {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <User size={36} className="text-gray-600" />
-                )}
-              </div>
+            {/* Profile Avatar with Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(prev => !prev)}
+                className="relative group focus:outline-none cursor-pointer"
+              >
+                <div className="w-10 h-10 bg-gray-100 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden">
+                  {profileImage ? (
+                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={36} className="text-gray-600" />
+                  )}
+                </div>
+                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+              </button>
 
-              {/* Online indicator */}
-              <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
-            </button>
-
-
+              {/* Dropdown UI */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 p-4 text-sm space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full overflow-hidden">
+                      {profileImage ? (
+                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <User size={36} className="text-gray-600" />
+                      )}
+                    </div>
+                    <div className="font-medium text-gray-800">{profileName}</div>
+                  </div>
+                  <hr />
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-all duration-200 cursor-pointer"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -109,14 +148,13 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Nav */}
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t border-gray-200">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href
-                
                 return (
                   <Link
                     key={item.href}
@@ -133,35 +171,28 @@ export default function Navbar() {
                   </Link>
                 )
               })}
-              
-              {/* Mobile Actions */}
-              <div className="flex items-center gap-3 pt-4 mt-2 border-t border-gray-200">
-                <a 
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
-                  href="https://go.cloudskillsboost.google/arcade" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <PlayCircle size={16} />
-                  Play Now
-                </a>
-                <button className="relative group">
-                  <div className=" w-10 h-10 bg-gray-100 rounded-xl hover:bg-gray-200 transition-all duration-200 overflow-hidden">
+
+              {/* Mobile Avatar with Dropdown */}
+              <div className="flex items-center justify-between px-4 mt-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer" onClick={() => setIsDropdownOpen(prev => !prev)}>
                     {profileImage ? (
-                      <img
-                        src={profileImage}
-                        alt="Profile"
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
                       <User size={36} className="text-gray-600" />
                     )}
                   </div>
-
-                  {/* Online indicator */}
-                  <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
-                </button>
+                  <span className="text-sm font-medium text-gray-800">{profileName}</span>
+                </div>
+                {isDropdownOpen && (
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                )}
               </div>
             </div>
           </div>

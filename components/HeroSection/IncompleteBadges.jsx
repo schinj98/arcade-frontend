@@ -85,7 +85,7 @@ order.forEach((type) => {
   });
 
   return (
-    <div className="min-h-screen rounded-xl bg-gray-50 p-6">
+    <div className="rounded-xl bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
