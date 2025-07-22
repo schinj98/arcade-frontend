@@ -56,7 +56,7 @@ export default function BadgesSection() {
   const completedTiers = tiers.filter(tier => (tier.current / tier.total) >= 1).length;
 
   return (
-    <div className="min-h-screen rounded-xl bg-gray-50 p-6">
+    <div className="rounded-xl bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-8 mb-12 border border-blue-200 shadow-lg">
@@ -76,7 +76,8 @@ export default function BadgesSection() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-6">
+              {/* MODIFIED SECTION */}
+              <div className="flex flex-wrap items-center gap-4 sm:gap-6"> {/* Added flex-wrap and adjusted gap for small screens */}
                 <div className="flex items-center gap-2 px-4 py-2 bg-white/80 rounded-xl border border-blue-200 shadow-sm">
                   <Zap size={16} className="text-blue-600" />
                   <span className="text-gray-900 font-semibold">{totalPoints}</span>
