@@ -7,6 +7,7 @@ import RewardsSection from './RewardsSection';
 import IncompleteBadges from './IncompleteBadges';
 import IncompleteBadges2 from './IncompleteBadges';
 import ProgressGraph from './ProgressGraph';
+import CompletedLabsSection from './CompletedLabsSection';
 
 export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp }) {
   const user = profileData?.userDetails;
@@ -28,6 +29,9 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
         <div className="md:col-span-2">
           <BadgesSection />
         </div>
+      </div>
+      <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <CompletedLabsSection />
       </div>
       <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <RewardsSection />
