@@ -45,13 +45,19 @@ export default function Navbar() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!profileData?.userDetails) {
+      setIsDropdownOpen(false)
+    }
+  }, [profileData])
+
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left - Brand */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className=" bg-blue-600 rounded-full group-hover:shadow-lg group-hover:shadow-blue-600/25 transition-all duration-200">
+            <div className="bg-blue-600 rounded-full group-hover:shadow-lg group-hover:shadow-blue-600/25 transition-all duration-200">
               <img src="/images/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
             </div>
             <span className="text-xl font-bold text-gray-900">
@@ -82,7 +88,7 @@ export default function Navbar() {
           </div>
 
           {/* Right - Actions */}
-          <div className="hidden md:flex items-center gap-4 ">
+          <div className="hidden md:flex items-center gap-4">
             <a 
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-100 hover:text-blue-500 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200"
               href="https://go.cloudskillsboost.google/arcade" 
@@ -93,46 +99,51 @@ export default function Navbar() {
               Play Now
             </a>
 
-            {/* Profile Avatar with Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setIsDropdownOpen(prev => !prev)}
-                className="relative group focus:outline-none cursor-pointer"
-              >
-                <div className="w-10 h-10 bg-gray-100 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden">
-                  {profileImage ? (
-                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <User size={36} className="text-gray-600" />
-                  )}
-                </div>
-                <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
-              </button>
-
-              {/* Dropdown UI */}
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 p-4 text-sm space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden">
-                      {profileImage ? (
-                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                      ) : (
-                        <User size={36} className="text-gray-600" />
-                      )}
-                    </div>
-                    <div className="font-medium text-gray-800">{profileName}</div>
+            {/* Profile Avatar */}
+            {profileData?.userDetails ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsDropdownOpen(prev => !prev)}
+                  className="relative group focus:outline-none cursor-pointer"
+                >
+                  <div className="w-10 h-10 bg-gray-100 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden">
+                    {profileImage ? (
+                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <User size={36} className="text-gray-600" />
+                    )}
                   </div>
-                  <hr />
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-all duration-200 cursor-pointer"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                </div>
-              )}
-            </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 p-4 text-sm space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full overflow-hidden">
+                        {profileImage ? (
+                          <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                          <User size={36} className="text-gray-600" />
+                        )}
+                      </div>
+                      <div className="font-medium text-gray-800">{profileName}</div>
+                    </div>
+                    <hr />
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-all duration-200 cursor-pointer"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-xl border-2 border-white shadow-md">
+                <User size={24} className="text-gray-400" />
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -172,28 +183,37 @@ export default function Navbar() {
                 )
               })}
 
-              {/* Mobile Avatar with Dropdown */}
-              <div className="flex items-center justify-between px-4 mt-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer" onClick={() => setIsDropdownOpen(prev => !prev)}>
-                    {profileImage ? (
-                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <User size={36} className="text-gray-600" />
-                    )}
+              {/* Mobile Avatar and Logout */}
+              {profileData?.userDetails ? (
+                <div className="flex items-center justify-between px-4 mt-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer" onClick={() => setIsDropdownOpen(prev => !prev)}>
+                      {profileImage ? (
+                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <User size={36} className="text-gray-600" />
+                      )}
+                    </div>
+                    <span className="text-sm font-medium text-gray-800">{profileName}</span>
                   </div>
-                  <span className="text-sm font-medium text-gray-800">{profileName}</span>
+                  {isDropdownOpen && (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  )}
                 </div>
-                {isDropdownOpen && (
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                )}
-              </div>
+              ) : (
+                <div className="flex items-center gap-3 px-4 mt-4">
+                  <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
+                    <User size={36} className="text-gray-400" />
+                  </div>
+                  <span className="text-sm font-medium text-gray-500">Guest</span>
+                </div>
+              )}
             </div>
           </div>
         )}
