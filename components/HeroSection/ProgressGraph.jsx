@@ -153,7 +153,7 @@ const ProgressGraph = () => {
 
 
   return (
-    <div className="rounded-xl bg-gray-50 py-6 sm:py-10.5 px-3 sm:px-4">
+    <div className="rounded-xl bg-gray-50 py-6 sm:py-7 px-3 sm:px-4">
 
       {/* Weekly Progress Chart */}
       {activeTab === 'chart' ? (
