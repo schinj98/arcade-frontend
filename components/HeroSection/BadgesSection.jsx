@@ -9,7 +9,7 @@ export default function BadgesSection() {
   const {profileData} = useContext(ProfileContext)
   
   // Mock data - replace with actual context
-  const completed_total_points = 55;
+  const completed_total_points = profileData?.completed_totalPoints;
   
   useEffect(() => {
     const timer = setTimeout(() => setAnimationDelay(true), 100);
