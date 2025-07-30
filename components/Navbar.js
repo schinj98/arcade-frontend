@@ -52,7 +52,7 @@ export default function Navbar() {
   }, [profileData])
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-100">
+    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-[100]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left - Brand */}
@@ -159,64 +159,69 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile Nav */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => {
-                const Icon = item.icon
-                const isActive = pathname === item.href
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                      isActive
-                        ? 'bg-blue-50 text-blue-600 border border-blue-200'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                    }`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Icon size={18} className={isActive ? 'text-blue-600' : 'text-gray-400'} />
-                    {item.label}
-                  </Link>
-                )
-              })}
+        {/* 🌟 Mobile Nav with Smooth Transition */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out border-t border-gray-200`}
+          style={{
+            maxHeight: isMenuOpen ? '1000px' : '0px',
+            paddingTop: isMenuOpen ? '1rem' : '0',
+            opacity: isMenuOpen ? 1 : 0,
+          }}
+        >
+          <div className="flex flex-col gap-2">
+            {navItems.map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? 'bg-blue-50 text-blue-600 border border-blue-200'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Icon size={18} className={isActive ? 'text-blue-600' : 'text-gray-400'} />
+                  {item.label}
+                </Link>
+              )
+            })}
 
-              {/* Mobile Avatar and Logout */}
-              {profileData?.userDetails ? (
-                <div className="flex items-center justify-between px-4 mt-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer" onClick={() => setIsDropdownOpen(prev => !prev)}>
-                      {profileImage ? (
-                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                      ) : (
-                        <User size={36} className="text-gray-600" />
-                      )}
-                    </div>
-                    <span className="text-sm font-medium text-gray-800">{profileName}</span>
+            {/* Mobile Avatar and Logout */}
+            {profileData?.userDetails ? (
+              <div className="flex items-center justify-between px-4 pb-4 mt-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer" onClick={() => setIsDropdownOpen(prev => !prev)}>
+                    {profileImage ? (
+                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <User size={36} className="text-gray-600" />
+                    )}
                   </div>
-                  {isDropdownOpen && (
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
-                    >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
-                  )}
+                  <span className="text-sm font-medium text-gray-800">{profileName}</span>
                 </div>
-              ) : (
-                <div className="flex items-center gap-3 px-4 mt-4">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-                    <User size={36} className="text-gray-400" />
-                  </div>
-                  <span className="text-sm font-medium text-gray-500">Guest</span>
+                {isDropdownOpen && (
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 px-4 mt-4">
+                <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
+                  <User size={36} className="text-gray-400" />
                 </div>
-              )}
-            </div>
+                <span className="text-sm font-medium text-gray-500">Guest</span>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </nav>
   )

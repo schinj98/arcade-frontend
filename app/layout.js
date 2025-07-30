@@ -1,6 +1,7 @@
 // app/layout.js
 import './globals.css'
 import Navbar from '../components/Navbar'
+import CountdownNotificationBar from '../components/CountdownNotificationBar'
 import Footer from '../components/Footer'
 import Script from 'next/script';
 import { ProfileProvider } from "@/context/ProfileContext";
@@ -69,6 +70,7 @@ export default function RootLayout({ children }) {
       <body className="bg-blue-50 text-gray-900">
         <ProfileProvider>
           <Navbar />
+          <CountdownNotificationBar />
             <main className="min-h-screen ">
             {/* <div className="px-6 sm:px-10 md:px-10 lg:px-50 xl:px-10 py-1"> */}
               {children}
