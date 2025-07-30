@@ -8,30 +8,17 @@ const typeColors = {
   Trivia: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   Game: 'bg-blue-50 text-blue-700 border-blue-200',
   Skill: 'bg-amber-50 text-amber-700 border-amber-200',
-  'Free Lab': 'bg-purple-50 text-purple-700 border-purple-200'
+  labsFree: 'bg-purple-50 text-purple-700 border-purple-200'
 };
 
 const typeIcons = {
   Trivia: '🧠',
   Game: '🎮',
   Skill: '⚡',
-  'Free Lab': '🔬'
+  labsFree: '📖'
 };
 
-function getTypeFromCategory(category) {
-  switch (category) {
-    case 'skillBadges':
-      return 'Skill';
-    case 'gameBadges':
-      return 'Game';
-    case 'triviaBadges':
-      return 'Trivia';
-    default:
-      return 'Other';
-  }
-}
-
-const filters = ['All', 'Trivia', 'Game', 'Skill'];
+const filters = ['All', 'Trivia', 'Game', 'Skill', 'labsFree'];
 
 export default function IncompleteBadges() {
   const [visibleCount, setVisibleCount] = useState(12);
@@ -40,47 +27,41 @@ export default function IncompleteBadges() {
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
 
-  const {profileData} = useContext(ProfileContext)
-  const badges = profileData?.incompleteBadges
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(text);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
+  const { profileData } = useContext(ProfileContext);
+  const badges = profileData?.incompleteBadges;
 
   const allBadges = [];
 
   if (badges) {
-    const order = ['Game', 'Trivia', 'Skill'];
+    const order = ['Game', 'Trivia', 'Skill', 'labsFree'];
 
-order.forEach((type) => {
-  const categoryKey = {
-    'Game': 'gameBadges',
-    'Trivia': 'triviaBadges',
-    'Skill': 'skillBadges',
-  }[type];
+    order.forEach((type) => {
+      const categoryKey = {
+        'Game': 'gameBadges',
+        'Trivia': 'triviaBadges',
+        'Skill': 'skillBadges',
+        'labsFree': 'labsFreeBadges',
+      }[type];
 
-  const badgeItems = badges?.[categoryKey] || {};
-  
-  Object.values(badgeItems).forEach((badge) => {
-    allBadges.push({
-      ...badge,
-      id: badge.accessToken || badge.badgeName || badge.badgeLink,
-      title: badge.badgeName,
-      type,
-      points: type === 'Skill' ? 0.5 : (badge.points || 0),
+      const badgeItems = badges?.[categoryKey] || {};
+      Object.values(badgeItems).forEach((badge) => {
+        const badgeObj = {
+          ...badge,
+          id: badge.accessToken || badge.badgeName || badge.badgeLink,
+          title: badge.badgeName,
+          type,
+          points: type === 'Skill' ? 0.5 : type === 'labsFree' ? 0 : (badge.points || 0),
+        };
+        allBadges.push(badgeObj);
+      });
     });
-  });
-});
-
   }
 
   const filteredBadges = allBadges.filter((badge) => {
     const matchesFilter = activeFilter === 'All' || badge.type === activeFilter;
     const matchesSearch =
-      badge.title.toLowerCase().includes(search.toLowerCase()) ||
-      badge.id.toLowerCase().includes(search.toLowerCase());
+      badge.title?.toLowerCase().includes(search.toLowerCase()) ||
+      badge.id?.toLowerCase().includes(search.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -187,7 +168,7 @@ order.forEach((type) => {
                     </div>
                   </div>
 
-                  {badge.type !== 'Skill' && (
+                  {badge.type !== 'Skill' && badge.type !== 'labsFree' && (
                     <div className="flex items-center gap-2">
                       <code className="flex-1 text-xs bg-gray-100 px-3 py-2 rounded-lg font-mono text-gray-700 truncate">
                         {badge.id}
