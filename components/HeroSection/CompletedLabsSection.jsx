@@ -59,11 +59,11 @@ export default function CompletedLabsSection() {
 
     if (
       categoryKey === 'skillBadges' &&
-      (totalPoints == 0 && (profileData?.completed_skill_badges?.length || 0) > 0)
+      (totalPoints == 0 && (profileData?.completed_skill_badges_list?.length || 0) > 0)
     ) {
-      const skillBadges = profileData?.completed_skill_badges || [];
+      const skillBadges = profileData?.completed_skill_badges_list || [];
       totalPoints = Math.floor(skillBadges.length / 2);
-    }
+    }    
 
     return { badgeCount, totalPoints };
   };
@@ -73,9 +73,9 @@ export default function CompletedLabsSection() {
 
     if (badges.length === 0) {
       if (categoryKey === 'levelBadges') {
-        badges = profileData?.completed_game_badges || [];
+        badges = profileData?.completed_game_badges_list || [];
       } else if (categoryKey === 'skillBadges') {
-        badges = profileData?.completed_skill_badges || [];
+        badges = profileData?.completed_skill_badges_list || [];
       } else if (categoryKey === 'triviaBadges') {
         badges = profileData?.completed_trivia_badges || [];
       } else if (categoryKey === 'certificationBadges') {
