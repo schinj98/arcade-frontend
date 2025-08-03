@@ -92,7 +92,7 @@ export default function CountdownNotificationBar() {
               </div>
               <div className="flex items-center gap-2">
                 <h3 className="font-bold text-base lg:text-lg tracking-wide">
-                  Facilitator '25
+                  Facilitator &#39;25
                 </h3>
                 <span className="px-2 py-0.5 bg-white/20 rounded-full text-xs font-medium backdrop-blur-sm">
                   Cohort 2
