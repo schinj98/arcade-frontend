@@ -7,10 +7,18 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://arcade-backend-4oc3.onrender.com/api/v1/leaderboard")
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    const headers = {
+      ...(apiKey && { "X-API-KEY": apiKey })
+    };
+  
+    fetch("https://arcade-backend-4oc3.onrender.com/api/v1/leaderboard", {
+      method: "GET",
+      headers,
+      credentials: "include"
+    })
       .then((res) => res.json())
       .then((data) => {
-        // Sort profiles by total_points in descending order
         const sortedProfiles = (data.data || []).sort((a, b) => b.total_points - a.total_points);
         setProfiles(sortedProfiles);
         setLoading(false);
@@ -20,6 +28,7 @@ export default function DashboardPage() {
         setLoading(false);
       });
   }, []);
+  
 
   const topThree = profiles.slice(0, 3);
   const restProfiles = profiles.slice(3);
@@ -27,21 +36,21 @@ export default function DashboardPage() {
   const getRankIcon = (rank) => {
     switch (rank) {
       case 1:
-        return <Crown className="w-6 h-6 text-yellow-500" />;
+        return <Crown className="w-6 h-6 text-white" />;
       case 2:
-        return <Medal className="w-6 h-6 text-gray-400" />;
+        return <Medal className="w-6 h-6 text-white" />;
       case 3:
-        return <Award className="w-6 h-6 text-amber-600" />;
+        return <Award className="w-6 h-6 text-white" />;
       default:
-        return <Star className="w-5 h-5 text-gray-500" />;
+        return <Star className="w-5 h-5 text-white" />;
     }
   };
 
   const getRankBadge = (rank) => {
     const badges = {
-      1: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white",
-      2: "bg-gradient-to-r from-gray-300 to-gray-500 text-white",
-      3: "bg-gradient-to-r from-amber-400 to-amber-600 text-white"
+      1: "bg-yellow-400 text-white",
+      2: "bg-gray-400 text-white",
+      3: "bg-orange-400 text-white"
     };
     return badges[rank] || "bg-gradient-to-r from-blue-500 to-blue-600 text-white";
   };
@@ -162,14 +171,10 @@ export default function DashboardPage() {
                             </span>
                             <span className="text-gray-500 text-sm">pts</span>
                           </div>
-                          
-                          <p className="text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full">
-                            ID: {profile.profile_id}
-                          </p>
                         </div>
 
                         {/* Podium Base */}
-                        <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-full ${getPodiumHeight(rank)} ${getRankBadge(rank)} rounded-b-lg opacity-20`}></div>
+                        {/* <div className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full w-full ${getPodiumHeight(rank)} ${getRankBadge(rank)} rounded-b-lg opacity-20`}></div> */}
                       </div>
                     );
                   })}
@@ -179,7 +184,7 @@ export default function DashboardPage() {
 
             {/* Rest of the Profiles */}
             {restProfiles.length > 0 && (
-              <div>
+              <div className="mx-auto px-4 max-w-full sm:max-w-2xl md:max-w-lg lg:max-w-xl xl:max-w-2xl">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800">🌟 Rising Stars</h2>
                 <div className="space-y-4">
                   {restProfiles.map((profile, index) => {
@@ -190,7 +195,7 @@ export default function DashboardPage() {
                         className="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-4 flex items-center space-x-4 hover:bg-gray-50"
                       >
                         {/* Rank Number */}
-                        <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                        <div className="flex-shrink-0 w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
                           #{rank}
                         </div>
 
@@ -211,9 +216,6 @@ export default function DashboardPage() {
                           <h3 className="font-semibold text-gray-900 truncate text-lg">
                             {profile.user_name}
                           </h3>
-                          <p className="text-sm text-gray-500">
-                            ID: {profile.profile_id}
-                          </p>
                         </div>
 
                         {/* Points */}
