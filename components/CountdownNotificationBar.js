@@ -2,12 +2,13 @@
 import { useState, useEffect } from 'react';
 import { Clock, Calendar } from 'lucide-react';
 
+const EVENT_START_TIME = new Date('2025-08-04T17:00:00'); // Adjust as needed
+
 export default function CountdownNotificationBar() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [isVisible, setIsVisible] = useState(true);
 
   // Step 1: Event start time (in ISO format, UTC or local)
-  const EVENT_START_TIME = new Date('2025-08-04T17:00:00'); // Adjust as needed
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -28,7 +29,8 @@ export default function CountdownNotificationBar() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [EVENT_START_TIME]);
+
 
   const formatTime = (time) => time.toString().padStart(2, '0');
 
@@ -48,7 +50,7 @@ export default function CountdownNotificationBar() {
                   <Calendar className="w-3 h-3" />
                 </div>
                 <h3 className="font-bold text-sm tracking-wide">
-                  Facilitator '25
+                  Facilitator &#39;25
                 </h3>
                 <span className="px-1.5 py-0.5 bg-white/20 rounded-full text-xs font-medium backdrop-blur-sm">
                   Cohort 2
