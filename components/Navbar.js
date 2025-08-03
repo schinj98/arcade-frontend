@@ -7,7 +7,7 @@ import { ProfileContext } from "/context/ProfileContext"
 import {
   Home, LayoutDashboard, Gamepad2, Info,
   BookOpenCheck, MessageSquare, PlayCircle,
-  Menu, X, User, LogOut
+  Menu, X, ListOrdered, User, LogOut
 } from 'lucide-react'
 
 export default function Navbar() {
@@ -23,7 +23,7 @@ export default function Navbar() {
     { href: '/', label: 'Home', icon: Home },
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { href: '/knowledge', label: 'Knowledge', icon: BookOpenCheck },
-    { href: '/about', label: 'About', icon: Info },
+    { href: '/leaderboard', label: 'Leaderboard', icon: ListOrdered },
     { href: '/contact', label: 'Contact', icon: MessageSquare }
   ]
 
