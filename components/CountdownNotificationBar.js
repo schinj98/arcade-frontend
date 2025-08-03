@@ -103,7 +103,7 @@ export default function CountdownNotificationBar() {
             {/* Countdown Section */}
             <div className="flex items-center gap-3 font-mono">
               <div className="flex items-center gap-2 font-semibold text-sm">
-                <Clock className="w-4 h-4 animate-spin" style={{ animationDuration: '2s' }} />
+                <Clock className="w-4 h-4 animate-spin" style={{ animationDuration: '5s' }} />
                 <span className="hidden md:inline">Starting in</span>
                 <span className="md:hidden">In</span>
               </div>

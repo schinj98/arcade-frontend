@@ -6,7 +6,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://arcade-backend-4oc3.onrender.com/api/v1/allProfiles")
+    fetch("https://arcade-backend-4oc3.onrender.com/api/v1/leaderboard")
       .then((res) => res.json())
       .then((data) => {
         setProfiles(data.data || []);
