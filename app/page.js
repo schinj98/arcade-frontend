@@ -68,7 +68,7 @@ function ProfileUrlInputSection() {
             Connect Your Public Profile
           </h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Link your achievements and progress to personalize your learning experience.
+            Enter Google Cloud Public Profile URL to Calculate Arcade Points Instantly.
           </p>
         </div>
 
@@ -148,8 +148,8 @@ export default function HomePage() {
 
       
         <title>Arcade Points Calculator | Personalized Score Tracker</title>
-        <meta name="description" content="Calculate and Cloud Arcade Points using our accurate and user-friendly platform. Checkout the Swags you're Eligible for." />
-        <meta name="keywords" content="arcade calculator, arcade profile, cloud skill badge tracker, facilitator Points calculate, calculate arcade points, learning tracker" />
+        <meta name="description" content="Calculate and Cloud Arcade Points using our accurate and user-friendly platform. Checkout the Swags you're Eligible for. Monitor your Google Cloud Arcade journey in real-time. Track points, badges, and swag eligibility. Get personalized insights, progress analytics, and achievement recommendations to accelerate your cloud certification path." />
+        <meta name="keywords" content="arcade calculator, arcade profile, cloud skill badge tracker, facilitator Points calculate, calculate arcade points, learning tracker , arcade points calculator,calculate arcade points,Google Cloud Arcade calculator,arcade points tracker,cloud arcade points,Google Cloud points calculator,arcade points system,cloud certification points,arcade rewards calculator,Google Cloud Skills points,arcadecalc,arcade calc,arcadecalc vercel,arcade point calc,arcade points vercel,arcade points vercel,arcade calculator vercel,arcade calculator 2025,arcade points counter,calculator arcade,aracde point calculator,point calculator arcade,google cloud,Arcade Points Calculator,arcade point calculator,arcade point,arcade points,calculate arcade points,calculate arcade point,Google Cloud Dashboard,Arcade Progress Tracker,Arcade Points Calculator,Calculate Arcade Points,Cloud Certification Progress,Google Cloud Points,Badge Progress Monitor,Swag Eligibility Tracker,Cloud Skills Analytics,Google Cloud Achievement,Real-time Progress Tracking,Cloud Learning Dashboard" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Arcade Points Calculator" />
         <meta property="og:description" content="calculate your cloud arcade points easily!" />
