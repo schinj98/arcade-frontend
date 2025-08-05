@@ -1,16 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Trophy, Target, Crown, Star, Flame, Zap, Gamepad2, Sparkles } from 'lucide-react';
-import { ProfileContext } from '../../context/ProfileContext';
-
-
+import { Trophy, Target, Crown, Star, Flame, Zap, Gamepad2, Sparkles, ChevronRight } from 'lucide-react';
+import { ProfileContext } from '@/context/ProfileContext';
 export default function BadgesSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
   const [animationDelay, setAnimationDelay] = useState(false);
   const {profileData} = useContext(ProfileContext)
   
   // Mock data - replace with actual context
-  const completed_total_points = profileData?.completed_totalPoints;
-  
+  const completed_total_points = profileData?.completed_totalPoints || 0;
+
   useEffect(() => {
     const timer = setTimeout(() => setAnimationDelay(true), 100);
     return () => clearTimeout(timer);
@@ -57,209 +55,231 @@ export default function BadgesSection() {
   const completedTiers = tiers.filter(tier => (tier.current / tier.total) >= 1).length;
 
   return (
-    <div className="bg-gray-50 p-6 rounded-xl">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="bg-slate-50 p-4 rounded-2xl">
+      <div className="max-w-6xl mx-auto space-y-6">
         
-        {/* Simple Header */}
-        <div className="bg-blue-100 rounded-2xl p-8">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        {/* Compact Header with Inline Stats */}
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             
+            {/* Left Side - Title and Progress */}
             <div className="flex-1">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-blue-600 rounded-xl">
-                  <Gamepad2 size={28} className="text-white" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-indigo-600 rounded-lg">
+                  <Gamepad2 size={24} className="text-white" />
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">Tier Progress</h1>
-                  <p className="text-gray-600">Track your arcade journey</p>
+                  <h1 className="text-2xl font-bold text-slate-900">Arcade Progress</h1>
+                  <p className="text-slate-600 text-sm">Level up your arcade journey</p>
                 </div>
               </div>
               
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-blue-200">
-                  <Zap size={16} className="text-blue-600" />
-                  <span className="text-gray-900 font-semibold">{totalPoints}</span>
-                  <span className="text-gray-600">points</span>
+              {/* Inline Stats */}
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <Zap size={16} className="text-indigo-600" />
+                  <span className="text-slate-900 font-semibold text-lg">{totalPoints}</span>
+                  <span className="text-slate-600 text-sm">pts</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-blue-200">
-                  <Sparkles size={16} className="text-blue-600" />
-                  <span className="text-gray-900 font-semibold">{completedTiers}</span>
-                  <span className="text-gray-600">tiers completed</span>
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-amber-500" />
+                  <span className="text-slate-900 font-semibold text-lg">{completedTiers}</span>
+                  <span className="text-slate-600 text-sm">unlocked</span>
+                </div>
+                <div className="hidden sm:flex items-center gap-2">
+                  <Target size={16} className="text-emerald-600" />
+                  <span className="text-slate-900 font-semibold text-lg">{overallPercentage.toFixed(0)}%</span>
+                  <span className="text-slate-600 text-sm">complete</span>
                 </div>
               </div>
             </div>
 
-            {/* Simple Progress Circle */}
-            <div className="bg-white p-6 rounded-2xl border border-blue-200">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <svg className="w-20 h-20 transform -rotate-90">
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="32"
-                      stroke="rgb(148 163 184)"
-                      strokeWidth="6"
-                      fill="none"
-                    />
-                    <circle
-                      cx="40"
-                      cy="40"
-                      r="32"
-                      stroke="rgb(37 99 235)"
-                      strokeWidth="6"
-                      fill="none"
-                      strokeDasharray={`${2 * Math.PI * 32}`}
-                      strokeDashoffset={`${2 * Math.PI * 32 * (1 - overallPercentage / 100)}`}
-                      className="transition-all duration-1000 ease-out"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xl font-bold text-gray-900">{overallPercentage.toFixed(0)}%</span>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm">Overall Progress</p>
-                  <p className="font-bold text-gray-900 text-lg">{totalPoints} / {maxPoints}</p>
+            {/* Right Side - Compact Progress */}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-slate-600 text-xs uppercase tracking-wide font-medium">Overall Progress</p>
+                <p className="font-bold text-slate-900 text-lg">{totalPoints} / {maxPoints}</p>
+              </div>
+              <div className="relative">
+                <svg className="w-16 h-16 transform -rotate-90">
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    stroke="rgb(226 232 240)"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    stroke="rgb(79 70 229)"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeDasharray={`${2 * Math.PI * 28}`}
+                    strokeDashoffset={`${2 * Math.PI * 28 * (1 - overallPercentage / 100)}`}
+                    className="transition-all duration-1000 ease-out"
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-sm font-bold text-slate-900">{overallPercentage.toFixed(0)}%</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Simple Tiers Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-          {tiers.map((tier, index) => {
-            const Icon = tier.icon;
-            const percentage = tier.total > 0 ? Math.min((tier.current / tier.total) * 100, 100) : 0;
-            const isCurrentTier = index === currentTierIndex;
-            const isCompleted = percentage === 100;
-            
-            return (
-              <div
-                key={tier.name}
-                className={`bg-white rounded-2xl p-6 border-2 transition-all duration-300 hover:scale-105 ${
-                  isCompleted 
-                    ? 'border-yellow-400 bg-yellow-50' 
-                    : isCurrentTier 
-                      ? 'border-blue-600' 
-                      : 'border-blue-200 hover:border-blue-300'
-                }`}
-                onMouseEnter={() => setHoveredTier(tier.name)}
-                onMouseLeave={() => setHoveredTier(null)}
-              >
-                {/* Simple status bar */}
-                {isCurrentTier && (
-                  <div className="h-1 bg-blue-600 rounded-full mb-4 -mt-2 mx-2"></div>
-                )}
-                {isCompleted && !isCurrentTier && (
-                  <div className="h-1 bg-yellow-400 rounded-full mb-4 -mt-2 mx-2"></div>
-                )}
-
-                {/* Icon */}
-                <div className="mb-4">
-                  <div className={`w-16 h-16 mx-auto rounded-xl flex items-center justify-center ${
-                    isCompleted 
-                      ? 'bg-yellow-400' 
-                      : isCurrentTier
-                        ? 'bg-blue-100'
-                        : 'bg-slate-100'
-                  }`}>
-                    <Icon size={28} className={`${
-                      isCompleted 
-                        ? 'text-white' 
-                        : isCurrentTier
-                          ? 'text-blue-600'
-                          : 'text-gray-400'
-                    }`} />
-                  </div>
-                </div>
-
-                {/* Tier name */}
-                <h3 className="text-lg font-bold text-center mb-3 text-gray-900">
-                  {tier.name.replace('Arcade ', '')}
-                </h3>
-
-                {/* Progress */}
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 font-medium">
-                      {tier.current}/{tier.total} pts
-                    </span>
-                    <span className={`text-sm font-bold px-3 py-1 rounded-full ${
-                      isCompleted 
-                        ? 'text-yellow-700 bg-yellow-100' 
-                        : isCurrentTier
-                          ? 'text-blue-700 bg-blue-100'
-                          : 'text-gray-700 bg-slate-100'
-                    }`}>
-                      {percentage.toFixed(0)}%
-                    </span>
-                  </div>
-                  
-                  {/* Progress bar */}
-                  <div className="w-full bg-slate-200 rounded-full h-2">
-                    <div 
-                      className={`h-2 rounded-full transition-all duration-1000 ${
-                        isCompleted 
-                          ? 'bg-yellow-400' 
-                          : isCurrentTier
-                            ? 'bg-blue-600'
-                            : 'bg-slate-300'
-                      }`}
-                      style={{ width: `${percentage}%` }}
-                    ></div>
-                  </div>
-                </div>
+        {/* Horizontal Tier Progress */}
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-slate-900">Achievement Tiers</h2>
+            {currentTierIndex >= 0 && currentTierIndex < tiers.length && (
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <span>Next:</span>
+                <span className="font-medium text-indigo-600">
+                  {tiers[currentTierIndex].total - tiers[currentTierIndex].current} pts to {tiers[currentTierIndex].name.replace('Arcade ', '')}
+                </span>
+                <ChevronRight size={16} className="text-slate-400" />
               </div>
-            );
-          })}
+            )}
+          </div>
+          
+          {/* Tier Cards - Horizontal Layout */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {tiers.map((tier, index) => {
+              const Icon = tier.icon;
+              const percentage = tier.total > 0 ? Math.min((tier.current / tier.total) * 100, 100) : 0;
+              const isCurrentTier = index === currentTierIndex;
+              const isCompleted = percentage === 100;
+              
+              return (
+                <div
+                  key={tier.name}
+                  className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-300 cursor-pointer hover:scale-105 ${
+                    isCompleted 
+                      ? 'bg-gradient-to-br from-amber-50 to-amber-100 border-2 border-amber-300' 
+                      : isCurrentTier 
+                        ? 'bg-gradient-to-br from-indigo-50 to-indigo-100 border-2 border-indigo-300' 
+                        : 'bg-slate-50 border-2 border-slate-200 hover:border-slate-300'
+                  }`}
+                  onMouseEnter={() => setHoveredTier(tier.name)}
+                  onMouseLeave={() => setHoveredTier(null)}
+                >
+                  {/* Active indicator */}
+                  {isCurrentTier && (
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-indigo-600"></div>
+                  )}
+                  {isCompleted && !isCurrentTier && (
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500"></div>
+                  )}
+
+                  {/* Icon */}
+                  <div className="mb-3">
+                    <div className={`w-12 h-12 mx-auto rounded-lg flex items-center justify-center transition-colors ${
+                      isCompleted 
+                        ? 'bg-amber-500' 
+                        : isCurrentTier
+                          ? 'bg-indigo-600'
+                          : 'bg-slate-300 group-hover:bg-slate-400'
+                    }`}>
+                      <Icon size={20} className={`${
+                        isCompleted || isCurrentTier
+                          ? 'text-white' 
+                          : 'text-slate-600'
+                      }`} />
+                    </div>
+                  </div>
+
+                  {/* Tier name */}
+                  <h3 className="text-sm font-semibold text-center mb-2 text-slate-900">
+                    {tier.name.replace('Arcade ', '')}
+                  </h3>
+
+                  {/* Progress */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-slate-600">
+                        {tier.current}/{tier.total}
+                      </span>
+                      <span className={`text-xs font-bold px-2 py-1 rounded-full ${
+                        isCompleted 
+                          ? 'text-amber-700 bg-amber-200' 
+                          : isCurrentTier
+                            ? 'text-indigo-700 bg-indigo-200'
+                            : 'text-slate-700 bg-slate-200'
+                      }`}>
+                        {percentage.toFixed(0)}%
+                      </span>
+                    </div>
+                    
+                    {/* Progress bar */}
+                    <div className="w-full bg-slate-200 rounded-full h-1.5">
+                      <div 
+                        className={`h-1.5 rounded-full transition-all duration-1000 ${
+                          isCompleted 
+                            ? 'bg-amber-500' 
+                            : isCurrentTier
+                              ? 'bg-indigo-600'
+                              : 'bg-slate-400'
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  {/* Hover effect overlay */}
+                  {hoveredTier === tier.name && (
+                    <div className="absolute  bg-white bg-opacity-10 pointer-events-none"></div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Simple Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Compact Achievement Summary */}
+        <div className="grid grid-cols-3 gap-4">
           {[
+            {
+              title: 'Achievement Rate',
+              value: `${((completedTiers / tiers.length) * 100).toFixed(0)}%`,
+              icon: Star,
+              color: 'emerald'
+            },
             {
               title: 'Next Milestone',
               value: currentTierIndex >= 0 && currentTierIndex < tiers.length 
                 ? `${tiers[currentTierIndex].total - tiers[currentTierIndex].current} pts`
                 : 'Complete!',
-              subtitle: currentTierIndex >= 0 && currentTierIndex < tiers.length 
-                ? `to ${tiers[currentTierIndex].name}`
-                : 'All tiers achieved',
               icon: Target,
-              bgColor: 'bg-blue-100'
+              color: 'indigo'
             },
             {
               title: 'Tiers Unlocked',
-              value: `${completedTiers} / ${tiers.length}`,
-              subtitle: 'tiers completed',
+              value: `${completedTiers}/${tiers.length}`,
               icon: Trophy,
-              bgColor: 'bg-yellow-100'
-            },
-            {
-              title: 'Achievement Rate',
-              value: `${((completedTiers / tiers.length) * 100).toFixed(0)}%`,
-              subtitle: 'completion rate',
-              icon: Star,
-              bgColor: 'bg-blue-100'
+              color: 'amber'
             }
           ].map((stat, index) => (
             <div key={stat.title} className="group">
-              <div className={`${stat.bgColor} rounded-2xl p-6 transition-all duration-300 group-hover:scale-105`}>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-gray-600 text-sm font-medium">{stat.title}</p>
-                  <div className={`p-2 rounded-xl ${
-                    stat.bgColor === 'bg-yellow-100' ? 'bg-yellow-400' : 'bg-blue-600'
+              <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
+                <div className="flex items-center justify-between mb-2">
+                  <div className={`p-1.5 rounded-md ${
+                    stat.color === 'emerald' ? 'bg-emerald-100' :
+                    stat.color === 'indigo' ? 'bg-indigo-100' : 'bg-amber-100'
                   }`}>
-                    <stat.icon size={20} className="text-white" />
+                    <stat.icon size={16} className={`${
+                      stat.color === 'emerald' ? 'text-emerald-600' :
+                      stat.color === 'indigo' ? 'text-indigo-600' : 'text-amber-600'
+                    }`} />
                   </div>
                 </div>
-                <p className="text-3xl font-bold text-gray-900 mb-1">
+                <p className="text-xl font-bold text-slate-900 mb-1">
                   {stat.value}
                 </p>
-                <p className="text-gray-500 text-sm">{stat.subtitle}</p>
+                <p className="text-slate-600 text-xs">{stat.title}</p>
               </div>
             </div>
           ))}
