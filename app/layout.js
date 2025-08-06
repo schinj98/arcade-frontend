@@ -40,13 +40,32 @@ export const metadata = {
   },
 };
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Theme Flash Prevention Script - Must be executed before any rendering */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme') || 'light';
+                  if (theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })()
+            `,
+          }}
+        />
         <link rel="icon" href="/images/logo.png" type="image/png" />
         <meta name="google-adsense-account" content="ca-pub-5183171666938196"></meta>
+        
+        
+        
         {/* Google Analytics Script */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ECCG3B88Q0"
@@ -65,10 +84,6 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      {/* 
-        Use both light and dark variants on <body>.
-        This works when your ThemeProvider toggles the "dark" class on <html> (recommended).
-      */}
       <body className="bg-blue-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
         <ThemeProvider>
           <ProfileProvider>
