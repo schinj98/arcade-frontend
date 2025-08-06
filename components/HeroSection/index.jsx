@@ -11,13 +11,13 @@ import Facilitator_section from './Facilitator_section';
 import Total_progress from './Total_progress';
 import CompletedLabsSection from './CompletedLabsSection';
 
-export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp }) {
+export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp, isDarkMode = false  }) {
   const user = profileData?.userDetails;
   const completed_totalPoints = profileData?.completed_totalPoints;
   // const badges = IncompleteBadges?.IncompleteBadges; // This line seems to be incorrect, IncompleteBadges is a component, not an object with a property called IncompleteBadges
 
   return (
-    <div className="min-h-screen bg-blue-50 py-5 px-4 sm:px-6 lg:px-8 font-inter">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950' : 'bg-blue-50'} py-5 px-4 sm:px-6 lg:px-8 font-inter transition-colors duration-300`}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         .font-inter { font-family: 'Inter', sans-serif; }

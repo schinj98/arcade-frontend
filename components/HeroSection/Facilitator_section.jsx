@@ -2,6 +2,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Sun, Moon, Trophy, Target, Zap, Star, Crown, ChevronRight, Info, CheckCircle2, Clock, Sparkles } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
+import { ThemeContext } from '@/context/ThemeContext';
 
 export default function Facilitator_section() {
   // Mock ProfileContext for demo
@@ -12,7 +13,7 @@ export default function Facilitator_section() {
   const [hoveredGoal, setHoveredGoal] = useState(null);
   const [animateProgress, setAnimateProgress] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { isDarkMode } = useContext(ThemeContext);
   const [pulseCompleted, setPulseCompleted] = useState(false);
   
   const finding_total_completions = profileData?.badgesOverview || {
@@ -202,16 +203,7 @@ export default function Facilitator_section() {
         
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2 sm:gap-3 order-2 sm:order-1">
-            {/* <button
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className={`p-2 rounded-lg ${themeClasses.accent} ${themeClasses.accentHover} backdrop-blur-sm transition-all duration-300 group`}
-            >
-              {isDarkMode ? (
-                <Sun className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500 group-hover:rotate-180 transition-transform duration-500" />
-              ) : (
-                <Moon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 group-hover:rotate-12 transition-transform duration-300" />
-              )}
-            </button> */}
+            
             
             <button
               onClick={() => setShowDetails(!showDetails)}

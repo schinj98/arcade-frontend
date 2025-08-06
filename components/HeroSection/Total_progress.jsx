@@ -5,17 +5,18 @@ import {
   ChevronRight, Activity, Users, Shield
 } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
-
+import { ThemeContext } from '@/context/ThemeContext'; // adjust path if needed
 
 export default function TotalProgress() {
   const { profileData } = useContext(ProfileContext);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode } = useContext(ThemeContext);
+
   const [hoveredStat, setHoveredStat] = useState(null);
   const [animateNumbers, setAnimateNumbers] = useState(false);
   const [pulseEffect, setPulseEffect] = useState(false);
-  
+
   const user = profileData?.userDetails;
-  const totalPoints = profileData?.completed_totalPoints;
+  const totalPoints = profileData?.completed_totalPoints ?? 0;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -26,26 +27,58 @@ export default function TotalProgress() {
     return () => clearTimeout(timer);
   }, []);
 
+  // themeClasses exactly as you provided (applies only for dark mode; light stays same)
   const themeClasses = {
-    bg: isDarkMode ? 'bg-gray-900' : 'bg-white',
-    cardBg: isDarkMode ? 'bg-gray-800' : 'bg-white',
-    text: isDarkMode ? 'text-gray-100' : 'text-gray-800',
-    textSecondary: isDarkMode ? 'text-gray-300' : 'text-gray-600',
-    textMuted: isDarkMode ? 'text-gray-400' : 'text-gray-500',
-    border: isDarkMode ? 'border-gray-700' : 'border-blue-200',
-    borderLight: isDarkMode ? 'border-gray-600' : 'border-gray-100',
-    hover: isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50',
-    accent: isDarkMode ? 'bg-gray-700' : 'bg-gray-50',
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-white',
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    text: isDarkMode ? 'text-slate-100' : 'text-slate-800',
+    textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
+    textMuted: isDarkMode ? 'text-slate-400' : 'text-gray-500',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-blue-200',
+    borderLight: isDarkMode ? 'border-slate-600/30' : 'border-slate-100/30',
+    hover: isDarkMode ? 'hover:bg-slate-800/50' : 'hover:bg-gray-50',
+    accent: isDarkMode ? 'bg-slate-800/50' : 'bg-gray-50',
+  };
+
+  // map color keys to explicit Tailwind classes (so runtime template strings are avoided)
+  const colorMap = {
+    blue: {
+      borderHover: 'border-blue-300',
+      shadow: 'shadow-blue-500/20',
+      pillLight: 'bg-blue-100 text-blue-700',
+      pillDark: 'bg-blue-900/30 text-blue-300',
+      iconBg: 'from-blue-400 to-blue-600',
+      bgGradient: 'from-blue-50 to-blue-100',
+      darkBgGradient: 'from-blue-900/20 to-blue-800/10',
+    },
+    purple: {
+      borderHover: 'border-purple-300',
+      shadow: 'shadow-purple-500/20',
+      pillLight: 'bg-purple-100 text-purple-700',
+      pillDark: 'bg-purple-900/30 text-purple-300',
+      iconBg: 'from-purple-400 to-purple-600',
+      bgGradient: 'from-purple-50 to-purple-100',
+      darkBgGradient: 'from-purple-900/20 to-purple-800/10',
+    },
+    green: {
+      borderHover: 'border-green-300',
+      shadow: 'shadow-green-500/20',
+      pillLight: 'bg-green-100 text-green-700',
+      pillDark: 'bg-green-900/30 text-green-300',
+      iconBg: 'from-green-400 to-green-600',
+      bgGradient: 'from-green-50 to-green-100',
+      darkBgGradient: 'from-green-900/20 to-green-800/10',
+    }
   };
 
   if (!user) {
     return (
       <div className={`${themeClasses.cardBg} rounded-2xl border ${themeClasses.border} p-6 sm:p-8 text-center shadow-lg relative overflow-hidden`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-purple-50/10 to-pink-50/20 dark:from-blue-950/20 dark:via-purple-950/10 dark:to-pink-950/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-purple-50/10 to-pink-50/20" />
         <div className="relative animate-pulse">
-          <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-full mx-auto mb-4"></div>
-          <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-lg w-32 mx-auto mb-2"></div>
-          <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 rounded-lg w-24 mx-auto"></div>
+          <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full mx-auto mb-4"></div>
+          <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-32 mx-auto mb-2"></div>
+          <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-24 mx-auto"></div>
         </div>
       </div>
     );
@@ -56,10 +89,7 @@ export default function TotalProgress() {
       label: 'Facilitator Points',
       value: profileData?.facilitatorPoints ?? 0,
       icon: Trophy,
-      color: 'blue',
-      gradient: 'from-blue-400 to-blue-600',
-      bgGradient: 'from-blue-50 to-blue-100',
-      darkBgGradient: 'from-blue-900/20 to-blue-800/10',
+      colorKey: 'blue',
       description: 'Arcade Facilitator Points',
       trend: '+12%'
     },
@@ -67,10 +97,7 @@ export default function TotalProgress() {
       label: 'Arcade Points',
       value: profileData?.completed_totalPoints ?? 0,
       icon: Crown,
-      color: 'purple',
-      gradient: 'from-purple-400 to-purple-600',
-      bgGradient: 'from-purple-50 to-purple-100',
-      darkBgGradient: 'from-purple-900/20 to-purple-800/10',
+      colorKey: 'purple',
       description: 'Total Arcade Points',
       trend: '+8%'
     },
@@ -78,10 +105,7 @@ export default function TotalProgress() {
       label: 'Swags Eligibility',
       value: profileData?.completed_totalBadges ?? 0,
       icon: Flame,
-      color: 'green',
-      gradient: 'from-green-400 to-green-600',
-      bgGradient: 'from-green-50 to-green-100',
-      darkBgGradient: 'from-green-900/20 to-green-800/10',
+      colorKey: 'green',
       description: 'Total Cumulative Badges',
       trend: '+15%'
     }
@@ -92,12 +116,10 @@ export default function TotalProgress() {
 
     useEffect(() => {
       if (!animateNumbers) return;
-      
       let startTime;
       const animate = (timestamp) => {
         if (!startTime) startTime = timestamp;
         const progress = (timestamp - startTime) / duration;
-        
         if (progress < 1) {
           setDisplayValue(Math.floor(value * progress));
           requestAnimationFrame(animate);
@@ -105,7 +127,6 @@ export default function TotalProgress() {
           setDisplayValue(value);
         }
       };
-      
       requestAnimationFrame(animate);
     }, [value, duration, animateNumbers]);
 
@@ -113,10 +134,10 @@ export default function TotalProgress() {
   };
 
   return (
-    <div className={`${themeClasses.cardBg} rounded-2xl shadow-lg border ${themeClasses.border} p-6 w-full max-w-sm mx-auto relative overflow-hidden transition-all duration-500`}>
+    <div className={`${themeClasses.cardBg} rounded-2xl shadow-lg border ${themeClasses.border} p-6 w-full max-w-sm mx-auto relative overflow-hidden transition-all duration-500 ${themeClasses.bg}`}>
       {/* Background Effects */}
-      <div className="absolute inset-0 bg-white dark:from-blue-950/30 dark:via-purple-950/20 dark:to-pink-950/30" />
-      
+      <div className={`absolute inset-0 ${isDarkMode ? 'bg-gradient-to-br from-slate-900/40 to-slate-800/20' : 'bg-white/0'}`} />
+
       {/* Floating Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(6)].map((_, i) => (
@@ -124,9 +145,9 @@ export default function TotalProgress() {
             key={i}
             className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-pulse"
             style={{
-              left: `${20 + i * 15}%`,
+              left: `${20 + i * 12}%`,
               top: `${10 + (i % 3) * 30}%`,
-              animationDelay: `${i * 0.8}s`,
+              animationDelay: `${i * 0.6}s`,
               animationDuration: `${2 + i * 0.5}s`
             }}
           />
@@ -134,7 +155,7 @@ export default function TotalProgress() {
       </div>
 
       <div className="relative z-10">
-        {/* Enhanced Header */}
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-indigo-600 rounded-lg shadow-md">
@@ -151,90 +172,79 @@ export default function TotalProgress() {
               </p>
             </div>
           </div>
-          
         </div>
 
-        {/* Enhanced Stat Items */}
         <div className="space-y-4">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             const isHovered = hoveredStat === index;
-            
+            const cmap = colorMap[stat.colorKey];
+
             return (
               <div
                 key={stat.label}
-                className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-500 cursor-pointer transform hover:scale-105 hover:shadow-lg border-2 ${
-                  isHovered 
-                    ? `border-${stat.color}-300 dark:border-${stat.color}-600 shadow-lg shadow-${stat.color}-500/20` 
-                    : 'border-transparent'
-                }`}
-                style={{
-                  background: isDarkMode 
-                    ? `linear-gradient(135deg, ${stat.darkBgGradient.split(' ')[1].replace('to-', '')}, ${stat.darkBgGradient.split(' ')[2]})` 
-                    : `linear-gradient(135deg, ${stat.bgGradient.split(' ')[1].replace('to-', '')}, ${stat.bgGradient.split(' ')[2]})`
-                }}
                 onMouseEnter={() => setHoveredStat(index)}
                 onMouseLeave={() => setHoveredStat(null)}
+                className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-500 cursor-pointer transform hover:scale-105 hover:shadow-lg border-2 ${isHovered ? `${cmap?.borderHover || 'border-transparent'} ${cmap?.shadow ? '' : ''}` : 'border-transparent'}`}
               >
-                {/* Animated Background Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-r ${stat.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
-                
-                {/* Content */}
+                {/* background / overlay */}
+                <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 ${isDarkMode ? (cmap?.darkBgGradient ? `bg-gradient-to-r ${cmap.darkBgGradient}` : '') : (cmap?.bgGradient ? `bg-gradient-to-r ${cmap.bgGradient}` : '')}`} />
+
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.gradient} shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                    <div className={`p-3 rounded-xl bg-gradient-to-r ${cmap?.iconBg || 'from-gray-200 to-gray-300'} shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3`}>
                       <Icon className="text-white w-5 h-5" />
                     </div>
+
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className={`${themeClasses.textSecondary} font-semibold text-sm`}>
-                          {stat.label}
-                        </span>
+                        <span className={`${themeClasses.textSecondary} font-semibold text-sm`}>{stat.label}</span>
+
                         {isHovered && (
-                          <div className={`px-2 py-1 rounded-full text-xs font-medium bg-${stat.color}-100 text-${stat.color}-700 dark:bg-${stat.color}-900/30 dark:text-${stat.color}-300 animate-fadeIn`}>
+                          <div className={`${isDarkMode ? (cmap?.pillDark || 'bg-slate-800 text-slate-200') : (cmap?.pillLight || 'bg-gray-100 text-gray-700')} px-2 py-1 rounded-full text-xs font-medium animate-fadeIn`}>
                             {stat.trend}
                           </div>
                         )}
                       </div>
+
                       <p className={`text-xs ${themeClasses.textMuted} flex items-center gap-1`}>
                         <Target className="w-3 h-3" />
                         {stat.description}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="text-right">
                     <div className={`font-bold text-2xl ${themeClasses.text} ${pulseEffect ? 'animate-pulse' : ''} flex items-center gap-2`}>
                       <AnimatedNumber value={stat.value} />
                       {isHovered && <ChevronRight className="w-4 h-4 animate-pulse" />}
                     </div>
-                    
+
                     {/* Progress Indicator */}
                     <div className="mt-2 flex justify-end">
                       <div className="flex space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <div
-                            key={i}
-                            className={`w-1 h-2 rounded-full transition-all duration-300 ${
-                              i < Math.min(Math.floor(stat.value / (100 / 5)), 5)
-                                ? `bg-${stat.color}-500`
-                                : 'bg-gray-200 dark:bg-gray-600'
-                            }`}
-                            style={{ animationDelay: `${i * 100}ms` }}
-                          />
-                        ))}
+                        {[...Array(5)].map((_, i) => {
+                          const filled = i < Math.min(Math.floor(stat.value / (100 / 5)), 5);
+                          return (
+                            <div
+                              key={i}
+                              className={`${filled ? (stat.colorKey === 'blue' ? 'bg-blue-500' : stat.colorKey === 'purple' ? 'bg-purple-500' : 'bg-green-500') : (isDarkMode ? 'bg-slate-600' : 'bg-gray-200')} w-1 h-2 rounded-full transition-all duration-300`}
+                              style={{ animationDelay: `${i * 100}ms` }}
+                            />
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Hover Effect Particles */}
+                {/* Hover Particles */}
                 {isHovered && (
                   <div className="absolute inset-0 pointer-events-none">
                     {[...Array(3)].map((_, i) => (
                       <div
                         key={i}
-                        className={`absolute w-1 h-1 bg-${stat.color}-400 rounded-full animate-ping`}
+                        className={`${stat.colorKey === 'blue' ? 'bg-blue-400' : stat.colorKey === 'purple' ? 'bg-purple-400' : 'bg-green-400'} absolute w-1 h-1 rounded-full animate-ping`}
                         style={{
                           left: `${20 + i * 30}%`,
                           top: `${20 + i * 20}%`,

@@ -1,11 +1,10 @@
-// app/layout.js
 import './globals.css'
 import Navbar from '../components/Navbar'
 import CountdownNotificationBar from '../components/CountdownNotificationBar'
 import Footer from '../components/Footer'
 import Script from 'next/script';
 import { ProfileProvider } from "@/context/ProfileContext";
-
+import { ThemeProvider } from '../context/ThemeContext';
 
 export const metadata = {
   title: 'Arcade Points Calculator | Track Your Points & Progress',
@@ -44,11 +43,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        
-      <link rel="icon" href="/images/logo.png" type="image/png" />
-      <meta name="google-adsense-account" content="ca-pub-5183171666938196"></meta>
+        <link rel="icon" href="/images/logo.png" type="image/png" />
+        <meta name="google-adsense-account" content="ca-pub-5183171666938196"></meta>
         {/* Google Analytics Script */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-ECCG3B88Q0"
@@ -67,17 +65,21 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body className="bg-blue-50 text-gray-900">
-        <ProfileProvider>
-          <Navbar />
-          <CountdownNotificationBar />
+      {/* 
+        Use both light and dark variants on <body>.
+        This works when your ThemeProvider toggles the "dark" class on <html> (recommended).
+      */}
+      <body className="bg-blue-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
+        <ThemeProvider>
+          <ProfileProvider>
+            <Navbar />
+            {/* <CountdownNotificationBar /> */}
             <main className="min-h-screen ">
-            {/* <div className="px-6 sm:px-10 md:px-10 lg:px-50 xl:px-10 py-1"> */}
               {children}
-            {/* </div> */}
             </main>
-          <Footer />
-        </ProfileProvider>
+            <Footer />
+          </ProfileProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

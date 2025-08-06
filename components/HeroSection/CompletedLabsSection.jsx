@@ -1,11 +1,13 @@
+// CompletedLabsSection.jsx
 'use client';
 
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import {
   Copy, Flame, ExternalLink, ChevronDown, ChevronUp,
   Search, Award, Trophy, Target, FileText, Star, Brain
 } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const categoryConfig = {
   skillBadges: {
@@ -39,7 +41,25 @@ const categoryConfig = {
 };
 
 export default function CompletedLabsSection() {
-  const { profileData } = useContext(ProfileContext);
+  const { profileData } = useContext(ProfileContext) || {};
+  // safe fallback if ThemeContext isn't provided
+  const themeCtx = useContext(ThemeContext) || { isDarkMode: false };
+  const { isDarkMode } = themeCtx;
+
+  // dark-mode only themeClasses (light values kept same)
+  const themeClasses = {
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
+    textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
+    textMuted: isDarkMode ? 'text-slate-400' : 'text-gray-500',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200/50',
+    borderLight: isDarkMode ? 'border-slate-600/30' : 'border-gray-100/30',
+    hover: isDarkMode ? 'hover:bg-slate-800/50' : 'hover:bg-gray-100',
+    accent: isDarkMode ? 'bg-slate-800/50' : 'bg-blue-50',
+    accentHover: isDarkMode ? 'hover:bg-slate-700/50' : 'hover:bg-blue-50/50',
+  };
+
   const [expandedCategories, setExpandedCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const completedBadges = profileData?.badgesOverview || {};
@@ -63,7 +83,7 @@ export default function CompletedLabsSection() {
     ) {
       const skillBadges = profileData?.completed_skill_badges_list || [];
       totalPoints = Math.floor(skillBadges.length / 2);
-    }    
+    }
 
     return { badgeCount, totalPoints };
   };
@@ -96,42 +116,44 @@ export default function CompletedLabsSection() {
   );
 
   return (
-    <div className="rounded-xl bg-gray-50 p-4 sm:p-6">
+    <div className={`${themeClasses.bg} rounded-xl p-4 sm:p-6`}>
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-6 sm:mb-8">
+        {/* Header card */}
+        <div className={`${isDarkMode ? themeClasses.cardBg + ' rounded-2xl shadow-sm border ' + themeClasses.border : 'bg-white rounded-2xl shadow-sm border border-gray-200'} p-6 sm:p-8 mb-6 sm:mb-8`}>
           <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 sm:gap-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+              <h1 className={`text-2xl sm:text-3xl font-bold mb-2 ${themeClasses.text}`}>
                 Completed Badges
               </h1>
-              <p className="text-sm sm:text-base text-gray-600 mb-4">
+              <p className={`text-sm sm:text-base mb-4 ${themeClasses.textSecondary}`}>
                 Find out Badges you've completed in this season.
               </p>
             </div>
 
-            <div className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 shadow-md bg-blue-50 text-blue-400 rounded-full text-xs sm:text-sm font-medium self-start lg:self-center flex-shrink-0">
+            <div className={`${isDarkMode ? 'inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium self-start lg:self-center flex-shrink-0 ' + themeClasses.accent : 'inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 shadow-md bg-blue-50 text-blue-400 rounded-full text-xs sm:text-sm font-medium self-start lg:self-center flex-shrink-0'}`}>
               <Trophy size={14} className="mr-1.5 sm:mr-2" />
               {totalBadgesThisSeason} badges this season
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-4 sm:p-6 border-b border-gray-200">
+        {/* Categories container */}
+        <div className={`${isDarkMode ? themeClasses.cardBg + ' rounded-2xl shadow-sm border ' + themeClasses.border : 'bg-white rounded-2xl shadow-sm border border-gray-200'} overflow-hidden`}>
+          <div className={`p-4 sm:p-6 ${isDarkMode ? 'border-b ' + themeClasses.border : 'border-b border-gray-200'}`}>
             <div className="flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Category</h2>
+              <h2 className={`text-lg sm:text-xl font-semibold ${themeClasses.text}`}>Category</h2>
               <div className="flex gap-4 sm:gap-8 text-right px-8">
                 <div className="hidden sm:block text-center">
-                  <div className="text-sm font-medium text-gray-600">Badges</div>
+                  <div className={`text-sm font-medium ${themeClasses.textSecondary}`}>Badges</div>
                 </div>
                 <div className="hidden sm:block text-center">
-                  <div className="text-sm font-medium text-gray-600">Points</div>
+                  <div className={`text-sm font-medium ${themeClasses.textSecondary}`}>Points</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="divide-y divide-gray-200">
+          <div className={`divide-y ${isDarkMode ? 'divide-slate-700/40' : 'divide-gray-200'}`}>
             {Object.entries(categoryConfig).map(([categoryKey, config], index) => {
               const stats = getCategoryStats(categoryKey);
               const IconComponent = config.icon;
@@ -139,39 +161,41 @@ export default function CompletedLabsSection() {
               const filteredBadges = getFilteredBadges(categoryKey);
 
               const contentRef = useRef(null);
-              const rowBgClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+              const rowBgClass = isDarkMode
+                ? themeClasses.cardBg
+                : (index % 2 === 0 ? 'bg-white' : 'bg-gray-50');
 
               return (
                 <div key={categoryKey} className={`transition-all duration-200 ${rowBgClass}`}>
                   <div
-                    className="px-4 py-3 sm:px-6 sm:py-4 cursor-pointer hover:bg-gray-100 transition-colors"
+                    className={`px-4 py-3 sm:px-6 sm:py-4 cursor-pointer transition-colors ${isDarkMode ? themeClasses.hover : 'hover:bg-gray-100'}`}
                     onClick={() => toggleCategory(categoryKey)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3 sm:gap-4">
-                        <div className={`p-1.5 sm:p-2 rounded-lg ${config.bgColor}`}>
-                          <IconComponent size={18} className={config.color} />
+                        <div className={`p-1.5 sm:p-2 rounded-lg ${isDarkMode ? (config.bgColor === 'bg-blue-50' ? 'bg-blue-900/20' : config.bgColor) : config.bgColor}`}>
+                          <IconComponent size={18} className={isDarkMode ? (config.color === 'text-blue-400' ? 'text-blue-300' : config.color) : config.color} />
                         </div>
-                        <p className="text-sm sm:text-base text-gray-800">{config.name}</p>
+                        <p className={`text-sm sm:text-base ${themeClasses.text}`}>{config.name}</p>
                       </div>
 
                       <div className="flex items-center gap-4 sm:gap-8">
                         <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1 sm:gap-8">
                           <div className="text-center">
-                            <div className="text-sm text-gray-800">{stats.badgeCount}</div>
-                            <div className="block sm:hidden text-xs text-gray-500">Badges</div>
+                            <div className={`text-sm ${themeClasses.text}`}>{stats.badgeCount}</div>
+                            <div className={`block sm:hidden text-xs ${themeClasses.textMuted}`}>Badges</div>
                           </div>
                           <div className="text-center">
-                            <div className="text-blue-400 text-sm">{stats.totalPoints || 0}</div>
-                            <div className="block sm:hidden text-xs text-gray-500">Points</div>
+                            <div className={`${config.color} text-sm`}>{stats.totalPoints || 0}</div>
+                            <div className={`block sm:hidden text-xs ${themeClasses.textMuted}`}>Points</div>
                           </div>
                         </div>
 
                         <div className="ml-2 sm:ml-4 flex-shrink-0">
                           {isExpanded ? (
-                            <ChevronUp size={20} className="text-gray-400" />
+                            <ChevronUp size={20} className={isDarkMode ? themeClasses.textMuted : 'text-gray-400'} />
                           ) : (
-                            <ChevronDown size={20} className="text-gray-400" />
+                            <ChevronDown size={20} className={isDarkMode ? themeClasses.textMuted : 'text-gray-400'} />
                           )}
                         </div>
                       </div>
@@ -184,17 +208,17 @@ export default function CompletedLabsSection() {
                     style={{
                       maxHeight: isExpanded ? `${contentRef.current?.scrollHeight}px` : '0px',
                     }}
-                    className="overflow-hidden transition-all duration-500 bg-gray-50"
+                    className={`overflow-hidden transition-all duration-500 ${isDarkMode ? themeClasses.bg : 'bg-gray-50'}`}
                   >
                     {stats.badgeCount > 0 ? (
                       <div className="px-4 pb-4 sm:px-6 sm:pb-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-4 gap-4 sm:gap-6">
-                          {filteredBadges.map((badge, index) => (
+                          {filteredBadges.map((badge, idx) => (
                             <div
-                              key={`${categoryKey}-${index}`}
-                              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 overflow-hidden group flex flex-col"
+                              key={`${categoryKey}-${idx}`}
+                              className={`${isDarkMode ? themeClasses.cardBg + ' border ' + themeClasses.border : 'bg-white border border-gray-200'} rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col`}
                             >
-                              <div className="relative h-40 sm:h-48 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-3 sm:p-4">
+                              <div className={`${isDarkMode ? 'relative h-40 sm:h-48 bg-gradient-to-br from-slate-800/20 to-slate-900/10' : 'relative h-40 sm:h-48 bg-gradient-to-br from-gray-50 to-gray-100'} flex items-center justify-center p-3 sm:p-4`}>
                                 <img
                                   src={badge.image}
                                   alt={badge.badgeName}
@@ -205,13 +229,13 @@ export default function CompletedLabsSection() {
                                   }}
                                 />
                               </div>
-                              <div className="p-4 sm:p-6 flex flex-col flex-1">
-                                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3 line-clamp-2 leading-tight">
+                              <div className={`p-4 sm:p-6 flex flex-col flex-1`}>
+                                <h3 className={`text-base sm:text-lg font-semibold mb-2 sm:mb-3 line-clamp-2 leading-tight ${themeClasses.text}`}>
                                   {badge.badgeName}
                                 </h3>
                                 <div className="space-y-2 sm:space-y-3 flex-1">
                                   <div className="flex items-center justify-between">
-                                    <div className="flex items-center text-sm text-gray-600">
+                                    <div className={`flex items-center text-sm ${themeClasses.textSecondary}`}>
                                       <Flame size={14} className="text-orange-500 mr-1" />
                                       <span className="font-medium">{badge.points} Points</span>
                                     </div>
@@ -225,8 +249,8 @@ export default function CompletedLabsSection() {
                     ) : (
                       <div className="px-4 pb-4 sm:px-6 sm:pb-6">
                         <div className="text-center py-6 sm:py-8">
-                          <div className="text-gray-400 text-xl sm:text-2xl mb-2">🏆</div>
-                          <p className="text-gray-500 text-xs sm:text-sm">
+                          <div className={`${isDarkMode ? 'text-slate-400' : 'text-gray-400'} text-xl sm:text-2xl mb-2`}>🏆</div>
+                          <p className={`${isDarkMode ? themeClasses.textMuted : 'text-gray-500'} text-xs sm:text-sm`}>
                             No badges Completions in this category yet
                           </p>
                         </div>

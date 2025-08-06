@@ -1,11 +1,24 @@
 'use client';
 import { Target, BarChart3, Globe, Heart, Users, TrendingUp, Award, Zap, Shield, Star, ChevronRight, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
-
+import { useContext } from 'react';
+import { ThemeContext } from '@/context/ThemeContext';
 
 export default function AboutClient() {
   const router = useRouter();
+  const { isDarkMode } = useContext(ThemeContext);
+
+  const themeClasses = {
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white',
+    text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
+    textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
+    borderLight: isDarkMode ? 'border-slate-600/30' : 'border-gray-200/50',
+    hoverShadow: isDarkMode ? 'hover:shadow-slate-800/50' : 'hover:shadow-gray-200/50',
+    gradientBlue: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-blue-50 to-indigo-50',
+  };
+
   const team = [
     {
       name: 'Sachin Jangid',
@@ -68,18 +81,18 @@ export default function AboutClient() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className={`min-h-screen ${themeClasses.bg} p-6 transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
+        <div className={`${themeClasses.cardBg} rounded-2xl shadow-sm border ${themeClasses.border} p-8 mb-8 transition-colors duration-300`}>
           <div className="text-center max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="rounded-full shadow-md text-white">
-              <img src="/images/logo.png" alt="Logo" className="w-15 h-15 object-contain" />
+                <img src="/images/logo.png" alt="Logo" className="w-15 h-15 object-contain" />
               </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About ArcadeTrack</h1>
-            <p className="text-lg text-gray-600">
+            <h1 className={`text-3xl md:text-4xl font-bold ${themeClasses.text} mb-4`}>About ArcadeTrack</h1>
+            <p className={`text-lg ${themeClasses.textSecondary}`}>
               ArcadeTrack is your simple and fast companion to track Google Cloud Arcade
               progress. No logins. No clutter. Just your profile URL and complete insights.
             </p>
@@ -91,13 +104,16 @@ export default function AboutClient() {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300">
+              <div
+                key={index}
+                className={`${themeClasses.cardBg} rounded-xl border ${themeClasses.border} p-6 shadow-sm ${themeClasses.hoverShadow} transition-all duration-300`}
+              >
                 <div className="flex items-center justify-between mb-2">
                   <Icon size={20} className={stat.color} />
-                  <ChevronRight size={16} className="text-gray-400" />
+                  <ChevronRight size={16} className={themeClasses.textSecondary} />
                 </div>
-                <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
-                <p className="text-sm text-gray-600">{stat.label}</p>
+                <p className={`text-2xl font-bold ${themeClasses.text} mb-1`}>{stat.value}</p>
+                <p className={`text-sm ${themeClasses.textSecondary}`}>{stat.label}</p>
               </div>
             );
           })}
@@ -105,14 +121,14 @@ export default function AboutClient() {
 
         {/* Story Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+          <div className={`${themeClasses.cardBg} rounded-2xl shadow-sm border ${themeClasses.border} p-8 transition-colors duration-300`}>
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 bg-indigo-100 rounded-xl">
                 <Zap size={20} className="text-indigo-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-900">How It Started</h2>
+              <h2 className={`text-2xl font-bold ${themeClasses.text}`}>How It Started</h2>
             </div>
-            <div className="space-y-4 text-gray-600">
+            <div className={`space-y-4 ${themeClasses.textSecondary}`}>
               <p>
                 As a GCP learner myself, I found it difficult to track my Arcade badge progress
                 quickly. Google&apos;s dashboard didn&apos;t offer enough flexibility or clarity.
@@ -130,45 +146,25 @@ export default function AboutClient() {
           </div>
 
           {/* Platform Journey */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Our Journey</h3>
+          <div className={`bg-gradient-to-br ${themeClasses.gradientBlue} rounded-2xl p-8 border border-blue-200 transition-colors duration-300`}>
+            <h3 className={`text-2xl font-bold ${themeClasses.text} mb-6`}>Our Journey</h3>
             <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                  1
+              {[ 
+                { step: 1, title: "The Problem", desc: "Identified the need for better Arcade progress tracking" },
+                { step: 2, title: "The Solution", desc: "Built a simple, no-login tracking tool" },
+                { step: 3, title: "The Growth", desc: "Scaled to serve 50K+ learners worldwide" },
+                { step: 4, title: "The Future", desc: "Continuously improving with community feedback" }
+              ].map((item) => (
+                <div key={item.step} className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                    {item.step}
+                  </div>
+                  <div>
+                    <h4 className={`font-semibold ${themeClasses.text} mb-1`}>{item.title}</h4>
+                    <p className={`text-sm ${themeClasses.textSecondary}`}>{item.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">The Problem</h4>
-                  <p className="text-sm text-gray-600">Identified the need for better Arcade progress tracking</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                  2
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">The Solution</h4>
-                  <p className="text-sm text-gray-600">Built a simple, no-login tracking tool</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                  3
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">The Growth</h4>
-                  <p className="text-sm text-gray-600">Scaled to serve 50K+ learners worldwide</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                  4
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">The Future</h4>
-                  <p className="text-sm text-gray-600">Continuously improving with community feedback</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
@@ -176,8 +172,8 @@ export default function AboutClient() {
         {/* Values Section */}
         <div className="mb-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Our Values</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className={`text-2xl font-bold ${themeClasses.text} mb-3`}>Our Values</h2>
+            <p className={`${themeClasses.textSecondary} max-w-2xl mx-auto`}>
               Simplicity. Speed. Support. These values drive ArcadeTrack&apos;s mission to empower every GCP learner.
             </p>
           </div>
@@ -187,13 +183,13 @@ export default function AboutClient() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 group cursor-pointer"
+                  className={`${themeClasses.cardBg} rounded-2xl border ${themeClasses.border} p-6 shadow-sm ${themeClasses.hoverShadow} transition-all duration-300 group cursor-pointer`}
                 >
                   <div className={`${value.bgColor} ${value.borderColor} border rounded-xl p-3 w-fit mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon size={24} className={value.color} />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{value.title}</h3>
-                  <p className="text-sm text-gray-600">{value.description}</p>
+                  <h3 className={`text-lg font-semibold ${themeClasses.text} mb-2`}>{value.title}</h3>
+                  <p className={`text-sm ${themeClasses.textSecondary}`}>{value.description}</p>
                 </div>
               );
             })}
@@ -203,8 +199,8 @@ export default function AboutClient() {
         {/* Team Section */}
         <div className="mb-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">Meet The Creator</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className={`text-2xl font-bold ${themeClasses.text} mb-3`}>Meet The Creator</h2>
+            <p className={`${themeClasses.textSecondary} max-w-2xl mx-auto`}>
               ArcadeTrack was built solo — with love for GCP Arcade and the community learning with it.
             </p>
           </div>
@@ -215,14 +211,14 @@ export default function AboutClient() {
               return (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 text-center w-full sm:w-[320px] hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300"
+                  className={`${themeClasses.cardBg} rounded-2xl shadow-sm border ${themeClasses.border} p-6 text-center w-full sm:w-[320px] ${themeClasses.hoverShadow} transition-all duration-300`}
                 >
                   <div className={`w-20 h-20 ${member.bgColor} rounded-full flex items-center justify-center mx-auto mb-4`}>
                     <Icon size={32} className={member.color} />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
+                  <h3 className={`text-xl font-semibold ${themeClasses.text} mb-1`}>{member.name}</h3>
                   <p className="text-sm font-medium text-blue-600 mb-3">{member.role}</p>
-                  <p className="text-gray-600 text-sm">{member.description}</p>
+                  <p className={`text-sm ${themeClasses.textSecondary}`}>{member.description}</p>
                 </div>
               );
             })}
@@ -230,10 +226,15 @@ export default function AboutClient() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 text-center">
-          <h3 className="text-xl font-bold text-gray-900 mb-3">Ready to Track Your Progress?</h3>
-          <p className="text-gray-600 mb-6">Join thousands of learners using ArcadeTrack to monitor their GCP Arcade journey.</p>
-          <button onClick={() => router.push('/')} className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200 inline-flex items-center gap-2">
+        <div className={`bg-gradient-to-r ${themeClasses.gradientBlue} rounded-2xl p-8 border border-blue-200 text-center`}>
+          <h3 className={`text-xl font-bold ${themeClasses.text} mb-3`}>Ready to Track Your Progress?</h3>
+          <p className={`${themeClasses.textSecondary} mb-6`}>
+            Join thousands of learners using ArcadeTrack to monitor their GCP Arcade journey.
+          </p>
+          <button
+            onClick={() => router.push('/')}
+            className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-xl hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200 inline-flex items-center gap-2"
+          >
             Start Tracking Now
             <ChevronRight size={18} />
           </button>

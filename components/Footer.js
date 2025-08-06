@@ -1,9 +1,25 @@
-// components/Footer.js
 'use client'
 
 import Link from 'next/link'
+import { useContext } from 'react'
+import { ThemeContext } from '@/context/ThemeContext'
 
 export default function Footer() {
+  const { isDarkMode } = useContext(ThemeContext)
+
+  const themeClasses = {
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-slate-50',
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    text: isDarkMode ? 'text-slate-100' : 'text-slate-900',
+    textSecondary: isDarkMode ? 'text-slate-300' : 'text-slate-600',
+    textMuted: isDarkMode ? 'text-slate-400' : 'text-slate-500',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-slate-200/50',
+    borderLight: isDarkMode ? 'border-slate-600/30' : 'border-slate-100/30',
+    hover: isDarkMode ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50/50',
+    accent: isDarkMode ? 'bg-slate-800/50' : 'bg-slate-50/50',
+    accentHover: isDarkMode ? 'hover:bg-slate-700/50' : 'hover:bg-blue-50/50',
+  };
+
   const quickLinks = [
     { href: '/dashboard', label: 'Dashboard', icon: '📊' },
     { href: '/about', label: 'About', icon: '🏆' },
@@ -37,18 +53,18 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-100 py-12">
+    <footer className={`${themeClasses.bg} ${themeClasses.border} border-t py-12 transition-colors duration-300`}>
      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 shadow-md rounded-full flex items-center justify-center">
+              <div className={`w-10 h-10 shadow-md rounded-full flex items-center justify-center ${themeClasses.cardBg}`}>
                 <img src="/images/logo.png" alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <span className="text-xl font-bold text-gray-900">Arcade Track</span>
+              <span className={`text-xl font-bold ${themeClasses.text}`}>Arcade Track</span>
             </div>
-            <p className="text-gray-600 text-sm max-w-sm">
+            <p className={`${themeClasses.textSecondary} text-sm max-w-sm`}>
               Your ultimate companion for Google Cloud Arcade. Track progress, manage badges, and compete globally with our intuitive platform.
             </p>
             <div className="flex space-x-3">
@@ -56,7 +72,7 @@ export default function Footer() {
                 <Link
                   key={social.name}
                   href={social.href}
-                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                  className={`w-8 h-8 flex items-center justify-center ${themeClasses.textMuted} hover:${themeClasses.text} transition-colors`}
                   aria-label={social.name}
                 >
                   {social.icon}
@@ -67,13 +83,13 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="space-y-4 md:pl-20">
-            <h3 className="text-lg font-semibold text-gray-900">Quick Links</h3>
+            <h3 className={`text-lg font-semibold ${themeClasses.text}`}>Quick Links</h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors text-sm"
+                    className={`flex items-center space-x-2 ${themeClasses.textSecondary} hover:text-blue-500 transition-colors text-sm`}
                   >
                     <span>{link.icon}</span>
                     <span>{link.label}</span>
@@ -85,13 +101,13 @@ export default function Footer() {
 
           {/* Community */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Community</h3>
+            <h3 className={`text-lg font-semibold ${themeClasses.text}`}>Community</h3>
             <ul className="space-y-3">
               {communityLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors text-sm"
+                    className={`flex items-center space-x-2 ${themeClasses.textSecondary} hover:text-blue-500 transition-colors text-sm`}
                   >
                     <span>{link.icon}</span>
                     <span>{link.label}</span>
@@ -103,14 +119,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-8 border-t border-gray-100 ">
+        <div className={`pt-8 ${themeClasses.borderLight} border-t`}>
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-gray-600">© 2025 ArcadeTrack. All rights reserved.</span>
+              <span className={`text-sm ${themeClasses.textSecondary}`}>© 2025 ArcadeTrack. All rights reserved.</span>
             </div>
-            <div className="text-sm text-gray-600">
+            <div className={`text-sm ${themeClasses.textSecondary}`}>
               Made by{' '}
-              <Link href="/" className="text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="/" className="text-blue-500 hover:text-blue-600 font-medium">
                 Sachin Jangid
               </Link>
             </div>

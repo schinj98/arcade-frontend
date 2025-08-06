@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+
+import React, { useState, useContext } from 'react';
 import { Trophy, Gift, Sparkles, ChevronRight, Info } from 'lucide-react';
+import { ThemeContext } from '@/context/ThemeContext'; // adjust if your path differs
 
 export default function RewardsSection() {
   const [hoveredTier, setHoveredTier] = useState(null);
+  const { isDarkMode } = useContext(ThemeContext);
 
   const tierImages = {
     Novice: "/images/arcade-swags-images/Novice.png",
@@ -10,6 +13,20 @@ export default function RewardsSection() {
     Ranger: "/images/arcade-swags-images/Ranger.png",
     Champion: "/images/arcade-swags-images/Champion.png",
     Legend: "/images/arcade-swags-images/Legend.png",
+  };
+
+  // user-provided dark-mode mapping; light mode will fall back to originals
+  const themeClasses = {
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white',
+    text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
+    textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
+    textMuted: isDarkMode ? 'text-slate-400' : 'text-gray-600',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
+    borderLight: isDarkMode ? 'border-slate-600/30' : 'border-gray-200',
+    hover: isDarkMode ? 'hover:bg-slate-800/50' : 'hover:shadow-lg hover:shadow-gray-200/50',
+    accent: isDarkMode ? 'bg-slate-800/50' : 'bg-gradient-to-r from-indigo-50 to-purple-50',
+    accentHover: isDarkMode ? 'hover:bg-slate-700/50' : 'hover:bg-indigo-100'
   };
 
   const tiers = [
@@ -21,41 +38,41 @@ export default function RewardsSection() {
   ];
 
   return (
-    <div className=" rounded-xl bg-gray-50 p-6">
+    <div className={`rounded-xl ${themeClasses.bg} p-6`}>
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
+        <div className={`rounded-2xl shadow-sm border ${themeClasses.border} p-8 mb-8 ${isDarkMode ? themeClasses.cardBg : 'bg-white'}`}>
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <div className="flex items-center gap-3 mb-3">
                 <div className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl text-white">
                   <Trophy size={24} />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-900">Swag Rewards</h1>
+                <h1 className={`text-3xl font-bold ${themeClasses.text}`}>Swag Rewards</h1>
               </div>
-              <p className="text-gray-600">
+              <p className={`${themeClasses.textSecondary}`}>
                 Earn points to unlock exclusive swag rewards from previous seasons
               </p>
               <div className="flex items-center gap-4 mt-4">
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm">
                   <Gift size={16} className="text-indigo-500 mr-1" />
-                  <span className="font-medium text-gray-900">5</span>
-                  <span className="ml-1">reward tiers</span>
+                  <span className={`font-medium ${themeClasses.text}`}>5</span>
+                  <span className={`ml-1 ${themeClasses.textSecondary}`}>reward tiers</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm">
                   <Sparkles size={16} className="text-amber-500 mr-1" />
-                  <span className="font-medium text-gray-900">Season 1</span>
+                  <span className={`font-medium ${themeClasses.text}`}>Season 1</span>
                 </div>
               </div>
             </div>
 
             {/* Season Badge */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 px-6 py-4 rounded-xl border border-indigo-200">
+            <div className={`${isDarkMode ? themeClasses.accent : 'bg-gradient-to-r from-indigo-50 to-purple-50'} px-6 py-4 rounded-xl border ${themeClasses.border}`}>
               <div className="flex items-center gap-3">
                 <div className="text-2xl">🏆</div>
                 <div>
-                  <p className="text-sm text-gray-600">Previous Season</p>
-                  <p className="font-semibold text-gray-900">Season 1 Rewards</p>
+                  <p className={`${themeClasses.textSecondary}`}>Previous Season</p>
+                  <p className={`font-semibold ${themeClasses.text}`}>Season 1 Rewards</p>
                 </div>
               </div>
             </div>
@@ -67,18 +84,18 @@ export default function RewardsSection() {
           {tiers.map((tier, index) => (
             <div
               key={tier.name}
-              className="bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-lg hover:shadow-gray-200/50 transition-all duration-300 overflow-hidden group cursor-pointer"
               onMouseEnter={() => setHoveredTier(tier.name)}
               onMouseLeave={() => setHoveredTier(null)}
+              className={`rounded-2xl transition-all duration-300 overflow-hidden group cursor-pointer ${isDarkMode ? `${themeClasses.cardBg} border ${themeClasses.border}` : 'bg-white border border-gray-200'} ${themeClasses.hover}`}
             >
               {/* Tier Image */}
-              <div className={`relative h-48 ${tier.bgColor} flex items-center justify-center p-4 overflow-hidden`}>
+              <div className={`relative h-48 flex items-center justify-center p-4 overflow-hidden ${isDarkMode ? 'bg-slate-800/40' : tier.bgColor}`}>
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-10">
                   <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-white to-transparent rounded-full"></div>
                   <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-tr from-white to-transparent rounded-full"></div>
                 </div>
-                
+
                 <img
                   src={tier.image}
                   alt={`${tier.name} Badge`}
@@ -88,50 +105,36 @@ export default function RewardsSection() {
                     e.target.src = 'https://placehold.co/160x160?text=Tier';
                   }}
                 />
-                
+
                 {/* Points Badge */}
-                <div className={`absolute top-3 right-3 px-3 py-1.5 text-xs font-medium rounded-lg ${tier.bgColor} ${tier.borderColor} border backdrop-blur-sm`}>
+                <div
+  className={`absolute top-3 right-3 px-3 py-1.5 text-xs font-medium rounded-lg
+    ${tier.bgColor}
+    ${tier.borderColor}
+    text-blue-600 border backdrop-blur-sm
+    dark:bg-opacity-70
+  `}
+>
                   {tier.points} pts
                 </div>
               </div>
 
               {/* Tier Content */}
-              <div className="p-6">
+              <div className={`p-6 ${isDarkMode ? '' : ''}`}>
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">{tier.name}</h3>
-                  <ChevronRight 
-                    size={20} 
-                    className={`text-gray-400 transition-transform duration-200 ${
-                      hoveredTier === tier.name ? 'translate-x-1' : ''
-                    }`}
+                  <h3 className={`text-lg font-semibold ${themeClasses.text}`}>{tier.name}</h3>
+                  <ChevronRight
+                    size={20}
+                    className={`text-gray-400 transition-transform duration-200 ${hoveredTier === tier.name ? 'translate-x-1' : ''}`}
                   />
                 </div>
-                
-                <p className="text-sm text-blue-600">
+
+                <p className={`text-sm ${isDarkMode ? 'text-sky-300' : 'text-blue-600'}`}>
                   Tier {index + 1} Reward
                 </p>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Season Notice */}
-        <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl border border-orange-200 p-8 shadow-sm">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
-            <div className="p-3 bg-orange-100 rounded-xl text-orange-600">
-              <Info size={24} />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Season 2 Coming Soon!</h3>
-              <p className="text-gray-600">
-                The prizes shown are from Season 1. New exclusive rewards for Season 2 are being prepared and will be announced soon.
-              </p>
-            </div>
-            <button className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-medium transition-all duration-200 flex items-center gap-2 whitespace-nowrap">
-              Get Notified
-              <ChevronRight size={16} />
-            </button>
-          </div>
         </div>
 
       </div>

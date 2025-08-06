@@ -4,10 +4,13 @@ import { useState, useEffect, useRef, useContext } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ProfileContext } from "/context/ProfileContext"
+import { ThemeContext } from '@/context/ThemeContext'
+import ThemeToggleButton from '@/components/ThemeToggleButton';
+
 import {
   Home, LayoutDashboard, Gamepad2, Info,
   BookOpenCheck, MessageSquare, PlayCircle,
-  Menu, X, ListOrdered, User, LogOut
+  Menu, X, ListOrdered, User, LogOut, Moon, Sun
 } from 'lucide-react'
 
 export default function Navbar() {
@@ -15,9 +18,26 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const pathname = usePathname()
   const { profileData } = useContext(ProfileContext)
+  const { isDarkMode } = useContext(ThemeContext)
   const profileImage = profileData?.userDetails?.profileImage
   const profileName = profileData?.userDetails?.fullName || profileData?.userDetails?.name || "Guest"
   const dropdownRef = useRef()
+
+  const themeClasses = {
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-white',
+    navShadow: isDarkMode ? 'shadow-sm' : 'shadow-sm',
+    text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
+    textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
+    textMuted: isDarkMode ? 'text-slate-400' : 'text-gray-400',
+    border: isDarkMode ? 'border-slate-800' : 'border-gray-200',
+    borderLight: isDarkMode ? 'border-slate-700/40' : 'border-gray-100',
+    cardBg: isDarkMode ? 'bg-slate-900/80' : 'bg-white',
+    hoverBg: isDarkMode ? 'hover:bg-slate-800/60' : 'hover:bg-gray-50',
+    activeBg: isDarkMode ? 'bg-slate-800/60' : 'bg-blue-50',
+    activeText: isDarkMode ? 'text-sky-400' : 'text-blue-600',
+    btnPrimaryBg: isDarkMode ? 'bg-blue-600' : 'bg-blue-600',
+    btnPrimaryHover: isDarkMode ? 'hover:bg-blue-700' : 'hover:bg-blue-100',
+  };
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
@@ -52,15 +72,15 @@ export default function Navbar() {
   }, [profileData])
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-[100]">
+    <nav className={`${themeClasses.bg} ${themeClasses.navShadow} border-b ${themeClasses.border} sticky top-0 z-[100] transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Left - Brand */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="bg-blue-600 rounded-full group-hover:shadow-lg group-hover:shadow-blue-600/25 transition-all duration-200">
+            <div className={`rounded-full group-hover:shadow-lg transition-all duration-200 ${isDarkMode ? 'shadow-none' : ''}`}>
               <img src="/images/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
             </div>
-            <span className="text-xl font-bold text-gray-900">
+            <span className={`text-xl font-bold ${themeClasses.text}`}>
               Arcade Track
             </span>
           </Link>
@@ -76,12 +96,12 @@ export default function Navbar() {
                   href={item.href}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? 'bg-blue-50 text-blue-600 border border-blue-200'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? `${themeClasses.activeBg} ${themeClasses.activeText} border ${isDarkMode ? 'border-slate-700' : 'border-blue-200'}`
+                      : `${themeClasses.textSecondary} ${themeClasses.hoverBg}`
                   }`}
                 >
-                  <Icon size={16} className={isActive ? 'text-blue-600' : 'text-gray-400'} />
-                  {item.label}
+                  <Icon size={16} className={isActive ? themeClasses.activeText : themeClasses.textMuted} />
+                  <span className={isActive ? themeClasses.activeText : themeClasses.textSecondary}>{item.label}</span>
                 </Link>
               )
             })}
@@ -89,8 +109,9 @@ export default function Navbar() {
 
           {/* Right - Actions */}
           <div className="hidden md:flex items-center gap-4">
+            <ThemeToggleButton className={`p-2  rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'}`} />
             <a 
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-100 hover:text-blue-500 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200"
+              className={`flex items-center gap-2 ${themeClasses.btnPrimaryBg} text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all duration-200 ${themeClasses.btnPrimaryHover}`}
               href="https://go.cloudskillsboost.google/arcade" 
               target="_blank"
               rel="noopener noreferrer"
@@ -106,29 +127,53 @@ export default function Navbar() {
                   onClick={() => setIsDropdownOpen(prev => !prev)}
                   className="relative group focus:outline-none cursor-pointer"
                 >
-                  <div className="w-10 h-10 bg-gray-100 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden">
-                    {profileImage ? (
-                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <User size={36} className="text-gray-600" />
-                    )}
+                  <div className={`w-10 h-10 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                  {profileImage ? (
+                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <div
+                      className={`w-full h-full flex items-center justify-center font-bold text-sm ${isDarkMode ? 'text-slate-200' : 'text-white'}`}
+                      style={{
+                        backgroundColor: `hsl(${(profileName || 'Guest')
+                          .split('')
+                          .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360}, 70%, 50%)`
+                      }}
+                    >
+                      {profileName
+                        ? profileName.split(' ').map(n => n[0]).join('').toUpperCase()
+                        : 'G'}
+                    </div>
+)}
+
                   </div>
                   <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-3 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 p-4 text-sm space-y-3">
+                  <div className={`${themeClasses.cardBg} border ${themeClasses.borderLight} rounded-xl shadow-xl z-50 p-4 text-sm space-y-3 w-56 absolute right-0 mt-3 transition-colors duration-200`}>
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full overflow-hidden">
-                        {profileImage ? (
-                          <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                        ) : (
-                          <User size={36} className="text-gray-600" />
-                        )}
+                      {profileImage ? (
+                        <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                      ) : (
+                        <div
+                          className={`w-full h-full flex items-center justify-center font-bold text-sm ${isDarkMode ? 'text-slate-200' : 'text-white'}`}
+                          style={{
+                            backgroundColor: `hsl(${(profileName || 'Guest')
+                              .split('')
+                              .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360}, 70%, 50%)`
+                          }}
+                        >
+                          {profileName
+                            ? profileName.split(' ').map(n => n[0]).join('').toUpperCase()
+                            : 'G'}
+                        </div>
+                      )}
+
                       </div>
-                      <div className="font-medium text-gray-800">{profileName}</div>
+                      <div className={`font-medium ${themeClasses.text}`}>{profileName}</div>
                     </div>
-                    <hr />
+                    <hr className={`${themeClasses.borderLight}`} />
                     <button
                       onClick={handleLogout}
                       className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-all duration-200 cursor-pointer"
@@ -140,35 +185,35 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-xl border-2 border-white shadow-md">
-                <User size={24} className="text-gray-400" />
+              <div className={`w-10 h-10 flex items-center justify-center rounded-xl border-2 border-white shadow-md ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                <User size={24} className={themeClasses.textMuted} />
               </div>
             )}
           </div>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-xl hover:bg-gray-100 transition-all duration-200"
+            className={`md:hidden p-2 rounded-xl transition-all duration-200 ${isDarkMode ? 'hover:bg-slate-800' : 'hover:bg-gray-100'}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (
-              <X size={24} className="text-gray-600" />
+              <X size={24} className={themeClasses.textSecondary} />
             ) : (
-              <Menu size={24} className="text-gray-600" />
+              <Menu size={24} className={themeClasses.textSecondary} />
             )}
           </button>
         </div>
 
         {/* 🌟 Mobile Nav with Smooth Transition */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out border-t border-gray-200`}
+          className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out border-t ${themeClasses.border}`}
           style={{
             maxHeight: isMenuOpen ? '1000px' : '0px',
             paddingTop: isMenuOpen ? '1rem' : '0',
             opacity: isMenuOpen ? 1 : 0,
           }}
         >
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 p-2">
             {navItems.map((item) => {
               const Icon = item.icon
               const isActive = pathname === item.href
@@ -178,13 +223,13 @@ export default function Navbar() {
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
                     isActive
-                      ? 'bg-blue-50 text-blue-600 border border-blue-200'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      ? `${themeClasses.activeBg} ${themeClasses.activeText} border ${isDarkMode ? 'border-slate-700' : 'border-blue-200'}`
+                      : `${themeClasses.textSecondary} ${themeClasses.hoverBg}`
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Icon size={18} className={isActive ? 'text-blue-600' : 'text-gray-400'} />
-                  {item.label}
+                  <Icon size={18} className={isActive ? themeClasses.activeText : themeClasses.textMuted} />
+                  <span className={isActive ? themeClasses.activeText : themeClasses.textSecondary}>{item.label}</span>
                 </Link>
               )
             })}
@@ -193,14 +238,26 @@ export default function Navbar() {
             {profileData?.userDetails ? (
               <div className="flex items-center justify-between px-4 pb-4 mt-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl overflow-hidden cursor-pointer" onClick={() => setIsDropdownOpen(prev => !prev)}>
-                    {profileImage ? (
-                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                    ) : (
-                      <User size={36} className="text-gray-600" />
-                    )}
+                  <div className={`w-10 h-10 rounded-xl overflow-hidden cursor-pointer ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`} onClick={() => setIsDropdownOpen(prev => !prev)}>
+                  {profileImage ? (
+                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <div
+                      className={`w-full h-full flex items-center justify-center font-bold text-sm ${isDarkMode ? 'text-slate-200' : 'text-white'}`}
+                      style={{
+                        backgroundColor: `hsl(${(profileName || 'Guest')
+                          .split('')
+                          .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360}, 70%, 50%)`
+                      }}
+                    >
+                      {profileName
+                        ? profileName.split(' ').map(n => n[0]).join('').toUpperCase()
+                        : 'G'}
+                    </div>
+                  )}
+
                   </div>
-                  <span className="text-sm font-medium text-gray-800">{profileName}</span>
+                  <span className={`text-sm font-medium ${themeClasses.text}`}>{profileName}</span>
                 </div>
                 {isDropdownOpen && (
                   <button
@@ -214,10 +271,10 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-3 px-4 mt-4">
-                <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-                  <User size={36} className="text-gray-400" />
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
+                  <User size={36} className={themeClasses.textMuted} />
                 </div>
-                <span className="text-sm font-medium text-gray-500">Guest</span>
+                <span className={`text-sm font-medium ${themeClasses.textSecondary}`}>Guest</span>
               </div>
             )}
           </div>
