@@ -154,7 +154,7 @@ export default function Facilitator_section() {
   };
 
   return (
-    <div className={`max-w-5xl mx-auto p-3 sm:p-4 lg:p-6 ${themeClasses.cardBg} backdrop-blur-xl rounded-2xl shadow-2xl border ${themeClasses.border} transition-all duration-300 relative overflow-hidden`}>
+    <div className={`max-w-5xl mx-auto p-3 sm:p-4 lg:p-6 ${themeClasses.cardBg} backdrop-blur-xl rounded-2xl shadow-2xl border ${themeClasses.border} transition-all duration-300 relative `}>
       {/* Futuristic Background Effects */}
       <div className={`absolute inset-0 bg-gradient-to-br ${currentMilestone.color} opacity-5`} />
       
@@ -230,7 +230,7 @@ export default function Facilitator_section() {
         <div className={`flex flex-col sm:flex-row gap-1 mb-3 sm:mb-4 ${themeClasses.accent} p-1 rounded-xl relative overflow-hidden shadow-inner backdrop-blur-sm`}>
           {/* Animated Background Slider */}
           <div 
-            className={`absolute top-1 bottom-1 bg-gradient-to-r ${currentMilestone.color} opacity-20 rounded-lg shadow-lg transition-all duration-500 ease-out border ${themeClasses.border} sm:block hidden`}
+            className={`absolute top-1 bottom-1  bg-gradient-to-r ${currentMilestone.color} opacity-20 rounded-lg shadow-lg transition-all duration-500 ease-out border ${themeClasses.border} sm:block hidden`}
             style={{
               left: `${selectedMilestone * 25 + 0.25}%`,
               width: 'calc(25% - 0.5%)'
@@ -247,7 +247,7 @@ export default function Facilitator_section() {
               <button
                 key={index}
                 onClick={() => setSelectedMilestone(index)}
-                className={`relative flex-1 px-2 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 z-10 group ${
+                className={`relative cursor-pointer flex-1 px-2 sm:px-4 py-2 sm:py-3 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 z-10 group ${
                   isActive
                     ? `${themeClasses.text} shadow-sm bg-gradient-to-r ${milestone.color} bg-opacity-10 sm:bg-transparent`
                     : `${themeClasses.textSecondary} hover:${themeClasses.text}`
@@ -381,12 +381,13 @@ export default function Facilitator_section() {
                   </div>
                   
                   {/* Tooltip */}
-                  {isHovered && (
-                    <div className={`absolute -bottom-12 left-1/2 transform -translate-x-1/2 ${themeClasses.cardBg} ${themeClasses.text} text-xs px-3 py-2 rounded-lg shadow-xl whitespace-nowrap z-20 border ${themeClasses.border} animate-fadeIn backdrop-blur-sm`}>
-                      {completed ? '🎉 Goal Achieved!' : `Need ${goal.total - goal.value} more to complete`}
-                      <div className={`absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 ${themeClasses.cardBg} rotate-45 border-l border-t ${themeClasses.border}`} />
-                    </div>
-                  )}
+{isHovered && (
+  <div className={`absolute -bottom-12 left-1/2 transform -translate-x-1/2 ${themeClasses.cardBg} ${themeClasses.text} text-xs px-3 py-2 rounded-lg shadow-xl whitespace-nowrap z-[9999] border ${themeClasses.border} animate-fadeIn backdrop-blur-sm`}>
+    {completed ? '🎉 Goal Achieved!' : `Need ${goal.total - goal.value} more to complete`}
+    <div className={`absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 ${themeClasses.cardBg} rotate-45 border-l border-t ${themeClasses.border}`} />
+  </div>
+)}
+
                 </div>
               </div>
             );

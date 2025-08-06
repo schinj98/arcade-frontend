@@ -16,7 +16,6 @@ export default function TotalProgress() {
   const [pulseEffect, setPulseEffect] = useState(false);
 
   const user = profileData?.userDetails;
-  const totalPoints = profileData?.completed_totalPoints ?? 0;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -102,7 +101,7 @@ export default function TotalProgress() {
       trend: '+8%'
     },
     {
-      label: 'Swags Eligibility',
+      label: 'Total Badges',
       value: profileData?.completed_totalBadges ?? 0,
       icon: Flame,
       colorKey: 'green',
@@ -132,6 +131,19 @@ export default function TotalProgress() {
 
     return <span>{displayValue.toLocaleString()}</span>;
   };
+
+const getFilledPillCount = (stat) => {
+  const value = Number(stat.value) || 0;
+
+  if (stat.colorKey === 'green') {
+    const badgeThresholds = [40, 80, 120, 160, 200];
+    return badgeThresholds.filter(t => value >= t).length;
+  }
+
+  const normalThresholds = [20, 40, 65, 75, 85];
+  return normalThresholds.filter(t => value >= t).length;
+};
+
 
   return (
     <div className={`${themeClasses.cardBg} rounded-2xl shadow-lg border ${themeClasses.border} p-6 w-full max-w-sm mx-auto relative overflow-hidden transition-all duration-500 ${themeClasses.bg}`}>
@@ -223,16 +235,17 @@ export default function TotalProgress() {
                     {/* Progress Indicator */}
                     <div className="mt-2 flex justify-end">
                       <div className="flex space-x-1">
-                        {[...Array(5)].map((_, i) => {
-                          const filled = i < Math.min(Math.floor(stat.value / (100 / 5)), 5);
-                          return (
-                            <div
-                              key={i}
-                              className={`${filled ? (stat.colorKey === 'blue' ? 'bg-blue-500' : stat.colorKey === 'purple' ? 'bg-purple-500' : 'bg-green-500') : (isDarkMode ? 'bg-slate-600' : 'bg-gray-200')} w-1 h-2 rounded-full transition-all duration-300`}
-                              style={{ animationDelay: `${i * 100}ms` }}
-                            />
-                          );
-                        })}
+                      {[...Array(5)].map((_, i) => {
+                        const filled = i < Math.min(Math.floor(stat.value / (100 / 5)), 5);
+                        return (
+                          <div
+                            key={i}
+                            className={`${filled ? (stat.colorKey === 'blue' ? 'bg-blue-500' : stat.colorKey === 'purple' ? 'bg-purple-500' : 'bg-green-500') : (isDarkMode ? 'bg-slate-600' : 'bg-gray-200')} w-1 h-2 rounded-full transition-all duration-300`}
+                            style={{ animationDelay: `${i * 100}ms` }}
+                          />
+                        );
+                      })}
+
                       </div>
                     </div>
                   </div>
