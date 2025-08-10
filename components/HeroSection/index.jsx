@@ -10,6 +10,7 @@ import ProgressGraph from './ProgressGraph';
 import Facilitator_section from './Facilitator_section';
 import Total_progress from './Total_progress';
 import CompletedLabsSection from './CompletedLabsSection';
+import AdBanner from '../AdBanner';
 
 export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp, isDarkMode = false  }) {
   const user = profileData?.userDetails;
@@ -28,11 +29,13 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
+          <AdBanner />
         </div>
 
         {/* Right Column (2/3rds width on md and up) */}
         <div className="md:col-span-2 space-y-8"> {/* Added space-y for vertical spacing between sections */}
           <Facilitator_section />
+          <AdBanner />
           <BadgesSection />
           {/* Moved CompletedLabsSection here */}
         </div>

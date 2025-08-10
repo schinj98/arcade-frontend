@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { ProfileProvider } from "@/context/ProfileContext";
 import { ThemeProvider } from '../context/ThemeContext';
 
+
 export const metadata = {
   title: 'Arcade Points Calculator | Track Your Points & Progress',
   description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',
@@ -71,6 +72,12 @@ export default function RootLayout({ children }) {
           src="https://www.googletagmanager.com/gtag/js?id=G-ECCG3B88Q0"
           strategy="afterInteractive"
         />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196"
+          crossOrigin="anonymous"
+        />
+
         <Script
           id="google-analytics"
           strategy="afterInteractive"
