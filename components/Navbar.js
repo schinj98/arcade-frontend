@@ -35,7 +35,7 @@ export default function Navbar() {
     hoverBg: isDarkMode ? 'hover:bg-slate-800/60' : 'hover:bg-gray-50',
     activeBg: isDarkMode ? 'bg-slate-800/60' : 'bg-blue-50',
     activeText: isDarkMode ? 'text-sky-400' : 'text-blue-600',
-    btnPrimaryBg: isDarkMode ? 'bg-blue-600' : 'bg-blue-600',
+    btnPrimaryBg: isDarkMode ? 'bg-sky-600' : 'bg-blue-600',
     btnPrimaryHover: isDarkMode ? 'hover:bg-blue-700' : 'hover:bg-blue-100',
   };
 
@@ -234,40 +234,53 @@ export default function Navbar() {
               )
             })}
 
+
             {/* Mobile Avatar and Logout */}
             {profileData?.userDetails ? (
               <div className="flex items-center justify-between px-4 pb-4 mt-4">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl overflow-hidden cursor-pointer ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`} onClick={() => setIsDropdownOpen(prev => !prev)}>
-                  {profileImage ? (
-                    <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                  ) : (
-                    <div
-                      className={`w-full h-full flex items-center justify-center font-bold text-sm ${isDarkMode ? 'text-slate-200' : 'text-white'}`}
-                      style={{
-                        backgroundColor: `hsl(${(profileName || 'Guest')
-                          .split('')
-                          .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360}, 70%, 50%)`
-                      }}
-                    >
-                      {profileName
-                        ? profileName.split(' ').map(n => n[0]).join('').toUpperCase()
-                        : 'G'}
-                    </div>
-                  )}
-
+                  {/* Avatar */}
+                  <div
+                    className={`w-10 h-10 rounded-xl overflow-hidden cursor-pointer ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`}
+                    onClick={() => setIsDropdownOpen(prev => !prev)}
+                  >
+                    {profileImage ? (
+                      <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                    ) : (
+                      <div
+                        className={`w-full h-full flex items-center justify-center font-bold text-sm ${isDarkMode ? 'text-slate-200' : 'text-white'}`}
+                        style={{
+                          backgroundColor: `hsl(${(profileName || 'Guest')
+                            .split('')
+                            .reduce((acc, char) => acc + char.charCodeAt(0), 0) % 360}, 70%, 50%)`
+                        }}
+                      >
+                        {profileName
+                          ? profileName.split(' ').map(n => n[0]).join('').toUpperCase()
+                          : 'G'}
+                      </div>
+                    )}
                   </div>
                   <span className={`text-sm font-medium ${themeClasses.text}`}>{profileName}</span>
                 </div>
-                {isDropdownOpen && (
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                )}
+
+                {/* Right side Theme Toggle */}
+                <div className="flex items-center gap-2">
+                  <ThemeToggleButton 
+                    className={`p-2 rounded-lg transition ${
+                      isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-gray-100 hover:bg-gray-200'
+                    }`}
+                  />
+                  {isDropdownOpen && (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="flex items-center gap-3 px-4 mt-4">

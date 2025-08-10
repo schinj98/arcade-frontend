@@ -42,7 +42,7 @@ function ProfileUrlInputSection() {
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
     border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
     inputBg: isDarkMode ? 'bg-slate-900/80' : 'bg-white',
-    inputBorder: isDarkMode ? 'border-slate-700' : 'border-gray-300',
+    inputBorder: isDarkMode ? 'border border-slate-700' : 'border border-gray-300',
     placeholder: isDarkMode ? 'placeholder-slate-500' : 'placeholder-gray-400',
     primaryBtn: 'bg-blue-600 hover:bg-blue-700',
   };

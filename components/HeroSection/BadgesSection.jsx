@@ -15,7 +15,7 @@ export default function BadgesSection() {
   const { isDarkMode } = themeCtx;
 
   const themeClasses = {
-    bg: isDarkMode ? 'bg-slate-950' : 'bg-slate-50',
+    bg: isDarkMode ? 'bg-slate-950 border border-slate-600 ' : 'bg-slate-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
     text: isDarkMode ? 'text-slate-100' : 'text-slate-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-slate-600',
@@ -86,8 +86,8 @@ export default function BadgesSection() {
   const progressBarFillDefault = isDarkMode ? 'bg-slate-400' : 'bg-slate-400';
 
   return (
-    <div className={`${themeClasses.bg} p-4 rounded-2xl`}>
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className={`${themeClasses.bg}  p-4 rounded-2xl`}>
+      <div className="max-w-6xl mx-auto  space-y-6">
 
         {/* Compact Header with Inline Stats */}
         <div className={cardWrapperClass}>

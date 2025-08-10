@@ -33,7 +33,7 @@ export default function IncompleteBadges() {
 
   // theme classes (apply only for dark mode; light mode retains original classes)
   const themeClasses = {
-    bg: isDarkMode ? 'bg-slate-950' : 'bg-slate-50',
+    bg: isDarkMode ? 'bg-slate-950 border border-slate-600' : 'bg-slate-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
     text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
@@ -99,7 +99,7 @@ export default function IncompleteBadges() {
 
   return (
     <div className={`rounded-xl p-6 ${themeClasses.bg}`}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto  ">
         {/* Header Section */}
         <div className={`rounded-2xl shadow-sm p-8 mb-8 border ${isDarkMode ? themeClasses.border : 'border-gray-200'} ${isDarkMode ? themeClasses.cardBg : 'bg-white'}`}>
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -130,7 +130,7 @@ export default function IncompleteBadges() {
                 <input
                   type="text"
                   placeholder="Search badges..."
-                  className={`w-full pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all ${isDarkMode ? 'bg-slate-800/60 placeholder-slate-400 text-slate-200 focus:ring-slate-700 border ' + themeClasses.border : 'border border-gray-300 focus:ring-blue-500'}`}
+                  className={`w-full pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all ${isDarkMode ? 'bg-slate-800/60 placeholder-slate-400 text-slate-200 focus:ring-slate-700 border ' + themeClasses.border : 'border border-gray-300 placeholder:text-slate-400 focus:ring-blue-500'}`}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />

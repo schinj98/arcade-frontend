@@ -26,7 +26,7 @@ export default function ContactPage() {
     borderLight: isDarkMode ? 'border-slate-600/30' : 'border-gray-100',
     hoverShadow: isDarkMode ? 'hover:shadow-slate-800/50' : 'hover:shadow-gray-200/50',
     inputBg: isDarkMode ? 'bg-slate-900/80' : 'bg-white',
-    inputBorder: isDarkMode ? 'border-slate-700' : 'border-gray-200',
+    inputBorder: isDarkMode ? 'border border-slate-700' : 'border border-gray-200',
     gradientBlue: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-blue-50 to-indigo-50'
   }
 

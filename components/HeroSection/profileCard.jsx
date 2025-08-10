@@ -74,7 +74,7 @@ export default function ProfileCard() {
       </div>
 
       {/* Member Since */}
-      <div className={`flex items-center justify-center gap-2 text-sm ${themeClasses.textSecondary} bg-slate-50 px-4 py-2 rounded-xl`}>
+      <div className={`flex items-center justify-center gap-2 text-sm ${themeClasses.textSecondary} bg-slate-50 px-4 py-2 dark:bg-slate-800/60 rounded-xl`}>
         <Calendar size={16} className="text-gray-500" />
         <span>{user.memberSince}</span>
       </div>

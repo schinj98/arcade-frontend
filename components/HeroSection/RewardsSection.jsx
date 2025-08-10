@@ -17,7 +17,7 @@ export default function RewardsSection() {
 
   // user-provided dark-mode mapping; light mode will fall back to originals
   const themeClasses = {
-    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    bg: isDarkMode ? 'bg-slate-950 border border-slate-600' : 'bg-gray-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white',
     text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',

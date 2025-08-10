@@ -48,7 +48,7 @@ export default function CompletedLabsSection() {
 
   // dark-mode only themeClasses (light values kept same)
   const themeClasses = {
-    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    bg: isDarkMode ? 'bg-slate-950 border border-slate-600' : 'bg-gray-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
     text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
