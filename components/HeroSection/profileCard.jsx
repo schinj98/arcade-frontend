@@ -12,11 +12,13 @@ export default function ProfileCard() {
   const themeClasses = {
     bg: isDarkMode ? 'bg-slate-950' : 'bg-slate-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    memberSinceBG: isDarkMode ? 'bg-slate-900/95' : 'bg-gray-300',
+    memberSinceBorder: isDarkMode ? 'border border-slate-600' : 'border border-gray-300',
     text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
     textMuted: isDarkMode ? 'text-slate-400' : 'text-gray-500',
     border: isDarkMode ? 'border-slate-700/50' : 'border-blue-200',
-    borderLight: isDarkMode ? 'border-slate-600/30' : 'border-yellow-200',
+    borderLight: isDarkMode ? 'border border-slate-600/30' : ' border border-yellow-200',
     hover: isDarkMode ? 'hover:bg-slate-800/50' : 'hover:bg-slate-50/50',
     accent: isDarkMode ? 'bg-slate-800/50' : 'bg-yellow-100',
     accentHover: isDarkMode ? 'hover:bg-slate-700/50' : 'hover:bg-blue-50/50',
@@ -74,7 +76,7 @@ export default function ProfileCard() {
       </div>
 
       {/* Member Since */}
-      <div className={`flex items-center justify-center gap-2 text-sm ${themeClasses.textSecondary} bg-slate-50 px-4 py-2 dark:bg-slate-800/60 rounded-xl`}>
+      <div className={`flex items-center justify-center gap-2 text-sm ${themeClasses.textSecondary}  ${themeClasses.memberSinceBG} ${themeClasses.memberSinceBorder} px-4 py-2 rounded-xl`}>
         <Calendar size={16} className="text-gray-500" />
         <span>{user.memberSince}</span>
       </div>

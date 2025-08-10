@@ -98,8 +98,8 @@ export default function CompletedLabsSection() {
         badges = profileData?.completed_skill_badges_list || [];
       } else if (categoryKey === 'triviaBadges') {
         badges = profileData?.completed_trivia_badges || [];
-      } else if (categoryKey === 'certificationBadges') {
-        badges = profileData?.completed_certification_badges || [];
+      } else if (categoryKey === 'labsFreeBadges') {
+        badges = profileData?.completed_labsFree_badges_list || [];
       }
     }
 
