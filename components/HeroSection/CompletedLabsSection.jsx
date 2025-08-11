@@ -24,7 +24,7 @@ const categoryConfig = {
     bgColor: 'bg-blue-50',
     description: 'Progressive achievement levels',
   },
-  certificationBadges: {
+  labsFreeBadges: {
     name: 'Certification Badges',
     icon: Trophy,
     color: 'text-blue-400',

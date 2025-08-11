@@ -37,7 +37,7 @@ function FuturisticLoader({ isDarkMode }) {
     setParticles(newParticles);
   }, [themeClasses.primaryColor, themeClasses.secondaryColor, themeClasses.accentColor]);
 
-  // Don't render particles until mounted to prevent hydration issues
+  // Don't render particles until mounted to 
   if (!mounted) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${themeClasses.bg} relative overflow-hidden transition-all duration-700`}>

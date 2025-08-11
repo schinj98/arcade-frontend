@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { ThemeContext } from '@/context/ThemeContext';
+import { useState } from 'react';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
-import { ThemeContext } from '@/context/ThemeContext';
 
 const typeColors = {
   Trivia: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -20,8 +21,63 @@ const typeIcons = {
 };
 
 const filters = ['All', 'Trivia', 'Game', 'Skill', 'labsFree'];
+// AdSense Card Component that matches your design system
+const AdSenseCard = ({ adSlot, adFormat = "fluid", layoutKey = "-6t+ed+2i-1n-4w", className = "" }) => {
+  const { isDarkMode } = useContext(ThemeContext);
+  
+  // Theme classes matching your existing design
+  const themeClasses = {
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
+    gradientBg: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-gray-50 to-gray-100',
+  };
 
-export default function IncompleteBadges() {
+  useEffect(() => {
+    try {
+      // Initialize AdSense
+      if (typeof window !== 'undefined') {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (err) {
+      console.error('AdSense error:', err);
+    }
+  }, []);
+
+  return (
+    <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${themeClasses.cardBg} border ${themeClasses.border} ${className}`}>
+      {/* Ad Header - matches your badge header style */}
+      <div className={`relative h-48 flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
+        <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${isDarkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+          <span className="mr-1">📢</span>
+          Sponsored
+        </div>
+        
+        {/* AdSense Ad Unit */}
+        <div className="w-full h-full flex items-center justify-center">
+          <ins 
+            className="adsbygoogle"
+            style={{ display: 'block', width: '100%', height: '100%' }}
+            data-ad-format={adFormat}
+            data-ad-layout-key={layoutKey}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={adSlot}
+            data-full-width-responsive="true"
+          />
+        </div>
+      </div>
+
+      {/* Ad Content Area - matches your badge content style */}
+      <div className="p-6 flex flex-col flex-1">
+        <div className={`text-sm text-center ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+          Advertisement
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modified IncompleteBadges component with integrated ads
+export default function IncompleteBadgesWithAds() {
   const [visibleCount, setVisibleCount] = useState(12);
   const itemsPerLoad = 12;
   const [activeFilter, setActiveFilter] = useState('All');
@@ -30,6 +86,22 @@ export default function IncompleteBadges() {
 
   const { profileData } = useContext(ProfileContext);
   const { isDarkMode } = useContext(ThemeContext);
+
+  // Add AdSense script to head
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    
+    if (!document.querySelector(`script[src="${script.src}"]`)) {
+      document.head.appendChild(script);
+    }
+
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
 
   // theme classes (apply only for dark mode; light mode retains original classes)
   const themeClasses = {
@@ -86,6 +158,27 @@ export default function IncompleteBadges() {
     return matchesFilter && matchesSearch;
   });
 
+  // Function to inject ads into the grid
+  const getBadgesWithAds = () => {
+    const badgesWithAds = [];
+    const adPositions = [1, 6, 8, 13, 19,28]; // Strategic positions for ads
+    
+    filteredBadges.slice(0, visibleCount).forEach((badge, index) => {
+      badgesWithAds.push({ ...badge, isAd: false });
+      
+      // Insert ad after certain positions
+      if (adPositions.includes(index + 1) && index < visibleCount - 1) {
+        badgesWithAds.push({
+          id: `ad-${index}`,
+          isAd: true,
+          adSlot: index < 8 ? "9513707482" : "4261380806" // Use different ad slots for variety
+        });
+      }
+    });
+    
+    return badgesWithAds;
+  };
+
   // copy helper
   const copyToClipboard = async (text) => {
     try {
@@ -97,10 +190,12 @@ export default function IncompleteBadges() {
     }
   };
 
+  const itemsToRender = getBadgesWithAds();
+
   return (
     <div className={`rounded-xl p-6 ${themeClasses.bg}`}>
-      <div className="max-w-7xl mx-auto  ">
-        {/* Header Section */}
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section - Keep original */}
         <div className={`rounded-2xl shadow-sm p-8 mb-8 border ${isDarkMode ? themeClasses.border : 'border-gray-200'} ${isDarkMode ? themeClasses.cardBg : 'bg-white'}`}>
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
@@ -139,7 +234,7 @@ export default function IncompleteBadges() {
           </div>
         </div>
 
-        {/* Filter Tabs */}
+        {/* Filter Tabs - Keep original */}
         <div className="flex flex-wrap gap-3 mb-8">
           {filters.map((filter) => (
             <button
@@ -158,91 +253,99 @@ export default function IncompleteBadges() {
           ))}
         </div>
 
-        {/* Badges Grid */}
+        {/* Enhanced Badges Grid with Ads */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredBadges.slice(0, visibleCount).map((badge) => (
-            <div
-              key={badge.id}
-              className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${isDarkMode ? themeClasses.cardBg + ' border ' + themeClasses.border : 'bg-white border border-gray-200'}`}
-            >
-              {/* Badge Image */}
-              <div className={`relative h-48 flex items-center justify-center p-4 ${isDarkMode ? `bg-gradient-to-br ${themeClasses.gradientBg}` : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
-                <img
-                  src={badge.image}
-                  alt={badge.title}
-                  className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://placehold.co/160x160?text=Badge';
-                  }}
-                />
-                <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${typeColors[badge.type] || (isDarkMode ? 'bg-slate-800 text-slate-200 border-slate-700' : 'bg-gray-50 text-gray-700 border-gray-200')}`}>
-                  <span className="mr-1">{typeIcons[badge.type]}</span>
-                  {badge.type}
+          {itemsToRender.map((item) => 
+            item.isAd ? (
+              <AdSenseCard
+                key={item.id}
+                adSlot={item.adSlot}
+                className="col-span-1"
+              />
+            ) : (
+              <div
+                key={item.id}
+                className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${isDarkMode ? themeClasses.cardBg + ' border ' + themeClasses.border : 'bg-white border border-gray-200'}`}
+              >
+                {/* Original Badge Card Content */}
+                <div className={`relative h-48 flex items-center justify-center p-4 ${isDarkMode ? `bg-gradient-to-br ${themeClasses.gradientBg}` : 'bg-gradient-to-br from-gray-50 to-gray-100'}`}>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://placehold.co/160x160?text=Badge';
+                    }}
+                  />
+                  <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${typeColors[item.type] || (isDarkMode ? 'bg-slate-800 text-slate-200 border-slate-700' : 'bg-gray-50 text-gray-700 border-gray-200')}`}>
+                    <span className="mr-1">{typeIcons[item.type]}</span>
+                    {item.type}
+                  </div>
                 </div>
-              </div>
 
-              {/* Badge Content */}
-              <div className="p-6 flex flex-col flex-1">
-                <h3 className={`text-lg font-semibold mb-3 line-clamp-2 leading-tight ${isDarkMode ? themeClasses.text : 'text-gray-900'}`}>
-                  {badge.title}
-                </h3>
+                <div className="p-6 flex flex-col flex-1">
+                  <h3 className={`text-lg font-semibold mb-3 line-clamp-2 leading-tight ${isDarkMode ? themeClasses.text : 'text-gray-900'}`}>
+                    {item.title}
+                  </h3>
 
-                {/* Badge Info */}
-                <div className="space-y-3 flex-1">
-                  <div className="flex items-center justify-between">
-                    <div className={`flex items-center text-sm ${isDarkMode ? themeClasses.textSecondary : 'text-gray-600'}`}>
-                      <Flame size={16} className="text-orange-500 mr-1" />
-                      <span className={`${isDarkMode ? themeClasses.text : 'font-medium text-gray-900'}`}>{badge.points} Points</span>
+                  <div className="space-y-3 flex-1">
+                    <div className="flex items-center justify-between">
+                      <div className={`flex items-center text-sm ${isDarkMode ? themeClasses.textSecondary : 'text-gray-600'}`}>
+                        <Flame size={16} className="text-orange-500 mr-1" />
+                        <span className={`${isDarkMode ? themeClasses.text : 'font-medium text-gray-900'}`}>{item.points} Points</span>
+                      </div>
                     </div>
+
+                    {item.type !== 'Skill' && item.type !== 'labsFree' && (
+                      <div className="flex items-center gap-2">
+                        <code className={`flex-1 text-xs px-3 py-2 rounded-lg font-mono truncate ${isDarkMode ? themeClasses.codeBg + ' border ' + themeClasses.borderLight : 'bg-gray-100 text-gray-700'}`}>
+                          {item.id}
+                        </code>
+                        <button
+                          onClick={() => copyToClipboard(item.id)}
+                          className={`p-2 cursor-pointer ${isDarkMode ? 'text-slate-200 hover:text-white ' + themeClasses.hover : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'} rounded-lg transition-colors`}
+                          title="Copy ID"
+                        >
+                          {copiedId === item.id ? (
+                            <CheckCircle size={16} className="cursor-pointer text-green-500" />
+                          ) : (
+                            <Copy size={16} />
+                          )}
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  {badge.type !== 'Skill' && badge.type !== 'labsFree' && (
-                    <div className="flex items-center gap-2">
-                      <code className={`flex-1 text-xs px-3 py-2 rounded-lg font-mono truncate ${isDarkMode ? themeClasses.codeBg + ' border ' + themeClasses.borderLight : 'bg-gray-100 text-gray-700'}`}>
-                        {badge.id}
-                      </code>
-                      <button
-                        onClick={() => copyToClipboard(badge.id)}
-                        className={`p-2 cursor-pointer ${isDarkMode ? 'text-slate-200 hover:text-white ' + themeClasses.hover : 'text-gray-500 hover:text-blue-600 hover:bg-blue-50'} rounded-lg transition-colors`}
-                        title="Copy ID"
-                      >
-                        {copiedId === badge.id ? (
-                          <CheckCircle size={16} className="cursor-pointer text-green-500" />
-                        ) : (
-                          <Copy size={16} />
-                        )}
-                      </button>
-                    </div>
-                  )}
+                  <button
+                    onClick={() => window.open(item.badgeLink, '_blank')}
+                    className={`w-full mt-4 cursor-pointer py-3 px-4 rounded-md font-medium transition-all duration-200 flex items-center justify-center gap-2 ${isDarkMode ? themeClasses.btnBg : 'bg-blue-500 hover:bg-blue-700 text-white'}`}
+                  >
+                    Start Challenge
+                    <ExternalLink size={16} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                  </button>
                 </div>
-
-                {/* Action Button */}
-                <button
-                  onClick={() => window.open(badge.badgeLink, '_blank')}
-                  className={`w-full mt-4 cursor-pointer py-3 px-4 rounded-md font-medium transition-all duration-200 flex items-center justify-center gap-2 ${isDarkMode ? themeClasses.btnBg : 'bg-blue-500 hover:bg-blue-700 text-white'}`}
-                >
-                  Start Challenge
-                  <ExternalLink size={16} className="group-hover/btn:translate-x-0.5 transition-transform" />
-                </button>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
 
-        {/* Load More Button */}
+        {/* Rest of your original code... */}
         {visibleCount < filteredBadges.length && (
           <div className="flex justify-center mt-12">
             <button
               onClick={() => setVisibleCount((prev) => prev + itemsPerLoad)}
-              className={`px-8 py-4 cursor-pointer rounded-xl transition-all duration-200 font-medium shadow-sm ${isDarkMode ? 'border text-white' + themeClasses.border + ' ' + themeClasses.cardBg : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'}`}
-            >
+              className={`px-8 py-4 cursor-pointer rounded-xl transition-all duration-200 font-medium shadow-sm ${
+                isDarkMode
+                  ? `border text-white ${themeClasses.border} ${themeClasses.cardBg}`
+                  : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+              }`}
+                          >
               Load More Badges ({filteredBadges.length - visibleCount} remaining)
             </button>
           </div>
         )}
 
-        {/* Empty State */}
         {filteredBadges.length === 0 && (
           <div className="text-center py-16">
             <div className={`text-6xl mb-4 ${isDarkMode ? 'text-slate-300' : 'text-gray-400'}`}>🏆</div>
@@ -251,7 +354,6 @@ export default function IncompleteBadges() {
           </div>
         )}
 
-        {/* Toast Notification */}
         {copiedId && (
           <div className={`fixed bottom-6 right-6 px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 ${themeClasses.toastBg}`}>
             <CheckCircle size={20}/>
