@@ -86,7 +86,7 @@ export default function TotalProgress() {
   const stats = [
     {
       label: 'Facilitator Points',
-      value: profileData?.facilitatorPoints ?? 0,
+      value: profileData?.facilitator_section?.facilitatorPoints ?? 0,
       icon: Trophy,
       colorKey: 'blue',
       description: 'Arcade Facilitator Points',

@@ -5,10 +5,8 @@ import { ProfileContext } from '@/context/ProfileContext';
 import { ThemeContext } from '@/context/ThemeContext';
 
 export default function Facilitator_section() {
-  // Mock ProfileContext for demo
+  
   const {profileData} = useContext(ProfileContext)
-
-
   const [selectedMilestone, setSelectedMilestone] = useState(0);
   const [hoveredGoal, setHoveredGoal] = useState(null);
   const [animateProgress, setAnimateProgress] = useState(false);
@@ -16,17 +14,17 @@ export default function Facilitator_section() {
   const { isDarkMode } = useContext(ThemeContext);
   const [pulseCompleted, setPulseCompleted] = useState(false);
   
-  const finding_total_completions = profileData?.badgesOverview || {
+  const finding_total_completions = profileData?.facilitator_section || {
     skillBadges: { count: 0 },
     levelBadges: { count: 0 },
     triviaBadges: { count: 0 },
     labsFreeBadges: { count: 0 }
   };
 
-  const skill_count = finding_total_completions.skillBadges.count || 0;
-  const game_count = finding_total_completions.levelBadges.count || 0;
-  const trivia_count = finding_total_completions.triviaBadges.count || 0;
-  const labsFree_count = finding_total_completions.labsFreeBadges.count || 0;
+  const skill_count = finding_total_completions.facilitator_skill_badges_count || 0;
+  const game_count = finding_total_completions.facilitator_game_badges_count || 0;
+  const trivia_count = finding_total_completions.facilitator_trivia_badges_count || 0;
+  const labsFree_count = finding_total_completions.facilitator_labsfree_badges_count || 0;
 
   const milestones = [
     {
