@@ -182,9 +182,9 @@ export default function IncompleteBadges() {
             <div className="p-4 flex flex-col h-full min-h-[400px] justify-center items-center">
             <AdBanner 
               slot="8577752535" 
-              format="rectangle" 
-              style={{ display: "inline-block", width: "250px", height: "336px" }}
-              responsive={false} 
+              format="auto" 
+              style={{ display: "block"}}
+              responsive={true} 
             />
 
             </div>
