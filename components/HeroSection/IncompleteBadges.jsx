@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '@/context/ThemeContext';
 import { Flame, Search, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
@@ -54,6 +54,18 @@ export default function IncompleteBadges() {
 
   const badges = profileData?.incompleteBadges;
   const allBadges = [];
+  const useScreenSize = () => {
+    const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
+  
+    useEffect(() => {
+      const handleResize = () => setWidth(window.innerWidth);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
+    return width;
+  };
+  
 
   if (badges) {
     const order = ['Game', 'Trivia', 'Skill', 'labsFree'];
@@ -173,6 +185,8 @@ export default function IncompleteBadges() {
 
       // Check if we need to add an ad after this position
       if (AD_POSITIONS.includes(position)) {
+        const screenWidth = useScreenSize();
+      
         adCounter++;
         items.push(
           <div
@@ -180,13 +194,31 @@ export default function IncompleteBadges() {
             className={`rounded-2xl shadow-sm transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}
           >
             <div className="p-4 flex flex-col h-full min-h-[400px] justify-center items-center">
-            <AdBanner 
-              slot="8577752535" 
-              format="auto" 
-              style={{ display: "block"}}
-              responsive={true} 
-            />
-
+              {screenWidth >= 1024 ? (
+                // Desktop
+                <AdBanner
+                  slot="6757969054"
+                  format="rectangle"
+                  style={{display:"inline-block", width:"280px", height:"500px"}}
+                  responsive={false}
+                />
+              ) : screenWidth >= 768 ? (
+                // Tablet
+                <AdBanner
+                  slot="6757969054"
+                  format="medium_rectangle"
+                  style={{display:"inline-block", width:"250px", height:"450px"}}
+                  responsive={false}
+                />
+              ) : (
+                // Mobile
+                <AdBanner 
+                  slot="8577752535" 
+                  format="rectangle" 
+                  style={{ display: "inline-block", width: "250px", height: "336px" }}
+                  responsive={false} 
+                />
+              )}
             </div>
           </div>
         );

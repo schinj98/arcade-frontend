@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 
-export default function AdBanner({ format = "auto", slot, style = {}, responsive = true }) {
+export default function AdBanner({ format, slot, style = {}, responsive = true }) {
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
