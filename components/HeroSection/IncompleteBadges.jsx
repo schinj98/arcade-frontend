@@ -201,25 +201,25 @@ export default function IncompleteBadges() {
                 // Desktop - Large Rectangle
                 <AdBanner
                   slot="6757969054"
-                  format="rectangle"
-                  style={{display:"inline-block", width:"280px", height:"336px"}}
-                  responsive={false}
+                  format="auto"
+                  style={{display:"block"}}
+                  responsive={true}
                 />
               ) : screenWidth >= 768 ? (
                 // Tablet - Medium Rectangle
                 <AdBanner
                   slot="6757969054"
-                  format="medium_rectangle"
-                  style={{display:"inline-block", width:"250px", height:"300px"}}
-                  responsive={false}
+                  format="auto"
+                  style={{display:"block"}}
+                  responsive={true}
                 />
               ) : (
                 // Mobile - Banner
                 <AdBanner 
-                  slot="8577752535" 
-                  format="banner" 
-                  style={{ display: "inline-block", width: "280px", height: "250px" }}
-                  responsive={false} 
+                  slot="6757969054"
+                  format="auto"
+                  style={{display:"block"}}
+                  responsive={true} 
                 />
               )}
             </div>
