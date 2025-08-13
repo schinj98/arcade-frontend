@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { ThemeContext } from '@/context/ThemeContext';
-import { useState } from 'react';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
 
@@ -22,11 +21,51 @@ const typeIcons = {
 
 const filters = ['All', 'Trivia', 'Game', 'Skill', 'labsFree'];
 
-// Enhanced AdSense Card Component for all screen sizes
-const AdSenseCard = ({ adSlot, adFormat = "auto", className = "" }) => {
+// Enhanced AdSense Card Component with responsive ad configurations
+const AdSenseCard = ({ adSlot, className = "", adIndex = 0 }) => {
   const { isDarkMode } = useContext(ThemeContext);
-  const [adLoaded, setAdLoaded] = useState(false);
-  const [adError, setAdError] = useState(false);
+  const [screenSize, setScreenSize] = useState('desktop');
+  
+  // Screen size detection
+  useEffect(() => {
+    const updateScreenSize = () => {
+      if (window.innerWidth < 768) {
+        setScreenSize('mobile');
+      } else if (window.innerWidth < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener('resize', updateScreenSize);
+  }, []);
+
+  // Responsive ad configurations for different screen sizes
+  const adConfigs = {
+    mobile: {
+      format: 'rectangle',
+      style: { display: 'block', width: '300px', height: '250px' },
+      layoutKey: null,
+      fullWidthResponsive: 'false'
+    },
+    tablet: {
+      format: 'rectangle', 
+      style: { display: 'inline-block', width: '336px', height: '280px' },
+      layoutKey: null,
+      fullWidthResponsive: 'false'
+    },
+    desktop: {
+      format: 'rectangle',
+      style: { display: 'inline-block', width: '300px', height: '250px' },
+      layoutKey: null,
+      fullWidthResponsive: 'false'
+    }
+  };
+
+  const currentConfig = adConfigs[screenSize];
   
   // Theme classes matching your existing design
   const themeClasses = {
@@ -35,157 +74,178 @@ const AdSenseCard = ({ adSlot, adFormat = "auto", className = "" }) => {
     gradientBg: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-gray-50 to-gray-100',
   };
 
-  useEffect(() => {
-    let timeoutId;
-    
-    const initializeAd = () => {
-      try {
-        // Ensure AdSense script is loaded
-        if (typeof window !== 'undefined' && window.adsbygoogle) {
-          // Clear any existing ad in this slot
-          const existingAd = document.querySelector(`[data-ad-slot="${adSlot}"]`);
-          if (existingAd && existingAd.innerHTML) {
-            return; // Ad already loaded
-          }
-
-          // Push the ad configuration
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-          setAdLoaded(true);
-          
-          // Set a timeout to check if ad loaded successfully
-          timeoutId = setTimeout(() => {
-            const adElement = document.querySelector(`[data-ad-slot="${adSlot}"]`);
-            if (adElement && !adElement.innerHTML.trim()) {
-              setAdError(true);
-            }
-          }, 3000);
-          
-        } else {
-          // Retry if AdSense not ready
-          setTimeout(initializeAd, 500);
-        }
-      } catch (err) {
-        console.error('AdSense initialization error:', err);
-        setAdError(true);
+  // Different ad slots for different positions and screen sizes
+  const getAdSlot = () => {
+    const slotMap = {
+      mobile: {
+        primary: "9513707482",   // Your existing slot
+        secondary: "4261380806"  // Your existing slot
+      },
+      tablet: {
+        primary: "9513707482",   
+        secondary: "4261380806"
+      },
+      desktop: {
+        primary: "9513707482",   
+        secondary: "4261380806"
       }
     };
+    
+    const isSecondary = adIndex % 2 === 1;
+    return slotMap[screenSize][isSecondary ? 'secondary' : 'primary'];
+  };
 
-    // Delay initialization slightly to ensure DOM is ready
-    const initTimeout = setTimeout(initializeAd, 100);
-
-    return () => {
-      clearTimeout(initTimeout);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [adSlot]);
+  useEffect(() => {
+    try {
+      // Push to AdSense queue for initialization
+      if (typeof window !== 'undefined') {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (err) {
+      console.error('AdSense error:', err);
+    }
+  }, [screenSize]); // Re-initialize when screen size changes
 
   return (
-    <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col min-h-[400px] ${themeClasses.cardBg} border ${themeClasses.border} ${className}`}>
+    <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${themeClasses.cardBg} border ${themeClasses.border} ${className}`}>
       {/* Ad Header */}
-      <div className={`relative flex-shrink-0 h-12 flex items-center justify-center px-4 bg-gradient-to-r ${themeClasses.gradientBg}`}>
-        <div className={`px-3 py-1.5 text-xs font-medium rounded-lg border ${isDarkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+      <div className={`relative h-48 flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
+        <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${isDarkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
           <span className="mr-1">📢</span>
           Sponsored
+        </div>
+        
+        {/* Responsive AdSense Ad Unit */}
+        <div className="w-full h-full flex items-center justify-center">
+          <ins 
+            className="adsbygoogle"
+            style={currentConfig.style}
+            data-ad-format={currentConfig.format}
+            data-ad-layout-key={currentConfig.layoutKey}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={getAdSlot()}
+            data-full-width-responsive={currentConfig.fullWidthResponsive}
+          />
         </div>
       </div>
 
       {/* Ad Content Area */}
-      <div className="flex-1 p-4 flex flex-col items-center justify-center min-h-[300px]">
-        {!adError ? (
-          <>
-            {/* AdSense Ad Unit */}
-            <ins 
-              className="adsbygoogle"
-              style={{ 
-                display: 'block',
-                width: '100%',
-                minHeight: '250px',
-                maxWidth: '100%'
-              }}
-              data-ad-format={adFormat}
-              data-ad-client="ca-pub-5183171666938196"
-              data-ad-slot={adSlot}
-              data-full-width-responsive="true"
-              data-ad-layout="in-article"
-            />
-            
-            {/* Loading state */}
-            {!adLoaded && (
-              <div className={`flex flex-col items-center justify-center space-y-3 text-center ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                <p className="text-sm">Loading advertisement...</p>
-              </div>
-            )}
-          </>
-        ) : (
-          /* Fallback content when ad fails to load */
-          <div className={`flex flex-col items-center justify-center space-y-3 text-center p-8 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-            <div className="text-4xl">📱</div>
-            <h3 className="text-lg font-semibold">Advertisement Space</h3>
-            <p className="text-sm">Support us by allowing ads</p>
-          </div>
-        )}
-      </div>
-
-      {/* Ad Footer */}
-      <div className={`flex-shrink-0 p-3 text-center border-t ${isDarkMode ? 'border-slate-700 bg-slate-800/30' : 'border-gray-100 bg-gray-50/50'}`}>
-        <div className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-          Advertisement
+      <div className="p-6 flex flex-col flex-1">
+        <div className={`text-sm text-center ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+          Advertisement • {screenSize}
         </div>
       </div>
     </div>
   );
 };
 
-// Modified IncompleteBadges component with integrated ads
+// Alternative Large Banner Ad Component for better desktop visibility
+const LargeBannerAd = ({ adIndex = 0, className = "" }) => {
+  const { isDarkMode } = useContext(ThemeContext);
+  const [screenSize, setScreenSize] = useState('desktop');
+
+  useEffect(() => {
+    const updateScreenSize = () => {
+      if (window.innerWidth < 768) {
+        setScreenSize('mobile');
+      } else if (window.innerWidth < 1024) {
+        setScreenSize('tablet');
+      } else {
+        setScreenSize('desktop');
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+    return () => window.removeEventListener('resize', updateScreenSize);
+  }, []);
+
+  const themeClasses = {
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
+  };
+
+  // Banner ad configurations
+  const bannerConfigs = {
+    mobile: {
+      format: 'banner',
+      style: { display: 'block', width: '320px', height: '100px' },
+    },
+    tablet: {
+      format: 'banner',
+      style: { display: 'block', width: '728px', height: '90px' },
+    },
+    desktop: {
+      format: 'banner',
+      style: { display: 'block', width: '728px', height: '90px' },
+    }
+  };
+
+  const currentConfig = bannerConfigs[screenSize];
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (err) {
+      console.error('AdSense banner error:', err);
+    }
+  }, [screenSize]);
+
+  // Only show on desktop/tablet and every 8th position
+  if (screenSize === 'mobile' || adIndex % 8 !== 0) {
+    return null;
+  }
+
+  return (
+    <div className={`col-span-full rounded-2xl shadow-sm border overflow-hidden ${themeClasses.cardBg} ${themeClasses.border} ${className} my-6`}>
+      <div className="p-4 text-center">
+        <div className={`text-xs mb-3 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+          <span className="mr-1">📢</span>
+          Sponsored Content
+        </div>
+        <div className="flex justify-center">
+          <ins 
+            className="adsbygoogle"
+            style={currentConfig.style}
+            data-ad-format={currentConfig.format}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot="9513707482"
+            data-full-width-responsive="false"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modified IncompleteBadges component with enhanced ads
 export default function IncompleteBadgesWithAds() {
   const [visibleCount, setVisibleCount] = useState(12);
   const itemsPerLoad = 12;
   const [activeFilter, setActiveFilter] = useState('All');
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState(null);
-  const [adsInitialized, setAdsInitialized] = useState(false);
 
   const { profileData } = useContext(ProfileContext);
   const { isDarkMode } = useContext(ThemeContext);
 
-  // Enhanced AdSense script loading
+  // Add AdSense script to head
   useEffect(() => {
-    if (adsInitialized) return;
-
-    const loadAdSense = () => {
-      // Check if script already exists
-      const existingScript = document.querySelector('script[src*="adsbygoogle.js"]');
-      if (existingScript) {
-        setAdsInitialized(true);
-        return;
-      }
-
-      // Create and load AdSense script
-      const script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
-      script.async = true;
-      script.crossOrigin = 'anonymous';
-      
-      script.onload = () => {
-        setAdsInitialized(true);
-        console.log('AdSense script loaded successfully');
-      };
-      
-      script.onerror = () => {
-        console.error('Failed to load AdSense script');
-      };
-
-      document.head.appendChild(script);
-    };
-
-    // Load script with slight delay to ensure DOM is ready
-    const timeoutId = setTimeout(loadAdSense, 100);
+    const script = document.createElement('script');
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
     
+    if (!document.querySelector(`script[src="${script.src}"]`)) {
+      document.head.appendChild(script);
+    }
+
     return () => {
-      clearTimeout(timeoutId);
+      // Cleanup if needed
     };
-  }, [adsInitialized]);
+  }, []);
 
   // theme classes (apply only for dark mode; light mode retains original classes)
   const themeClasses = {
@@ -245,30 +305,36 @@ export default function IncompleteBadgesWithAds() {
   // Enhanced function to inject ads with better positioning
   const getBadgesWithAds = () => {
     const badgesWithAds = [];
-    const visibleBadges = filteredBadges.slice(0, visibleCount);
+    let adCounter = 0;
     
-    // More strategic ad positions for better visibility
-    const adPositions = [3, 7, 12, 17, 23, 29, 35]; // Every 4-6 items
-    const adSlots = [
-      "9513707482", 
-      "4261380806", 
-      "1234567890", // Add more ad slots if you have them
-      "9876543210",
-      "5555555555",
-      "1111111111",
-      "2222222222"
-    ];
-    
-    visibleBadges.forEach((badge, index) => {
+    filteredBadges.slice(0, visibleCount).forEach((badge, index) => {
+      // Add banner ad at the top (position 0) for desktop/tablet
+      if (index === 0) {
+        badgesWithAds.push({
+          id: `banner-ad-top`,
+          isBannerAd: true,
+          adIndex: adCounter++
+        });
+      }
+      
       badgesWithAds.push({ ...badge, isAd: false });
       
-      // Insert ad after certain positions
-      const adPositionIndex = adPositions.findIndex(pos => pos === index + 1);
-      if (adPositionIndex !== -1 && index < visibleBadges.length - 1) {
+      // Insert card ads at strategic positions
+      const cardAdPositions = [3, 8, 14, 21, 28]; // Every ~5-7 cards
+      if (cardAdPositions.includes(index + 1) && index < visibleCount - 1) {
         badgesWithAds.push({
-          id: `ad-${index}-${Date.now()}`, // Unique ID to prevent conflicts
+          id: `card-ad-${index}`,
           isAd: true,
-          adSlot: adSlots[adPositionIndex % adSlots.length] || "9513707482" // Fallback to first slot
+          adIndex: adCounter++
+        });
+      }
+      
+      // Insert banner ads for desktop every 16 items
+      if ((index + 1) % 16 === 0 && index < visibleCount - 1) {
+        badgesWithAds.push({
+          id: `banner-ad-${index}`,
+          isBannerAd: true,
+          adIndex: adCounter++
         });
       }
     });
@@ -350,16 +416,30 @@ export default function IncompleteBadgesWithAds() {
           ))}
         </div>
 
-        {/* Enhanced Badges Grid with Ads - Now properly responsive */}
+        {/* Enhanced Badges Grid with Responsive Ads */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {itemsToRender.map((item) => 
-            item.isAd ? (
-              <AdSenseCard
-                key={item.id}
-                adSlot={item.adSlot}
-                className="w-full h-full"
-              />
-            ) : (
+          {itemsToRender.map((item) => {
+            if (item.isBannerAd) {
+              return (
+                <LargeBannerAd
+                  key={item.id}
+                  adIndex={item.adIndex}
+                  className="mb-6"
+                />
+              );
+            }
+            
+            if (item.isAd) {
+              return (
+                <AdSenseCard
+                  key={item.id}
+                  adIndex={item.adIndex}
+                  className="col-span-1"
+                />
+              );
+            }
+            
+            return (
               <div
                 key={item.id}
                 className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${isDarkMode ? themeClasses.cardBg + ' border ' + themeClasses.border : 'bg-white border border-gray-200'}`}
@@ -423,11 +503,11 @@ export default function IncompleteBadgesWithAds() {
                   </button>
                 </div>
               </div>
-            )
-          )}
+            );
+          })}
         </div>
 
-        {/* Load More Button */}
+        {/* Rest of your original code... */}
         {visibleCount < filteredBadges.length && (
           <div className="flex justify-center mt-12">
             <button
@@ -437,13 +517,12 @@ export default function IncompleteBadgesWithAds() {
                   ? `border text-white ${themeClasses.border} ${themeClasses.cardBg}`
                   : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
               }`}
-            >
+                          >
               Load More Badges ({filteredBadges.length - visibleCount} remaining)
             </button>
           </div>
         )}
 
-        {/* No badges found state */}
         {filteredBadges.length === 0 && (
           <div className="text-center py-16">
             <div className={`text-6xl mb-4 ${isDarkMode ? 'text-slate-300' : 'text-gray-400'}`}>🏆</div>
@@ -452,7 +531,6 @@ export default function IncompleteBadgesWithAds() {
           </div>
         )}
 
-        {/* Copy success toast */}
         {copiedId && (
           <div className={`fixed bottom-6 right-6 px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 ${themeClasses.toastBg}`}>
             <CheckCircle size={20}/>
