@@ -180,7 +180,7 @@ export default function IncompleteBadges() {
             className={`rounded-2xl shadow-sm transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}
           >
             <div className="p-4 flex flex-col h-full min-h-[400px] justify-center items-center">
-              <AdBanner />
+            <AdBanner slot="6757969054" format="auto" />
             </div>
           </div>
         );

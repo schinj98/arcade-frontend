@@ -5,7 +5,6 @@ import ProfileCard from '@/components/HeroSection/profileCard';
 import BadgesSection from './BadgesSection';
 import RewardsSection from './RewardsSection';
 import IncompleteBadges from './IncompleteBadges';
-// import IncompleteBadges2 from './IncompleteBadges'; // This was duplicated, removed
 import ProgressGraph from './ProgressGraph';
 import Facilitator_section from './Facilitator_section';
 import Total_progress from './Total_progress';
@@ -15,7 +14,6 @@ import AdBanner from '../AdBanner';
 export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp, isDarkMode = false  }) {
   const user = profileData?.userDetails;
   const completed_totalPoints = profileData?.completed_totalPoints;
-  // const badges = IncompleteBadges?.IncompleteBadges; // This line seems to be incorrect, IncompleteBadges is a component, not an object with a property called IncompleteBadges
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950' : 'bg-blue-50'} py-5 px-4 sm:px-6 lg:px-8 font-inter transition-colors duration-300`}>
