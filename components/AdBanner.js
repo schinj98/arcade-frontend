@@ -28,15 +28,18 @@ export default function AdBanner() {
           📢 Sponsored
         </div>
         <div
-          className="w-full min-h-[250px]"
-          style={{ maxHeight: "400px", overflow: "hidden" }}
+          className="w-full min-h-[250px] flex justify-center items-center"
+          style={{
+            maxHeight: "400px",
+            overflow: "hidden"
+          }}
         >
           <ins
             className="adsbygoogle"
             style={{
-              display:"inline-block",
-              width:"200px",
-              height:"300px"
+              display: "inline-block",
+              width: "200px",
+              height: "300px"
             }}
             data-ad-client="ca-pub-5183171666938196"
             data-ad-slot="1375448730"
@@ -44,6 +47,7 @@ export default function AdBanner() {
             data-full-width-responsive="false"
           ></ins>
         </div>
+
       </div>
     </div>
   );
