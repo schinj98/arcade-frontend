@@ -12,10 +12,18 @@ export default function AdBanner() {
 
   return (
     <div className="my-4 flex justify-center">
-      <div className="w-full h-auto min-h-[250px]">
+      <div
+        className="w-full min-h-[250px]"
+        style={{ maxHeight: "400px", overflow: "hidden" }}
+      >
         <ins
           className="adsbygoogle"
-          style={{ display: "block", width: "100%", height: "100%" }}
+          style={{
+            display: "block",
+            width: "100%",
+            height: "100%",
+            maxHeight: "400px"
+          }}
           data-ad-client="ca-pub-5183171666938196"
           data-ad-slot="3736968322"
           data-ad-format="auto"
