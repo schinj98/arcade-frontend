@@ -183,9 +183,10 @@ export default function IncompleteBadges() {
             <AdBanner 
               slot="8577752535" 
               format="rectangle" 
-              style="display:inline-block;width:250px;height:336px"
+              style={{ display: "inline-block", width: "250px", height: "336px" }}
               responsive={false} 
             />
+
             </div>
           </div>
         );

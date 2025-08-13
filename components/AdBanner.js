@@ -5,10 +5,11 @@ export default function AdBanner({ format = "auto", slot, style = {}, responsive
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (e) {
-      console.error("AdSense error", e);
+    } catch (err) {
+      console.error("AdSense load error", err);
     }
-  }, [slot, format]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="my-4">
