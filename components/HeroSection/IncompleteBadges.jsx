@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { ThemeContext } from '@/context/ThemeContext';
+import { useState } from 'react';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
 
@@ -20,52 +21,9 @@ const typeIcons = {
 };
 
 const filters = ['All', 'Trivia', 'Game', 'Skill', 'labsFree'];
-
-// Enhanced AdSense Card Component with responsive ad configurations
-const AdSenseCard = ({ adSlot, className = "", adIndex = 0 }) => {
+// AdSense Card Component that matches your design system
+const AdSenseCard = ({ adSlot, adFormat = "fluid", layoutKey = "-6t+ed+2i-1n-4w", className = "" }) => {
   const { isDarkMode } = useContext(ThemeContext);
-  const [screenSize, setScreenSize] = useState('desktop');
-  
-  // Screen size detection
-  useEffect(() => {
-    const updateScreenSize = () => {
-      if (window.innerWidth < 768) {
-        setScreenSize('mobile');
-      } else if (window.innerWidth < 1024) {
-        setScreenSize('tablet');
-      } else {
-        setScreenSize('desktop');
-      }
-    };
-
-    updateScreenSize();
-    window.addEventListener('resize', updateScreenSize);
-    return () => window.removeEventListener('resize', updateScreenSize);
-  }, []);
-
-  // Responsive ad configurations for different screen sizes
-  const adConfigs = {
-    mobile: {
-      format: 'rectangle',
-      style: { display: 'block', width: '300px', height: '250px' },
-      layoutKey: null,
-      fullWidthResponsive: 'false'
-    },
-    tablet: {
-      format: 'rectangle', 
-      style: { display: 'inline-block', width: '336px', height: '280px' },
-      layoutKey: null,
-      fullWidthResponsive: 'false'
-    },
-    desktop: {
-      format: 'rectangle',
-      style: { display: 'inline-block', width: '300px', height: '250px' },
-      layoutKey: null,
-      fullWidthResponsive: 'false'
-    }
-  };
-
-  const currentConfig = adConfigs[screenSize];
   
   // Theme classes matching your existing design
   const themeClasses = {
@@ -74,153 +32,51 @@ const AdSenseCard = ({ adSlot, className = "", adIndex = 0 }) => {
     gradientBg: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-gray-50 to-gray-100',
   };
 
-  // Different ad slots for different positions and screen sizes
-  const getAdSlot = () => {
-    const slotMap = {
-      mobile: {
-        primary: "9513707482",   // Your existing slot
-        secondary: "4261380806"  // Your existing slot
-      },
-      tablet: {
-        primary: "9513707482",   
-        secondary: "4261380806"
-      },
-      desktop: {
-        primary: "9513707482",   
-        secondary: "4261380806"
-      }
-    };
-    
-    const isSecondary = adIndex % 2 === 1;
-    return slotMap[screenSize][isSecondary ? 'secondary' : 'primary'];
-  };
-
   useEffect(() => {
     try {
-      // Push to AdSense queue for initialization
+      // Initialize AdSense
       if (typeof window !== 'undefined') {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
       }
     } catch (err) {
       console.error('AdSense error:', err);
     }
-  }, [screenSize]); // Re-initialize when screen size changes
+  }, []);
 
   return (
     <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${themeClasses.cardBg} border ${themeClasses.border} ${className}`}>
-      {/* Ad Header */}
+      {/* Ad Header - matches your badge header style */}
       <div className={`relative h-48 flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
         <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${isDarkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
           <span className="mr-1">📢</span>
           Sponsored
         </div>
         
-        {/* Responsive AdSense Ad Unit */}
+        {/* AdSense Ad Unit */}
         <div className="w-full h-full flex items-center justify-center">
           <ins 
             className="adsbygoogle"
-            style={currentConfig.style}
-            data-ad-format={currentConfig.format}
-            data-ad-layout-key={currentConfig.layoutKey}
+            style={{ display: 'block', width: '100%', height: '100%' }}
+            data-ad-format={adFormat}
+            data-ad-layout-key={layoutKey}
             data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot={getAdSlot()}
-            data-full-width-responsive={currentConfig.fullWidthResponsive}
+            data-ad-slot={adSlot}
+            data-full-width-responsive="true"
           />
         </div>
       </div>
 
-      {/* Ad Content Area */}
+      {/* Ad Content Area - matches your badge content style */}
       <div className="p-6 flex flex-col flex-1">
         <div className={`text-sm text-center ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-          Advertisement • {screenSize}
+          Advertisement
         </div>
       </div>
     </div>
   );
 };
 
-// Alternative Large Banner Ad Component for better desktop visibility
-const LargeBannerAd = ({ adIndex = 0, className = "" }) => {
-  const { isDarkMode } = useContext(ThemeContext);
-  const [screenSize, setScreenSize] = useState('desktop');
-
-  useEffect(() => {
-    const updateScreenSize = () => {
-      if (window.innerWidth < 768) {
-        setScreenSize('mobile');
-      } else if (window.innerWidth < 1024) {
-        setScreenSize('tablet');
-      } else {
-        setScreenSize('desktop');
-      }
-    };
-
-    updateScreenSize();
-    window.addEventListener('resize', updateScreenSize);
-    return () => window.removeEventListener('resize', updateScreenSize);
-  }, []);
-
-  const themeClasses = {
-    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
-    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
-  };
-
-  // Banner ad configurations
-  const bannerConfigs = {
-    mobile: {
-      format: 'banner',
-      style: { display: 'block', width: '320px', height: '100px' },
-    },
-    tablet: {
-      format: 'banner',
-      style: { display: 'block', width: '728px', height: '90px' },
-    },
-    desktop: {
-      format: 'banner',
-      style: { display: 'block', width: '728px', height: '90px' },
-    }
-  };
-
-  const currentConfig = bannerConfigs[screenSize];
-
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    } catch (err) {
-      console.error('AdSense banner error:', err);
-    }
-  }, [screenSize]);
-
-  // Only show on desktop/tablet and every 8th position
-  if (screenSize === 'mobile' || adIndex % 8 !== 0) {
-    return null;
-  }
-
-  return (
-    <div className={`col-span-full rounded-2xl shadow-sm border overflow-hidden ${themeClasses.cardBg} ${themeClasses.border} ${className} my-6`}>
-      <div className="p-4 text-center">
-        <div className={`text-xs mb-3 ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-          <span className="mr-1">📢</span>
-          Sponsored Content
-        </div>
-        <div className="flex justify-center">
-          <ins 
-            className="adsbygoogle"
-            style={currentConfig.style}
-            data-ad-format={currentConfig.format}
-            data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot="9513707482"
-            data-full-width-responsive="false"
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Modified IncompleteBadges component with enhanced ads
+// Modified IncompleteBadges component with integrated ads
 export default function IncompleteBadgesWithAds() {
   const [visibleCount, setVisibleCount] = useState(12);
   const itemsPerLoad = 12;
@@ -302,39 +158,20 @@ export default function IncompleteBadgesWithAds() {
     return matchesFilter && matchesSearch;
   });
 
-  // Enhanced function to inject ads with better positioning
+  // Function to inject ads into the grid
   const getBadgesWithAds = () => {
     const badgesWithAds = [];
-    let adCounter = 0;
+    const adPositions = [1, 6, 8, 13, 19,28]; // Strategic positions for ads
     
     filteredBadges.slice(0, visibleCount).forEach((badge, index) => {
-      // Add banner ad at the top (position 0) for desktop/tablet
-      if (index === 0) {
-        badgesWithAds.push({
-          id: `banner-ad-top`,
-          isBannerAd: true,
-          adIndex: adCounter++
-        });
-      }
-      
       badgesWithAds.push({ ...badge, isAd: false });
       
-      // Insert card ads at strategic positions
-      const cardAdPositions = [3, 8, 14, 21, 28]; // Every ~5-7 cards
-      if (cardAdPositions.includes(index + 1) && index < visibleCount - 1) {
+      // Insert ad after certain positions
+      if (adPositions.includes(index + 1) && index < visibleCount - 1) {
         badgesWithAds.push({
-          id: `card-ad-${index}`,
+          id: `ad-${index}`,
           isAd: true,
-          adIndex: adCounter++
-        });
-      }
-      
-      // Insert banner ads for desktop every 16 items
-      if ((index + 1) % 16 === 0 && index < visibleCount - 1) {
-        badgesWithAds.push({
-          id: `banner-ad-${index}`,
-          isBannerAd: true,
-          adIndex: adCounter++
+          adSlot: index < 8 ? "9513707482" : "4261380806" // Use different ad slots for variety
         });
       }
     });
@@ -416,30 +253,16 @@ export default function IncompleteBadgesWithAds() {
           ))}
         </div>
 
-        {/* Enhanced Badges Grid with Responsive Ads */}
+        {/* Enhanced Badges Grid with Ads */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {itemsToRender.map((item) => {
-            if (item.isBannerAd) {
-              return (
-                <LargeBannerAd
-                  key={item.id}
-                  adIndex={item.adIndex}
-                  className="mb-6"
-                />
-              );
-            }
-            
-            if (item.isAd) {
-              return (
-                <AdSenseCard
-                  key={item.id}
-                  adIndex={item.adIndex}
-                  className="col-span-1"
-                />
-              );
-            }
-            
-            return (
+          {itemsToRender.map((item) => 
+            item.isAd ? (
+              <AdSenseCard
+                key={item.id}
+                adSlot={item.adSlot}
+                className="col-span-1"
+              />
+            ) : (
               <div
                 key={item.id}
                 className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${isDarkMode ? themeClasses.cardBg + ' border ' + themeClasses.border : 'bg-white border border-gray-200'}`}
@@ -503,8 +326,8 @@ export default function IncompleteBadgesWithAds() {
                   </button>
                 </div>
               </div>
-            );
-          })}
+            )
+          )}
         </div>
 
         {/* Rest of your original code... */}
