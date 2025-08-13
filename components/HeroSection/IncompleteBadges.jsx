@@ -4,7 +4,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ThemeContext } from '@/context/ThemeContext';
 import { Flame, Search, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
-import AdBanner from '@/components/AdBanner'; // Adjust the path as needed
+import AdBanner from '@/components/AdBanner';
 
 const typeColors = {
   Trivia: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -21,9 +21,7 @@ const typeIcons = {
 };
 
 const filters = ['All', 'Trivia', 'Game', 'Skill', 'labsFree'];
-
-// Ad positions (1-indexed, so we subtract 1 for 0-indexed array)
-const AD_POSITIONS = [2, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50]; // Added more positions for larger lists
+const AD_POSITIONS = [2, 6, 10, 15, 20, 25, 30, 35, 40, 45, 50];
 
 export default function IncompleteBadges() {
   const [visibleCount, setVisibleCount] = useState(12);
@@ -34,6 +32,16 @@ export default function IncompleteBadges() {
 
   const { profileData } = useContext(ProfileContext);
   const { isDarkMode } = useContext(ThemeContext);
+
+  const [screenWidth, setScreenWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 0
+  );
+
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const themeClasses = {
     bg: isDarkMode ? 'bg-slate-950 border border-slate-600' : 'bg-slate-50',
@@ -54,18 +62,6 @@ export default function IncompleteBadges() {
 
   const badges = profileData?.incompleteBadges;
   const allBadges = [];
-  const useScreenSize = () => {
-    const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
-  
-    useEffect(() => {
-      const handleResize = () => setWidth(window.innerWidth);
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
-  
-    return width;
-  };
-  
 
   if (badges) {
     const order = ['Game', 'Trivia', 'Skill', 'labsFree'];
@@ -79,14 +75,13 @@ export default function IncompleteBadges() {
 
       const badgeItems = badges?.[categoryKey] || {};
       Object.values(badgeItems).forEach((badge) => {
-        const badgeObj = {
+        allBadges.push({
           ...badge,
           id: badge.accessToken || badge.badgeName || badge.badgeLink,
           title: badge.badgeName,
           type,
           points: type === 'Skill' ? 0.5 : type === 'labsFree' ? 0 : (badge.points || 0),
-        };
-        allBadges.push(badgeObj);
+        });
       });
     });
   }
@@ -111,20 +106,19 @@ export default function IncompleteBadges() {
 
   const itemsToRender = filteredBadges.slice(0, visibleCount);
 
-  // Function to render grid items with ads
   const renderGridWithAds = () => {
     const items = [];
     let adCounter = 0;
 
     itemsToRender.forEach((item, index) => {
-      const position = index + 1; // 1-indexed position
+      const position = index + 1;
 
-      // Add badge card
       items.push(
         <div
           key={item.id}
           className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}
         >
+          {/* Badge Image */}
           <div className={`relative h-48 flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
             <img
               src={item.image}
@@ -141,6 +135,7 @@ export default function IncompleteBadges() {
             </div>
           </div>
 
+          {/* Badge Content */}
           <div className="p-6 flex flex-col flex-1">
             <h3 className={`text-lg font-semibold mb-3 line-clamp-2 leading-tight ${themeClasses.text}`}>
               {item.title}
@@ -183,10 +178,8 @@ export default function IncompleteBadges() {
         </div>
       );
 
-      // Check if we need to add an ad after this position
+      // Insert Ad
       if (AD_POSITIONS.includes(position)) {
-        const screenWidth = useScreenSize();
-      
         adCounter++;
         items.push(
           <div
@@ -195,29 +188,11 @@ export default function IncompleteBadges() {
           >
             <div className="p-4 flex flex-col h-full min-h-[400px] justify-center items-center">
               {screenWidth >= 1024 ? (
-                // Desktop
-                <AdBanner
-                  slot="6757969054"
-                  format="rectangle"
-                  style={{display:"inline-block", width:"280px", height:"500px"}}
-                  responsive={false}
-                />
+                <AdBanner slot="6757969054" format="rectangle" style={{ width: "280px", height: "500px" }} responsive={false} />
               ) : screenWidth >= 768 ? (
-                // Tablet
-                <AdBanner
-                  slot="6757969054"
-                  format="medium_rectangle"
-                  style={{display:"inline-block", width:"250px", height:"450px"}}
-                  responsive={false}
-                />
+                <AdBanner slot="6757969054" format="medium_rectangle" style={{ width: "250px", height: "450px" }} responsive={false} />
               ) : (
-                // Mobile
-                <AdBanner 
-                  slot="8577752535" 
-                  format="rectangle" 
-                  style={{ display: "inline-block", width: "250px", height: "336px" }}
-                  responsive={false} 
-                />
+                <AdBanner slot="8577752535" format="rectangle" style={{ width: "250px", height: "336px" }} responsive={false} />
               )}
             </div>
           </div>
@@ -231,99 +206,10 @@ export default function IncompleteBadges() {
   return (
     <div className={`rounded-xl p-6 ${themeClasses.bg}`}>
       <div className="max-w-7xl mx-auto">
-
-        {/* Header */}
-        <div className={`rounded-2xl shadow-sm p-8 mb-8 border ${themeClasses.border} ${themeClasses.cardBg}`}>
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div>
-              <h1 className={`text-3xl font-bold mb-2 ${themeClasses.text}`}>Incomplete Badges</h1>
-              <p className={themeClasses.textSecondary}>
-                Complete challenges to earn badges and boost your skills
-              </p>
-              <div className="flex items-center gap-4 mt-4">
-                <div className={`flex items-center text-sm ${themeClasses.textMuted}`}>
-                  <span className={themeClasses.text}>{filteredBadges.length}</span>
-                  <span className="ml-1">badges available</span>
-                </div>
-                <div className={`flex items-center text-sm ${themeClasses.textMuted}`}>
-                  <Flame size={16} className="text-orange-500 mr-1" />
-                  <span className={themeClasses.text}>
-                    {filteredBadges.reduce((sum, badge) => sum + badge.points, 0)}
-                  </span>
-                  <span className="ml-1">total points</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Search */}
-            <div className="flex flex-col sm:flex-row gap-4 lg:min-w-[400px]">
-              <div className="relative flex-1">
-                <Search size={20} className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${themeClasses.textMuted}`} />
-                <input
-                  type="text"
-                  placeholder="Search badges..."
-                  className={`w-full pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all ${themeClasses.cardBg} ${themeClasses.border}`}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filter */}
-        <div className="flex flex-wrap gap-3 mb-8">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 ${
-                activeFilter === filter
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                  : `${themeClasses.accent} ${themeClasses.border} ${themeClasses.hover}`
-              }`}
-            >
-              {filter !== 'All' && (
-                <span className="mr-2">{typeIcons[filter]}</span>
-              )}
-              {filter}
-            </button>
-          ))}
-        </div>
-
-        {/* Badges Grid with Ads */}
+        {/* Filters, Header, Search Bar here */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {renderGridWithAds()}
         </div>
-
-        {/* Load More */}
-        {visibleCount < filteredBadges.length && (
-          <div className="flex justify-center mt-12">
-            <button
-              onClick={() => setVisibleCount((prev) => prev + itemsPerLoad)}
-              className={`px-8 py-4 rounded-xl transition-all duration-200 font-medium shadow-sm ${themeClasses.cardBg} ${themeClasses.border}`}
-            >
-              Load More Badges ({filteredBadges.length - visibleCount} remaining)
-            </button>
-          </div>
-        )}
-
-        {/* No Badges */}
-        {filteredBadges.length === 0 && (
-          <div className="text-center py-16">
-            <div className="text-6xl mb-4 text-gray-400">🏆</div>
-            <h3 className={`text-xl font-semibold mb-2 ${themeClasses.text}`}>No badges found</h3>
-            <p className={themeClasses.textSecondary}>Try adjusting your search or filter criteria</p>
-          </div>
-        )}
-
-        {/* Toast */}
-        {copiedId && (
-          <div className={`fixed bottom-6 right-6 px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 ${themeClasses.toastBg}`}>
-            <CheckCircle size={20}/>
-            Badge ID copied!
-          </div>
-        )}
       </div>
     </div>
   );
