@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
 import AdSenseAds from '@/components/AdSenseAds';
+import AdBanner from '../AdBanner';
 
 const typeColors = {
   Trivia: 'bg-emerald-50 text-emerald-700 border-emerald-200',
@@ -257,10 +258,7 @@ export default function IncompleteBadgesWithAds() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {itemsToRender.map((item) =>
             item.isAd ? (
-              <AdSenseAds
-                key={item.id}
-                adSlot={item.adSlot}
-              />
+              <AdBanner />
             ) : (
               <div
                 key={item.id}

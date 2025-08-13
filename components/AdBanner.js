@@ -1,25 +1,24 @@
 "use client";
 import { useEffect } from "react";
 
-export default function AdBanner({ format = "auto", slot, style = {}, responsive = true }) {
+export default function AdBanner() {
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error("AdSense load error", err);
+    } catch (e) {
+      console.error("AdSense error", e);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="my-4">
       <ins
         className="adsbygoogle"
-        style={{ display: "block", ...style }}
+        style={{ display: "block" }}
         data-ad-client="ca-pub-5183171666938196"
-        data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive={responsive ? "true" : "false"}
+        data-ad-slot="3736968322"
+        data-ad-format="auto"
+        data-full-width-responsive="true"
       ></ins>
     </div>
   );
