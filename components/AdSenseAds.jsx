@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useRef, useState } from 'react';
 import { ThemeContext } from '@/context/ThemeContext';
 
 export default function AdSenseAds({ adSlot }) {
   const { isDarkMode } = useContext(ThemeContext);
+  const adContainerRef = useRef(null);
+  const [shouldLoadAd, setShouldLoadAd] = useState(false);
 
   const themeClasses = {
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
@@ -22,30 +24,56 @@ export default function AdSenseAds({ adSlot }) {
       script.crossOrigin = 'anonymous';
       document.head.appendChild(script);
     }
-
-    // Push ads
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error('AdSense error:', err);
-    }
   }, []);
 
+  useEffect(() => {
+    const checkSizeAndLoad = () => {
+      if (adContainerRef.current && adContainerRef.current.offsetWidth > 0) {
+        setShouldLoadAd(true);
+      }
+    };
+
+    // Check size immediately on mount
+    checkSizeAndLoad();
+
+    // Re-check size on window resize
+    window.addEventListener('resize', checkSizeAndLoad);
+
+    return () => {
+      window.removeEventListener('resize', checkSizeAndLoad);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (shouldLoadAd) {
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      } catch (err) {
+        console.error('AdSense error:', err);
+      }
+    }
+  }, [shouldLoadAd]);
+
   return (
-    <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}>
+    <div
+      ref={adContainerRef}
+      className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}
+    >
       <div className={`relative h-48 flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
         <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${isDarkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-gray-50 text-gray-600 border-gray-200'}`}>
           📢 Sponsored
         </div>
 
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block'}}
-          data-ad-client="ca-pub-5183171666938196"
-          data-ad-slot="1375448730"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
+        {shouldLoadAd && (
+          <ins
+            className="adsbygoogle"
+            style={{ display: 'block'}}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={adSlot} // Use the passed-in adSlot
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        )}
       </div>
       <div className="p-6 flex flex-col flex-1">
         <div className={`text-sm text-center ${themeClasses.text}`}>
