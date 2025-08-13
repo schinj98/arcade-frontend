@@ -23,7 +23,7 @@ const typeIcons = {
 
 const filters = ['All', 'Trivia', 'Game', 'Skill', 'labsFree'];
 // AdSense Card Component that matches your design system
-const AdSenseCard = ({ adSlot, adFormat = "fluid", layoutKey = "-6t+ed+2i-1n-4w", className = "" }) => {
+const AdSenseCard = ({ adSlot, adFormat = "auto", layoutKey = "-6t+ed+2i-1n-4w", className = "" }) => {
   const { isDarkMode } = useContext(ThemeContext);
   
   // Theme classes matching your existing design

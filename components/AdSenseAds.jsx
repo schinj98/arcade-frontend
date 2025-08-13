@@ -40,9 +40,9 @@ export default function AdSenseAds({ adSlot }) {
 
         <ins
           className="adsbygoogle"
-          style={{ display: 'block', width: '100%', height: '100%' }}
+          style={{ display: 'block'}}
           data-ad-client="ca-pub-5183171666938196"
-          data-ad-slot={adSlot}
+          data-ad-slot="1375448730"
           data-ad-format="auto"
           data-full-width-responsive="true"
         />
