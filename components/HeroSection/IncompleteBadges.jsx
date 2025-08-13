@@ -3,6 +3,7 @@
 import React, { useEffect, useContext } from 'react';
 import { ThemeContext } from '@/context/ThemeContext';
 import { useState } from 'react';
+import AdBanner from '@/components/AdBanner';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
 
@@ -161,21 +162,20 @@ export default function IncompleteBadgesWithAds() {
   // Function to inject ads into the grid
   const getBadgesWithAds = () => {
     const badgesWithAds = [];
-    const adPositions = [1, 6, 8, 13, 19,28]; // Strategic positions for ads
+    const adPositions = [1, 6, 8, 13, 19, 28]; // tumhare chosen positions
     
     filteredBadges.slice(0, visibleCount).forEach((badge, index) => {
       badgesWithAds.push({ ...badge, isAd: false });
-      
-      // Insert ad after certain positions
+  
       if (adPositions.includes(index + 1) && index < visibleCount - 1) {
         badgesWithAds.push({
           id: `ad-${index}`,
           isAd: true,
-          adSlot: index < 8 ? "9513707482" : "4261380806" // Use different ad slots for variety
+          adSlot: index < 8 ? "9513707482" : "4261380806"
         });
       }
     });
-    
+  
     return badgesWithAds;
   };
 
@@ -257,9 +257,12 @@ export default function IncompleteBadgesWithAds() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {itemsToRender.map((item) => 
             item.isAd ? (
-              <AdSenseCard
+              <AdBanner
                 key={item.id}
                 adSlot={item.adSlot}
+                adFormat="auto"
+                fullWidth={true}
+                minHeight="300px"
                 className="col-span-1"
               />
             ) : (
