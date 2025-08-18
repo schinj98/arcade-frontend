@@ -64,7 +64,7 @@ export default function RootLayout({ children }) {
         />
         <link rel="icon" href="/images/logo.png" type="image/png" />
         <meta name="google-adsense-account" content="ca-pub-5183171666938196"></meta>
-        
+        <meta name="google-site-verification" content="JOyjc_CM0VPz54VOGFsxreNldPVnZVuZXJv9qIl0Vjc" />
         
         
         {/* Google Analytics Script */}
@@ -90,6 +90,7 @@ export default function RootLayout({ children }) {
             `,
           }}
         />
+          
       </head>
       <body className="bg-blue-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
         <ThemeProvider>
