@@ -10,7 +10,7 @@ import { ThemeProvider } from '../context/ThemeContext';
 export const metadata = {
   title: 'Arcade Points Calculator | Track Your Points & Progress',
   description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',
-  keywords: 'arcade points calculator, GCP points facilitator points check, arcade tracking, learning badges, google cloud arcade points calculator, profile tracker',
+  keywords: 'arcade points calculator, GCP points facilitator points check, arcade facilitator points calculate, learning badges, google cloud arcade points calculator, profile tracker',
   icons: {
     icon: '/images/logo.png',
   },
