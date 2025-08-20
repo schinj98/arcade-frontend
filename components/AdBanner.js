@@ -4,7 +4,8 @@ import { ThemeContext } from '@/context/ThemeContext';
 
 export default function AdBanner({ adSlot }) {
   const { isDarkMode } = useContext(ThemeContext);
-  const adRef = useRef(null);
+  const desktopAdRef = useRef(null);
+  const mobileAdRef = useRef(null);
   const isInitialized = useRef(false);
 
   useEffect(() => {
@@ -12,16 +13,30 @@ export default function AdBanner({ adSlot }) {
     if (isInitialized.current) return;
         
     try {
-      if (typeof window !== "undefined" && adRef.current) {
-        // Check if this specific ad element is already processed
-        if (!adRef.current.getAttribute('data-adsbygoogle-status')) {
+      if (typeof window !== "undefined") {
+        const desktopAd = desktopAdRef.current;
+        const mobileAd = mobileAdRef.current;
+        
+        // Check if either ad element exists and hasn't been processed
+        const desktopNotProcessed = desktopAd && !desktopAd.getAttribute('data-adsbygoogle-status');
+        const mobileNotProcessed = mobileAd && !mobileAd.getAttribute('data-adsbygoogle-status');
+        
+        if (desktopNotProcessed || mobileNotProcessed) {
           // Mark as initialized to prevent duplicate calls
           isInitialized.current = true;
                     
           // Small delay to ensure DOM is ready
           setTimeout(() => {
             try {
-              (window.adsbygoogle = window.adsbygoogle || []).push({});
+              // Push for desktop ad if it exists and not processed
+              if (desktopNotProcessed) {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+              }
+              
+              // Push for mobile ad if it exists and not processed
+              if (mobileNotProcessed) {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+              }
             } catch (e) {
               console.error("AdSense push error", e);
               // Reset flag on error to allow retry
@@ -57,7 +72,7 @@ export default function AdBanner({ adSlot }) {
         {/* Desktop Ad - Fixed size for better compatibility */}
         <div className="hidden md:block w-full">
           <ins
-            ref={adRef}
+            ref={desktopAdRef}
             className="adsbygoogle"
             style={{ display: "block" }}
             data-ad-client="ca-pub-5183171666938196"
@@ -70,6 +85,7 @@ export default function AdBanner({ adSlot }) {
         {/* Mobile Ad - Responsive */}
         <div className="block md:hidden w-full">
           <ins
+            ref={mobileAdRef}
             className="adsbygoogle"
             style={{ display: "block" }}
             data-ad-client="ca-pub-5183171666938196"
