@@ -4,51 +4,33 @@ import { ThemeContext } from '@/context/ThemeContext';
 
 export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdFormat, dataFullWidthResponsive }) {
   const { isDarkMode } = useContext(ThemeContext);
+  const adRef = useRef(null);
+  const [adLoaded, setAdLoaded] = useState(false);
 
-  const desktopRef = useRef(null);
-  const mobileRef = useRef(null);
-  const [ready, setReady] = useState(false);
-
-  // Check when container has width > 0
   useEffect(() => {
-    const checkSize = setInterval(() => {
-      if (
-        (desktopRef.current && desktopRef.current.offsetWidth > 0) ||
-        (mobileRef.current && mobileRef.current.offsetWidth > 0)
-      ) {
-        setReady(true);
-        clearInterval(checkSize);
-      }
-    }, 200);
-
-    return () => clearInterval(checkSize);
-  }, []);
-
-  // Initialize AdSense once size is ready
-  useEffect(() => {
-    if (!ready) return;
-
-    const width =
-      (desktopRef.current && desktopRef.current.offsetWidth) ||
-      (mobileRef.current && mobileRef.current.offsetWidth);
-
-    if (width < 300) {
-      console.warn("Ad container too small for AdSense:", width);
-      return;
+    // Ensure AdSense script is loaded
+    if (!window.adsbygoogle) {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
+      script.crossOrigin = 'anonymous';
+      document.head.appendChild(script);
     }
 
+    // Wait for the ad container to be ready
     const timer = setTimeout(() => {
-      try {
-        if (typeof window !== "undefined" && !desktopRef.current?.getAttribute("data-adsbygoogle-status")) {
+      if (adRef.current && !adRef.current.getAttribute('data-adsbygoogle-status')) {
+        try {
           (window.adsbygoogle = window.adsbygoogle || []).push({});
+          setAdLoaded(true);
+        } catch (error) {
+          console.error('AdSense initialization error:', error);
         }
-      } catch (e) {
-        console.error("AdSense error:", e);
       }
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
-  }, [ready]);
+  }, []);
 
   const themeClasses = {
     cardBg: isDarkMode ? "bg-slate-900/95" : "bg-white/95",
@@ -58,10 +40,8 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
   };
 
   return (
-    <div
-      className={`rounded-2xl shadow-sm overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}
-    >
-      <div className={`relative flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
+    <div className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
+      <div className={`relative p-4 bg-gradient-to-br ${themeClasses.gradientBg} min-h-[200px] flex items-center justify-center`}>
         <div
           className="absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border
           bg-gray-50 text-gray-600 border-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
@@ -69,31 +49,32 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
           📢 Sponsored
         </div>
 
-        {/* Desktop / Tablet Ad */}
-        <div className="w-full flex justify-center">
+        {/* Single responsive ad container */}
+        <div className="w-full max-w-full flex justify-center">
           <ins
-            ref={desktopRef}
-            className="adsbygoogle hidden sm:block"
-            style={desktopStyle}
+            ref={adRef}
+            className="adsbygoogle"
+            style={{ 
+              display: 'block',
+              width: '100%',
+              minHeight: '150px',
+              ...desktopStyle 
+            }}
             data-ad-client="ca-pub-5183171666938196"
             data-ad-slot={adSlot}
-            data-ad-format={dataAdFormat}
-            data-full-width-responsive={dataFullWidthResponsive}
+            data-ad-format={dataAdFormat || 'auto'}
+            data-full-width-responsive={dataFullWidthResponsive || 'true'}
           />
         </div>
 
-        {/* Mobile Ad */}
-        <div className="w-full flex justify-center">
-          <ins
-            ref={mobileRef}
-            className="adsbygoogle block sm:hidden"
-            style={mobileStyle}
-            data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot={adSlot}
-            data-ad-format={dataAdFormat}
-            data-full-width-responsive={dataFullWidthResponsive}
-          />
-        </div>
+        {/* Fallback content while ad loads */}
+        {!adLoaded && (
+          <div className="absolute inset-4 flex items-center justify-center">
+            <div className={`text-center ${themeClasses.text}`}>
+              <div className="animate-pulse">Loading advertisement...</div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="p-3 text-center text-sm text-gray-500 dark:text-slate-400">
