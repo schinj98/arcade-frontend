@@ -1,28 +1,68 @@
-"use client";
-import { useEffect, useRef } from "react";
+// components/AdBanner.jsx - Reusable Google AdSense Component
 
-export default function AdBanner({ adSlot }) {
+import { useEffect, useRef } from 'react';
+import { pushAd, getAdConfig } from '../lib/googleads';
+
+const AdBanner = ({ 
+  adSlot, 
+  size = '300x300', 
+  publisherId = 'ca-pub-xxxxxxxxxx', // Replace with your publisher ID
+  className = '',
+  responsive = false 
+}) => {
   const adRef = useRef(null);
+  const adConfig = getAdConfig(size);
 
   useEffect(() => {
-    try {
-      if (typeof window !== "undefined" && window.adsbygoogle && adRef.current) {
-        window.adsbygoogle.push({});
-      }
-    } catch (err) {
-      console.error("AdSense error:", err);
-    }
+    // Ensure we're in the browser environment
+    if (typeof window === 'undefined') return;
+
+    // Push the ad to Google AdSense
+    const timer = setTimeout(() => {
+      pushAd();
+    }, 5000);
+
+    return () => clearTimeout(timer);
   }, []);
 
+  // Handle responsive ads
+  const getDataAdFormat = () => {
+    if (responsive || size === 'responsive') {
+      return 'auto';
+    }
+    return undefined;
+  };
+
+  const getDataFullWidthResponsive = () => {
+    if (responsive || size === 'responsive') {
+      return 'true';
+    }
+    return undefined;
+  };
+
   return (
-    <ins
-      ref={adRef}
-      className="adsbygoogle"
-      style={{ display: "block" }}
-      data-ad-client="ca-pub-5183171666938196"
-      data-ad-slot={adSlot}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-    />
+    <div 
+      className={`ad-container ${className}`}
+      style={{
+        textAlign: 'center',
+        margin: '10px 0',
+        ...(!responsive && size !== 'responsive' ? adConfig.style : {})
+      }}
+    >
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{
+          display: 'inline-block',
+          ...adConfig.style
+        }}
+        data-ad-client={publisherId}
+        data-ad-slot={adSlot}
+        data-ad-format={getDataAdFormat()}
+        data-full-width-responsive={getDataFullWidthResponsive()}
+      />
+    </div>
   );
-}
+};
+
+export default AdBanner;

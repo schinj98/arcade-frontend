@@ -37,16 +37,21 @@ export default function HeroSection({
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
-          <AdBanner adSlot="1818726897" />
-          <Script id="adsbygoogle-init" strategy="afterInteractive">
-            {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-          </Script>
+          <AdBanner 
+            adSlot="1818726897d" 
+            size="300x300"
+            className="mx-auto my-8"
+          />
         </div>
 
         {/* Right Column */}
         <div className="md:col-span-2 space-y-8">
           <Facilitator_section />
-          <AdBanner adSlot="7539641648" />
+          <AdBanner 
+            adSlot="7539641648" 
+            size="300x300"
+            className="mx-auto my-8"
+          />
           <BadgesSection />
         </div>
       </div>

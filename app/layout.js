@@ -1,3 +1,4 @@
+
 import './globals.css'
 import Navbar from '../components/Navbar'
 import CountdownNotificationBar from '../components/CountdownNotificationBar'
@@ -5,6 +6,7 @@ import Footer from '../components/Footer'
 import Script from 'next/script';
 import { ProfileProvider } from "@/context/ProfileContext";
 import { ThemeProvider } from '../context/ThemeContext';
+import AdSenseProvider from '../components/AdSenseProvider';
 
 
 export const metadata = {
@@ -42,6 +44,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -98,7 +101,9 @@ export default function RootLayout({ children }) {
             <Navbar />
             {/* <CountdownNotificationBar /> */}
             <main className="min-h-screen ">
+            <AdSenseProvider publisherId="ca-pub-5183171666938196">
               {children}
+            </AdSenseProvider>
             </main>
             <Footer />
           </ProfileProvider>

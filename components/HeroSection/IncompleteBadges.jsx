@@ -5,7 +5,7 @@ import { ThemeContext } from '@/context/ThemeContext';
 import { useState } from 'react';
 import { Flame, Search, Filter, ExternalLink, Copy, CheckCircle } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
-import AdSenseAds from '@/components/AdSenseAds';
+import AdSenseAds from '@/components/AdSenseProvider';
 import AdBanner from '../AdBanner';
 
 const typeColors = {
