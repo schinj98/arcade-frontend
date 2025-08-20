@@ -2,98 +2,100 @@
 import { useEffect, useContext, useRef, useState } from "react";
 import { ThemeContext } from '@/context/ThemeContext';
 
-// Global state to manage ad initialization queue
-let adInitQueue = [];
-let isProcessingQueue = false;
+// Global ad counter to ensure unique initialization
+let globalAdCounter = 0;
+const adInstances = new Map();
 
 export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdFormat, dataFullWidthResponsive, priority = 0 }) {
   const { isDarkMode } = useContext(ThemeContext);
   const adRef = useRef(null);
+  const containerRef = useRef(null);
   const [adLoaded, setAdLoaded] = useState(false);
   const [adError, setAdError] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [adId] = useState(() => `ad-${++globalAdCounter}`);
 
   useEffect(() => {
-    // Ensure AdSense script is loaded
-    const loadAdSenseScript = () => {
-      if (!window.adsbygoogle && !document.querySelector('script[src*="adsbygoogle.js"]')) {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
-        script.crossOrigin = 'anonymous';
-        document.head.appendChild(script);
+    // Monitor container size
+    const updateContainerSize = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        setContainerWidth(width);
+        console.log(`Ad ${adId} (slot: ${adSlot}) container width:`, width);
       }
     };
 
-    loadAdSenseScript();
-
-    // Add this ad to the initialization queue
-    const adConfig = {
-      ref: adRef,
-      slot: adSlot,
-      priority: priority,
-      callback: (success) => {
-        if (success) {
-          setAdLoaded(true);
-        } else {
-          setAdError(true);
-        }
-      }
-    };
-
-    adInitQueue.push(adConfig);
-    adInitQueue.sort((a, b) => b.priority - a.priority); // Higher priority first
-
-    // Process the queue
-    processAdQueue();
+    updateContainerSize();
+    window.addEventListener('resize', updateContainerSize);
 
     return () => {
-      // Remove from queue if component unmounts
-      adInitQueue = adInitQueue.filter(config => config.ref !== adRef);
+      window.removeEventListener('resize', updateContainerSize);
     };
-  }, [adSlot, priority]);
+  }, [adId, adSlot]);
 
-  const processAdQueue = async () => {
-    if (isProcessingQueue || adInitQueue.length === 0) return;
-    
-    isProcessingQueue = true;
+  useEffect(() => {
+    if (containerWidth === 0) return;
 
-    while (adInitQueue.length > 0) {
-      const adConfig = adInitQueue.shift();
-      
-      if (adConfig.ref.current && !adConfig.ref.current.getAttribute('data-adsbygoogle-status')) {
-        try {
-          // Wait for AdSense to be available
-          await waitForAdSense();
-          
-          // Initialize the ad
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-          
-          // Wait a bit before processing the next ad
-          await new Promise(resolve => setTimeout(resolve, 500));
-          
-          adConfig.callback(true);
-        } catch (error) {
-          console.error('AdSense initialization error for slot', adConfig.slot, ':', error);
-          adConfig.callback(false);
-        }
-      }
+    // Don't initialize ads in containers that are too narrow
+    if (containerWidth < 250) {
+      console.warn(`Ad ${adId} container too narrow (${containerWidth}px), skipping`);
+      setAdError(true);
+      return;
     }
 
-    isProcessingQueue = false;
-  };
-
-  const waitForAdSense = () => {
-    return new Promise((resolve) => {
-      const checkAdSense = () => {
-        if (window.adsbygoogle) {
-          resolve();
-        } else {
-          setTimeout(checkAdSense, 100);
+    const initializeAd = async () => {
+      try {
+        // Ensure AdSense script is loaded
+        if (!window.adsbygoogle) {
+          await new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
+            script.crossOrigin = 'anonymous';
+            script.onload = resolve;
+            document.head.appendChild(script);
+          });
         }
-      };
-      checkAdSense();
-    });
-  };
+
+        // Wait for container to be ready and visible
+        await new Promise(resolve => setTimeout(resolve, 1000 + (priority * 500)));
+
+        if (adRef.current && !adRef.current.getAttribute('data-adsbygoogle-status')) {
+          console.log(`Initializing ad ${adId} (slot: ${adSlot}) with width: ${containerWidth}px`);
+          
+          // Store ad instance
+          adInstances.set(adId, {
+            element: adRef.current,
+            slot: adSlot,
+            initialized: true
+          });
+
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          
+          // Check if ad loaded successfully after a delay
+          setTimeout(() => {
+            const adStatus = adRef.current?.getAttribute('data-adsbygoogle-status');
+            if (adStatus === 'done') {
+              console.log(`Ad ${adId} loaded successfully`);
+              setAdLoaded(true);
+            } else {
+              console.warn(`Ad ${adId} failed to load, status: ${adStatus}`);
+              setAdError(true);
+            }
+          }, 2000);
+        }
+      } catch (error) {
+        console.error(`AdSense initialization error for ad ${adId}:`, error);
+        setAdError(true);
+      }
+    };
+
+    initializeAd();
+
+    return () => {
+      adInstances.delete(adId);
+    };
+  }, [containerWidth, adSlot, adId, priority]);
 
   const themeClasses = {
     cardBg: isDarkMode ? "bg-slate-900/95" : "bg-white/95",
@@ -102,12 +104,14 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
     text: isDarkMode ? "text-slate-300" : "text-gray-500",
   };
 
-  if (adError) {
+  // Show placeholder for narrow containers
+  if (containerWidth > 0 && containerWidth < 250) {
     return (
-      <div className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
-        <div className={`relative p-4 bg-gradient-to-br ${themeClasses.gradientBg} min-h-[150px] flex items-center justify-center`}>
-          <div className={`text-center ${themeClasses.text}`}>
-            <div className="text-sm">Advertisement space</div>
+      <div ref={containerRef} className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
+        <div className={`relative p-4 bg-gradient-to-br ${themeClasses.gradientBg} min-h-[100px] flex items-center justify-center`}>
+          <div className={`text-center ${themeClasses.text} text-sm`}>
+            Ad space too narrow<br />
+            ({containerWidth}px)
           </div>
         </div>
       </div>
@@ -115,7 +119,7 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
   }
 
   return (
-    <div className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
+    <div ref={containerRef} className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
       <div className={`relative p-4 bg-gradient-to-br ${themeClasses.gradientBg} min-h-[200px] flex items-center justify-center`}>
         <div
           className="absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border
@@ -124,7 +128,7 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
           📢 Sponsored
         </div>
 
-        {/* Single responsive ad container */}
+        {/* Responsive ad container with size-specific styles */}
         <div className="w-full max-w-full flex justify-center">
           <ins
             ref={adRef}
@@ -132,21 +136,36 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
             style={{ 
               display: 'block',
               width: '100%',
-              minHeight: '150px',
+              minHeight: containerWidth < 400 ? '250px' : '150px',
+              maxWidth: '100%',
               ...desktopStyle 
             }}
             data-ad-client="ca-pub-5183171666938196"
             data-ad-slot={adSlot}
-            data-ad-format={dataAdFormat || 'auto'}
+            data-ad-format={containerWidth < 400 ? 'vertical' : (dataAdFormat || 'auto')}
             data-full-width-responsive={dataFullWidthResponsive || 'true'}
           />
         </div>
 
-        {/* Fallback content while ad loads */}
+        {/* Loading state */}
         {!adLoaded && !adError && (
           <div className="absolute inset-4 flex items-center justify-center">
             <div className={`text-center ${themeClasses.text}`}>
-              <div className="animate-pulse">Loading advertisement...</div>
+              <div className="animate-pulse">
+                Loading ad... ({containerWidth}px)
+                <br />
+                <small>ID: {adId} | Slot: {adSlot}</small>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error state */}
+        {adError && (
+          <div className="absolute inset-4 flex items-center justify-center">
+            <div className={`text-center ${themeClasses.text} text-sm`}>
+              <div>Advertisement</div>
+              <small>Slot: {adSlot} | Width: {containerWidth}px</small>
             </div>
           </div>
         )}

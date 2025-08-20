@@ -21,34 +21,37 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         .font-inter { font-family: 'Inter', sans-serif; }
       `}</style>
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        {/* Left Column */}
-        <div className="space-y-6 flex flex-col">
+      
+      {/* First, try a full-width ad at the top */}
+      <div className="max-w-7xl mx-auto mb-8">
+        <AdBanner 
+          adSlot={1818726897} 
+          desktopStyle={{ display: "block"}} 
+          mobileStyle={{ display: "block"}} 
+          dataAdFormat={"auto"} 
+          dataFullWidthResponsive={"true"}
+          priority={1}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column - Make it wider on large screens */}
+        <div className="lg:col-span-1 space-y-6">
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
-          {/* First ad with higher priority */}
-          <AdBanner 
-            adSlot={1818726897} 
-            desktopStyle={{ display: "block"}} 
-            mobileStyle={{ display: "block"}} 
-            dataAdFormat={"auto"} 
-            dataFullWidthResponsive={"true"}
-            priority={2}
-          />
         </div>
 
-        {/* Right Column (2/3rds width on md and up) */}
-        <div className="md:col-span-2 space-y-8">
+        {/* Right Column (2/3rds width on lg and up) */}
+        <div className="lg:col-span-2 space-y-8">
           <Facilitator_section />
-          {/* Second ad with lower priority */}
           <AdBanner 
             adSlot={7539641648} 
             desktopStyle={{ display: "block"}} 
             mobileStyle={{ display: "block"}} 
             dataAdFormat={"auto"} 
             dataFullWidthResponsive={"true"}
-            priority={1}
+            priority={2}
           />
           <BadgesSection />
         </div>
@@ -64,6 +67,18 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
 
       <div className="mt-10 max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
         <IncompleteBadges />
+      </div>
+
+      {/* Another full-width ad at the bottom */}
+      <div className="max-w-7xl mx-auto mt-8">
+        <AdBanner 
+          adSlot={1818726897} 
+          desktopStyle={{ display: "block"}} 
+          mobileStyle={{ display: "block"}} 
+          dataAdFormat={"auto"} 
+          dataFullWidthResponsive={"true"}
+          priority={3}
+        />
       </div>
     </div>
   );
