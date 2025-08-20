@@ -161,8 +161,8 @@ export default function IncompleteBadgesWithAds() {
   });
 
   // Function to inject ads into the grid
-  const adPositions = [1, 6, 12, 20];
-  const adSlots = ["1375448730", "6597260917", "1740520055", "6963242362"];
+  const adPositions = [1, 3, 6, 10];
+  const adSlots = ["6597260917", "6963242362", "1740520055", "1375448730"];
 
   const getBadgesWithAds = () => {
     const badgesWithAds = [];
@@ -259,7 +259,7 @@ export default function IncompleteBadgesWithAds() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {itemsToRender.map((item) =>
             item.isAd ? (
-              <AdBanner key={item.id} adSlot={item.adSlot} />
+              <AdBanner key={item.id} adSlot={item.adSlot} desktopStyle={{ display: "block"}} mobileStyle={{ display: "block"}} dataAdFormat={"auto"} dataFullWidthResponsive={"true"} />
             ) : (
               <div
                 key={item.id}
