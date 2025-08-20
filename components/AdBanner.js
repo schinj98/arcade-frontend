@@ -1,102 +1,70 @@
 "use client";
-import { useEffect, useContext, useRef } from "react";
-import { ThemeContext } from '@/context/ThemeContext';
+import { useEffect, useContext, useRef, useState } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
 
 export default function AdBanner({ adSlot }) {
   const { isDarkMode } = useContext(ThemeContext);
-  const desktopAdRef = useRef(null);
-  const mobileAdRef = useRef(null);
-  const isInitialized = useRef(false);
+  const adRef = useRef(null);
+  const [ready, setReady] = useState(false);
 
+  // Wait until the ad container has enough width
   useEffect(() => {
-    // Prevent multiple initializations
-    if (isInitialized.current) return;
-        
-    try {
-      if (typeof window !== "undefined") {
-        const desktopAd = desktopAdRef.current;
-        const mobileAd = mobileAdRef.current;
-        
-        // Check if either ad element exists and hasn't been processed
-        const desktopNotProcessed = desktopAd && !desktopAd.getAttribute('data-adsbygoogle-status');
-        const mobileNotProcessed = mobileAd && !mobileAd.getAttribute('data-adsbygoogle-status');
-        
-        if (desktopNotProcessed || mobileNotProcessed) {
-          // Mark as initialized to prevent duplicate calls
-          isInitialized.current = true;
-                    
-          // Small delay to ensure DOM is ready
-          setTimeout(() => {
-            try {
-              // Push for desktop ad if it exists and not processed
-              if (desktopNotProcessed) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-              }
-              
-              // Push for mobile ad if it exists and not processed
-              if (mobileNotProcessed) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-              }
-            } catch (e) {
-              console.error("AdSense push error", e);
-              // Reset flag on error to allow retry
-              isInitialized.current = false;
-            }
-          }, 100);
-        }
+    const checkSize = setInterval(() => {
+      if (adRef.current && adRef.current.offsetWidth >= 250) {
+        setReady(true);
+        clearInterval(checkSize);
       }
-    } catch (e) {
-      console.error("AdSense error", e);
-      isInitialized.current = false;
-    }
+    }, 300);
+
+    return () => clearInterval(checkSize);
   }, []);
 
+  // Trigger AdSense once size is ready
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      if (typeof window !== "undefined") {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    } catch (e) {
+      console.error("AdSense error:", e);
+    }
+  }, [ready]);
+
   const themeClasses = {
-    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
-    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
-    gradientBg: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-gray-50 to-gray-100',
-    text: isDarkMode ? 'text-slate-300' : 'text-gray-500',
+    cardBg: isDarkMode ? "bg-slate-900/95" : "bg-white/95",
+    border: isDarkMode ? "border-slate-700/50" : "border-gray-200",
+    gradientBg: isDarkMode ? "from-slate-800 to-slate-900" : "from-gray-50 to-gray-100",
+    text: isDarkMode ? "text-slate-300" : "text-gray-500",
   };
 
   return (
-    <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}>
-      <div className={`relative flex justify-center items-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
-        <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${
-          isDarkMode
-            ? "bg-slate-800 text-slate-300 border-slate-700"
-            : "bg-gray-50 text-gray-600 border-gray-200"
-        }`}>
+    <div
+      className={`rounded-2xl shadow-sm overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}
+    >
+      <div
+        className={`relative flex items-center justify-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}
+      >
+        <div
+          className="absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border
+          bg-gray-50 text-gray-600 border-gray-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+        >
           📢 Sponsored
         </div>
-        
-        {/* Desktop Ad - Fixed size for better compatibility */}
-        <div className="hidden md:block w-full">
-          <ins
-            ref={desktopAdRef}
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot={adSlot}
-            data-ad-format="rectangle"
-            data-full-width-responsive="false"
-          />
-        </div>
-        
-        {/* Mobile Ad - Responsive */}
-        <div className="block md:hidden w-full">
-          <ins
-            ref={mobileAdRef}
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot={adSlot}
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
-        </div>
+
+        {/* Responsive AdSense Unit */}
+        <ins
+          ref={adRef}
+          className="adsbygoogle"
+          style={{ display: "block", width: "100%", minHeight: "100px" }}
+          data-ad-client="ca-pub-5183171666938196"
+          data-ad-slot={adSlot}
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
       </div>
-      
-      <div className="p-6 text-center text-sm text-gray-500">
+
+      <div className="p-3 text-center text-sm text-gray-500 dark:text-slate-400">
         Advertisement
       </div>
     </div>
