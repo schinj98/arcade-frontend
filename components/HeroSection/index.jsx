@@ -27,13 +27,13 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
-          <AdBanner />
+          <AdBanner adSlot={1818726897}/>
         </div>
 
         {/* Right Column (2/3rds width on md and up) */}
         <div className="md:col-span-2 space-y-8"> {/* Added space-y for vertical spacing between sections */}
           <Facilitator_section />
-          <AdBanner />
+          <AdBanner  adSlot={7539641648}/>
           <BadgesSection />
           {/* Moved CompletedLabsSection here */}
         </div>

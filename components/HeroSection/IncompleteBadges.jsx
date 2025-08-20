@@ -161,22 +161,23 @@ export default function IncompleteBadgesWithAds() {
   });
 
   // Function to inject ads into the grid
+  const adPositions = [1, 6, 12, 20];
+  const adSlots = ["1375448730", "6597260917", "1740520055", "6963242362"];
+
   const getBadgesWithAds = () => {
     const badgesWithAds = [];
-    const adPositions = [1, 6, 8, 13, 19,28]; // Strategic positions for ads
-    
     filteredBadges.slice(0, visibleCount).forEach((badge, index) => {
       badgesWithAds.push({ ...badge, isAd: false });
-    
-      if (adPositions.includes(index + 1) && index < visibleCount - 1) {
+  
+      if (adPositions.includes(index + 1)) {
+        const slotIndex = adPositions.indexOf(index + 1);
         badgesWithAds.push({
           id: `ad-${index}`,
           isAd: true,
-          adSlot: index % 2 === 0 ? "9513707482" : "4261380806" // alternate slots if needed
+          adSlot: adSlots[slotIndex]
         });
       }
     });
-    
     return badgesWithAds;
   };
 
@@ -258,7 +259,7 @@ export default function IncompleteBadgesWithAds() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {itemsToRender.map((item) =>
             item.isAd ? (
-              <AdBanner />
+              <AdBanner key={item.id} adSlot={item.adSlot} />
             ) : (
               <div
                 key={item.id}
