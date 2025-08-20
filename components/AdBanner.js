@@ -2,35 +2,98 @@
 import { useEffect, useContext, useRef, useState } from "react";
 import { ThemeContext } from '@/context/ThemeContext';
 
-export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdFormat, dataFullWidthResponsive }) {
+// Global state to manage ad initialization queue
+let adInitQueue = [];
+let isProcessingQueue = false;
+
+export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdFormat, dataFullWidthResponsive, priority = 0 }) {
   const { isDarkMode } = useContext(ThemeContext);
   const adRef = useRef(null);
   const [adLoaded, setAdLoaded] = useState(false);
+  const [adError, setAdError] = useState(false);
 
   useEffect(() => {
     // Ensure AdSense script is loaded
-    if (!window.adsbygoogle) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
-      script.crossOrigin = 'anonymous';
-      document.head.appendChild(script);
-    }
+    const loadAdSenseScript = () => {
+      if (!window.adsbygoogle && !document.querySelector('script[src*="adsbygoogle.js"]')) {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5183171666938196';
+        script.crossOrigin = 'anonymous';
+        document.head.appendChild(script);
+      }
+    };
 
-    // Wait for the ad container to be ready
-    const timer = setTimeout(() => {
-      if (adRef.current && !adRef.current.getAttribute('data-adsbygoogle-status')) {
-        try {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
+    loadAdSenseScript();
+
+    // Add this ad to the initialization queue
+    const adConfig = {
+      ref: adRef,
+      slot: adSlot,
+      priority: priority,
+      callback: (success) => {
+        if (success) {
           setAdLoaded(true);
-        } catch (error) {
-          console.error('AdSense initialization error:', error);
+        } else {
+          setAdError(true);
         }
       }
-    }, 500);
+    };
 
-    return () => clearTimeout(timer);
-  }, []);
+    adInitQueue.push(adConfig);
+    adInitQueue.sort((a, b) => b.priority - a.priority); // Higher priority first
+
+    // Process the queue
+    processAdQueue();
+
+    return () => {
+      // Remove from queue if component unmounts
+      adInitQueue = adInitQueue.filter(config => config.ref !== adRef);
+    };
+  }, [adSlot, priority]);
+
+  const processAdQueue = async () => {
+    if (isProcessingQueue || adInitQueue.length === 0) return;
+    
+    isProcessingQueue = true;
+
+    while (adInitQueue.length > 0) {
+      const adConfig = adInitQueue.shift();
+      
+      if (adConfig.ref.current && !adConfig.ref.current.getAttribute('data-adsbygoogle-status')) {
+        try {
+          // Wait for AdSense to be available
+          await waitForAdSense();
+          
+          // Initialize the ad
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+          
+          // Wait a bit before processing the next ad
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          adConfig.callback(true);
+        } catch (error) {
+          console.error('AdSense initialization error for slot', adConfig.slot, ':', error);
+          adConfig.callback(false);
+        }
+      }
+    }
+
+    isProcessingQueue = false;
+  };
+
+  const waitForAdSense = () => {
+    return new Promise((resolve) => {
+      const checkAdSense = () => {
+        if (window.adsbygoogle) {
+          resolve();
+        } else {
+          setTimeout(checkAdSense, 100);
+        }
+      };
+      checkAdSense();
+    });
+  };
 
   const themeClasses = {
     cardBg: isDarkMode ? "bg-slate-900/95" : "bg-white/95",
@@ -38,6 +101,18 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
     gradientBg: isDarkMode ? "from-slate-800 to-slate-900" : "from-gray-50 to-gray-100",
     text: isDarkMode ? "text-slate-300" : "text-gray-500",
   };
+
+  if (adError) {
+    return (
+      <div className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
+        <div className={`relative p-4 bg-gradient-to-br ${themeClasses.gradientBg} min-h-[150px] flex items-center justify-center`}>
+          <div className={`text-center ${themeClasses.text}`}>
+            <div className="text-sm">Advertisement space</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`rounded-2xl shadow-sm overflow-hidden ${themeClasses.cardBg} border ${themeClasses.border}`}>
@@ -68,7 +143,7 @@ export default function AdBanner({ adSlot, desktopStyle, mobileStyle, dataAdForm
         </div>
 
         {/* Fallback content while ad loads */}
-        {!adLoaded && (
+        {!adLoaded && !adError && (
           <div className="absolute inset-4 flex items-center justify-center">
             <div className={`text-center ${themeClasses.text}`}>
               <div className="animate-pulse">Loading advertisement...</div>
