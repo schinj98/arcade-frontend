@@ -1,4 +1,3 @@
-
 import './globals.css'
 import Navbar from '../components/Navbar'
 import CountdownNotificationBar from '../components/CountdownNotificationBar'
@@ -6,13 +5,12 @@ import Footer from '../components/Footer'
 import Script from 'next/script';
 import { ProfileProvider } from "@/context/ProfileContext";
 import { ThemeProvider } from '../context/ThemeContext';
-import AdSenseProvider from '../components/AdSenseProvider';
 
 
 export const metadata = {
   title: 'Arcade Points Calculator | Track Your Points & Progress',
   description: 'Instantly calculate and track arcade points with our modern and accurate platform. Personalized, secure and fast.',
-  keywords: 'arcade points calculator, GCP points facilitator points check, arcade facilitator points calculate, learning badges, google cloud arcade points calculator, profile tracker',
+  keywords: 'arcade points calculator, GCP points facilitator points check, arcade facilitator points calculate, learning badges, Google Cloud Leaderboard,Arcade Points Ranking,Cloud Certification Rankings,Top Arcade Performers,Google Cloud Competition,Arcade Achievement Rankings,Cloud Skills Leaderboard,Google Cloud Points Tracker,Arcade Performance Metrics,Cloud Learning Competition',
   icons: {
     icon: '/images/logo.png',
   },
@@ -39,12 +37,12 @@ export const metadata = {
     card: 'summary_large_image',
     title: 'Arcade Track - Points Calculator',
     description: 'A smart way to calculate and track arcade points!',
+    keywords: 'Real-time rankings of top Google Cloud Arcade participants. Track your position, compare achievements, and compete with others in the cloud certification journey.',
     images: ['https://arcadetrack.com'],
   },
 };
 
 export default function RootLayout({ children }) {
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -101,9 +99,7 @@ export default function RootLayout({ children }) {
             <Navbar />
             {/* <CountdownNotificationBar /> */}
             <main className="min-h-screen ">
-            <AdSenseProvider publisherId="ca-pub-5183171666938196">
               {children}
-            </AdSenseProvider>
             </main>
             <Footer />
           </ProfileProvider>

@@ -1,68 +1,104 @@
-// components/AdBanner.jsx - Reusable Google AdSense Component
+"use client";
+import { useEffect, useContext, useRef } from "react";
+import { ThemeContext } from '@/context/ThemeContext';
 
-import { useEffect, useRef } from 'react';
-import { pushAd, getAdConfig } from '../lib/googleads';
-
-const AdBanner = ({ 
-  adSlot, 
-  size = '300x300', 
-  publisherId = 'ca-pub-xxxxxxxxxx', // Replace with your publisher ID
-  className = '',
-  responsive = false 
-}) => {
-  const adRef = useRef(null);
-  const adConfig = getAdConfig(size);
+export default function AdBanner({ adSlot }) {
+  const { isDarkMode } = useContext(ThemeContext);
+  const desktopAdRef = useRef(null);
+  const mobileAdRef = useRef(null);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    // Ensure we're in the browser environment
-    if (typeof window === 'undefined') return;
-
-    // Push the ad to Google AdSense
-    const timer = setTimeout(() => {
-      pushAd();
-    }, 5000);
-
-    return () => clearTimeout(timer);
+    // Prevent multiple initializations
+    if (isInitialized.current) return;
+        
+    try {
+      if (typeof window !== "undefined") {
+        const desktopAd = desktopAdRef.current;
+        const mobileAd = mobileAdRef.current;
+        
+        // Check if either ad element exists and hasn't been processed
+        const desktopNotProcessed = desktopAd && !desktopAd.getAttribute('data-adsbygoogle-status');
+        const mobileNotProcessed = mobileAd && !mobileAd.getAttribute('data-adsbygoogle-status');
+        
+        if (desktopNotProcessed || mobileNotProcessed) {
+          // Mark as initialized to prevent duplicate calls
+          isInitialized.current = true;
+                    
+          // Small delay to ensure DOM is ready
+          setTimeout(() => {
+            try {
+              // Push for desktop ad if it exists and not processed
+              if (desktopNotProcessed) {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+              }
+              
+              // Push for mobile ad if it exists and not processed
+              if (mobileNotProcessed) {
+                (window.adsbygoogle = window.adsbygoogle || []).push({});
+              }
+            } catch (e) {
+              console.error("AdSense push error", e);
+              // Reset flag on error to allow retry
+              isInitialized.current = false;
+            }
+          }, 100);
+        }
+      }
+    } catch (e) {
+      console.error("AdSense error", e);
+      isInitialized.current = false;
+    }
   }, []);
 
-  // Handle responsive ads
-  const getDataAdFormat = () => {
-    if (responsive || size === 'responsive') {
-      return 'auto';
-    }
-    return undefined;
-  };
-
-  const getDataFullWidthResponsive = () => {
-    if (responsive || size === 'responsive') {
-      return 'true';
-    }
-    return undefined;
+  const themeClasses = {
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
+    gradientBg: isDarkMode ? 'from-slate-800 to-slate-900' : 'from-gray-50 to-gray-100',
+    text: isDarkMode ? 'text-slate-300' : 'text-gray-500',
   };
 
   return (
-    <div 
-      className={`ad-container ${className}`}
-      style={{
-        textAlign: 'center',
-        margin: '10px 0',
-        ...(!responsive && size !== 'responsive' ? adConfig.style : {})
-      }}
-    >
-      <ins
-        ref={adRef}
-        className="adsbygoogle"
-        style={{
-          display: 'inline-block',
-          ...adConfig.style
-        }}
-        data-ad-client={publisherId}
-        data-ad-slot={adSlot}
-        data-ad-format={getDataAdFormat()}
-        data-full-width-responsive={getDataFullWidthResponsive()}
-      />
+    <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}>
+      <div className={`relative flex justify-center items-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
+        <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${
+          isDarkMode
+            ? "bg-slate-800 text-slate-300 border-slate-700"
+            : "bg-gray-50 text-gray-600 border-gray-200"
+        }`}>
+          📢 Sponsored
+        </div>
+        
+        {/* Desktop Ad - Fixed size for better compatibility */}
+        <div className="hidden md:block w-full">
+          <ins
+            ref={desktopAdRef}
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={adSlot}
+            data-ad-format="rectangle"
+            data-full-width-responsive="false"
+          />
+        </div>
+        
+        {/* Mobile Ad - Responsive */}
+        <div className="block md:hidden w-full">
+          <ins
+            ref={mobileAdRef}
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={adSlot}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        </div>
+      </div>
+      
+      <div className="p-6 text-center text-sm text-gray-500">
+        Advertisement
+      </div>
     </div>
   );
-};
-
-export default AdBanner;
+}

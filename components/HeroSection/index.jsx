@@ -1,68 +1,52 @@
-"use client";
+'use client';
 
-import React from "react";
-import Script from "next/script";
-import ProfileCard from "@/components/HeroSection/profileCard";
-import BadgesSection from "./BadgesSection";
-import RewardsSection from "./RewardsSection";
-import IncompleteBadges from "./IncompleteBadges";
-import ProgressGraph from "./ProgressGraph";
-import Facilitator_section from "./Facilitator_section";
-import Total_progress from "./Total_progress";
-import CompletedLabsSection from "./CompletedLabsSection";
-import AdBanner from "../AdBanner";
+import React from 'react';
+import ProfileCard from '@/components/HeroSection/profileCard';
+import BadgesSection from './BadgesSection';
+import RewardsSection from './RewardsSection';
+import IncompleteBadges from './IncompleteBadges';
+import ProgressGraph from './ProgressGraph';
+import Facilitator_section from './Facilitator_section';
+import Total_progress from './Total_progress';
+import CompletedLabsSection from './CompletedLabsSection';
+import AdBanner from '../AdBanner';
 
-export default function HeroSection({
-  profileData,
-  IncompleteBadges: incompleteBadgesProp,
-  isDarkMode = false,
-}) {
+export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp, isDarkMode = false  }) {
   const user = profileData?.userDetails;
   const completed_totalPoints = profileData?.completed_totalPoints;
 
   return (
-    <div
-      className={`min-h-screen ${
-        isDarkMode ? "bg-slate-950" : "bg-blue-50"
-      } py-5 px-4 sm:px-6 lg:px-8 font-inter transition-colors duration-300`}
-    >
+    <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950' : 'bg-blue-50'} py-5 px-4 sm:px-6 lg:px-8 font-inter transition-colors duration-300`}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         .font-inter { font-family: 'Inter', sans-serif; }
       `}</style>
-
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Left Column */}
         <div className="space-y-6 flex flex-col">
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
-          <AdBanner 
-            adSlot="1818726897d" 
-            size="300x300"
-            className="mx-auto my-8"
-          />
+          <AdBanner adSlot={1818726897}/>
         </div>
 
-        {/* Right Column */}
-        <div className="md:col-span-2 space-y-8">
+        {/* Right Column (2/3rds width on md and up) */}
+        <div className="md:col-span-2 space-y-8"> {/* Added space-y for vertical spacing between sections */}
           <Facilitator_section />
-          <AdBanner 
-            adSlot="7539641648" 
-            size="300x300"
-            className="mx-auto my-8"
-          />
+          <AdBanner  adSlot={7539641648}/>
           <BadgesSection />
+          {/* Moved CompletedLabsSection here */}
         </div>
       </div>
 
-      {/* Full width sections */}
+      {/* These sections will remain full max-w-7xl width, outside the grid */}
       <div className="mt-10 max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
-        <CompletedLabsSection />
+        <CompletedLabsSection /> 
       </div>
       <div className="mt-10 max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
         <RewardsSection />
       </div>
+
       <div className="mt-10 max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
         <IncompleteBadges />
       </div>
