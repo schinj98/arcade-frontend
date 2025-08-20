@@ -10,14 +10,14 @@ export default function AdBanner({ adSlot }) {
   useEffect(() => {
     // Prevent multiple initializations
     if (isInitialized.current) return;
-    
+        
     try {
       if (typeof window !== "undefined" && adRef.current) {
         // Check if this specific ad element is already processed
         if (!adRef.current.getAttribute('data-adsbygoogle-status')) {
           // Mark as initialized to prevent duplicate calls
           isInitialized.current = true;
-          
+                    
           // Small delay to ensure DOM is ready
           setTimeout(() => {
             try {
@@ -34,7 +34,7 @@ export default function AdBanner({ adSlot }) {
       console.error("AdSense error", e);
       isInitialized.current = false;
     }
-  }, []); // Remove adSlot dependency to prevent re-initialization
+  }, []);
 
   const themeClasses = {
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white/95',
@@ -45,23 +45,41 @@ export default function AdBanner({ adSlot }) {
 
   return (
     <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${themeClasses.cardBg} border ${themeClasses.border}`}>
-      <div className={`relative min-h-[250px] max-h-[400px] flex justify-center items-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
-        <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border ${
+      <div className={`relative flex justify-center items-center p-4 bg-gradient-to-br ${themeClasses.gradientBg}`}>
+        <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${
           isDarkMode
             ? "bg-slate-800 text-slate-300 border-slate-700"
             : "bg-gray-50 text-gray-600 border-gray-200"
         }`}>
           📢 Sponsored
         </div>
-        <ins
-          ref={adRef}
-          className="adsbygoogle"
-          style={{ display: "block", width: "100%", height: "100%" }}
-          data-ad-client="ca-pub-5183171666938196"
-          data-ad-slot={adSlot}
-          data-full-width-responsive="true"
-        />
+        
+        {/* Desktop Ad - Fixed size for better compatibility */}
+        <div className="hidden md:block w-full">
+          <ins
+            ref={adRef}
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={adSlot}
+            data-ad-format="rectangle"
+            data-full-width-responsive="false"
+          />
+        </div>
+        
+        {/* Mobile Ad - Responsive */}
+        <div className="block md:hidden w-full">
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-5183171666938196"
+            data-ad-slot={adSlot}
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        </div>
       </div>
+      
       <div className="p-6 text-center text-sm text-gray-500">
         Advertisement
       </div>
