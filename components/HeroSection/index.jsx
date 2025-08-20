@@ -37,15 +37,7 @@ export default function HeroSection({
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
-
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot="1818726897"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
+          <AdBanner adSlot="1818726897" />
           <Script id="adsbygoogle-init" strategy="afterInteractive">
             {`(adsbygoogle = window.adsbygoogle || []).push({});`}
           </Script>
@@ -54,14 +46,7 @@ export default function HeroSection({
         {/* Right Column */}
         <div className="md:col-span-2 space-y-8">
           <Facilitator_section />
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-5183171666938196"
-            data-ad-slot="7539641648"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
+          <AdBanner adSlot="7539641648" />
           <BadgesSection />
         </div>
       </div>
