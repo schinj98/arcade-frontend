@@ -30,11 +30,11 @@ export default function RewardsSection() {
   };
 
   const tiers = [
-    { name: 'Novice', points: 20, image: tierImages.Novice, color: 'from-green-400 to-emerald-500', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
-    { name: 'Trooper', points: 40, image: tierImages.Trooper, color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
+    { name: 'Novice', points: 25, image: tierImages.Novice, color: 'from-green-400 to-emerald-500', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
+    { name: 'Trooper', points: 45, image: tierImages.Trooper, color: 'from-blue-400 to-indigo-500', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' },
     { name: 'Ranger', points: 65, image: tierImages.Ranger, color: 'from-purple-400 to-pink-500', bgColor: 'bg-purple-50', borderColor: 'border-purple-200' },
     { name: 'Champion', points: 75, image: tierImages.Champion, color: 'from-orange-400 to-red-500', bgColor: 'bg-orange-50', borderColor: 'border-orange-200' },
-    { name: 'Legend', points: 85, image: tierImages.Legend, color: 'from-yellow-400 to-amber-500', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
+    { name: 'Legend', points: 95, image: tierImages.Legend, color: 'from-yellow-400 to-amber-500', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
   ];
 
   return (
