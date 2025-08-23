@@ -17,7 +17,7 @@ export default function ContactPage() {
   const [showSuccess, setShowSuccess] = useState(false)
 
   const themeClasses = {
-    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-blue-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white',
     text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',

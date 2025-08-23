@@ -72,12 +72,68 @@ export default function TotalProgress() {
 
   if (!user) {
     return (
-      <div className={`${themeClasses.cardBg} rounded-2xl border ${themeClasses.border} p-6 sm:p-8 text-center shadow-lg relative overflow-hidden`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 via-purple-50/10 to-pink-50/20" />
-        <div className="relative animate-pulse">
-          <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full mx-auto mb-4"></div>
-          <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-32 mx-auto mb-2"></div>
-          <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-24 mx-auto"></div>
+      <div className={`${themeClasses.cardBg} rounded-2xl shadow-lg border ${themeClasses.border} p-6 w-full max-w-sm mx-auto relative overflow-hidden`}>
+        {/* Background Effects */}
+        <div className={`absolute inset-0 ${isDarkMode ? 'bg-gradient-to-br from-slate-900/40 to-slate-800/20' : 'bg-white/0'}`} />
+
+        {/* Floating Particles */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400/20 rounded-full animate-pulse"
+              style={{
+                left: `${20 + i * 12}%`,
+                top: `${10 + (i % 3) * 30}%`,
+                animationDelay: `${i * 0.6}s`,
+                animationDuration: `${2 + i * 0.5}s`
+              }}
+            />
+          ))}
+        </div>
+
+        <div className="relative z-10 animate-pulse">
+          {/* Header Skeleton */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg"></div>
+              <div>
+                <div className="h-5 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-28 mb-2"></div>
+                <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-32"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Skeleton */}
+          <div className="space-y-4">
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="relative overflow-hidden rounded-xl p-4 border-2 border-transparent">
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 bg-gradient-to-r from-gray-200 to-gray-300 rounded-xl"></div>
+                    <div className="flex-1">
+                      <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-24 mb-2"></div>
+                      <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-32"></div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-16 mb-2"></div>
+                    {/* Progress Indicator Skeleton */}
+                    <div className="flex justify-end">
+                      <div className="flex space-x-1">
+                        {[...Array(5)].map((_, i) => (
+                          <div
+                            key={i}
+                            className="bg-gradient-to-r from-gray-200 to-gray-300 w-1 h-2 rounded-full"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

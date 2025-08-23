@@ -35,15 +35,15 @@ export default function BadgesSection() {
   }, []);
 
   const tiers = [
-    { name: 'Arcade Novice', current: completed_total_points, total: 20, icon: Target },
-    { name: 'Arcade Trooper', current: completed_total_points, total: 40, icon: Star },
+    { name: 'Arcade Novice', current: completed_total_points, total: 25, icon: Target },
+    { name: 'Arcade Trooper', current: completed_total_points, total: 45, icon: Star },
     { name: 'Arcade Ranger', current: completed_total_points, total: 65, icon: Flame },
     { name: 'Arcade Champion', current: completed_total_points, total: 75, icon: Trophy },
-    { name: 'Arcade Legend', current: completed_total_points, total: 85, icon: Crown },
+    { name: 'Arcade Legend', current: completed_total_points, total: 95, icon: Crown },
   ];
 
   const totalPoints = completed_total_points;
-  const maxPoints = 85;
+  const maxPoints = 95;
   const overallPercentage = maxPoints > 0 ? Math.min((totalPoints / maxPoints) * 100, 100) : 0;
 
   const currentTierIndex = tiers.findIndex(tier => tier.current < tier.total);

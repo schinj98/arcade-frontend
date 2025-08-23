@@ -36,7 +36,7 @@ function ProfileUrlInputSection() {
   const router = useRouter();
 
   const themeClasses = {
-    bg: isDarkMode ? 'bg-slate-950' : 'bg-gray-50',
+    bg: isDarkMode ? 'bg-slate-950' : 'bg-blue-50',
     cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white',
     text: isDarkMode ? 'text-slate-100' : 'text-gray-900',
     textSecondary: isDarkMode ? 'text-slate-300' : 'text-gray-600',
@@ -177,7 +177,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Arcade Points Calculator | Personalized Score Tracker</title>
+        <title>Arcade Points Calculator | Check arcade facilitator points instantly | live</title>
         <meta name="description" content="Calculate and Cloud Arcade Points using our accurate and user-friendly platform. Checkout the Swags you're Eligible for. Monitor your Google Cloud Arcade journey in real-time. Track points, badges, and swag eligibility. Get personalized insights, progress analytics, and achievement recommendations to accelerate your cloud certification path." />
         <meta name="keywords" content="arcade calculator, arcade profile, cloud skill badge tracker, facilitator Points calculate, calculate arcade points, learning tracker" />
         <meta property="og:type" content="website" />

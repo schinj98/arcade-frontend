@@ -65,7 +65,7 @@ export default function DashboardPage() {
     searchBg: isDarkMode ? "bg-slate-800" : "bg-white",
     searchBorder: isDarkMode ? "border-slate-700" : "border-gray-300",
     buttonPrimary: isDarkMode ? "bg-blue-600 hover:bg-blue-700" : "bg-blue-500 hover:bg-blue-600",
-    buttonSecondary: isDarkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-gray-200 hover:bg-gray-300",
+    buttonSecondary: isDarkMode ? "bg-slate-700 hover:bg-slate-600" : "bg-gray-300  hover:bg-gray-300",
     statsBg: isDarkMode ? "bg-slate-800/60" : "bg-white/80",
     skeletonBg: isDarkMode ? "bg-slate-800/60" : "bg-gray-300",
   };
@@ -386,13 +386,13 @@ export default function DashboardPage() {
                     <button
                       onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className={`flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all duration-200 ${
+                      className={`flex items-center gap-1  sm:gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all duration-200 ${
                         currentPage === 1
                           ? `${themeClasses.muted} cursor-not-allowed opacity-50`
                           : `${themeClasses.buttonSecondary} text-white hover:scale-105 shadow-lg hover:shadow-xl`
                       }`}
                     >
-                      <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <ChevronLeft className="w-4 h-4 cursor-pointer sm:w-5 sm:h-5" />
                       <span className="hidden xs:inline">Previous</span>
                     </button>
 
@@ -414,7 +414,7 @@ export default function DashboardPage() {
                           <button
                             key={pageNum}
                             onClick={() => setCurrentPage(pageNum)}
-                            className={`w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
+                            className={`w-9 h-9 sm:w-12 sm:h-12 cursor-pointer rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
                               currentPage === pageNum
                                 ? `${themeClasses.buttonPrimary} text-white shadow-lg scale-105 sm:scale-110`
                                 : `${themeClasses.buttonSecondary} hover:scale-105`
@@ -430,7 +430,7 @@ export default function DashboardPage() {
                     <button
                       onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
-                      className={`flex items-center gap-1 sm:gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all duration-200 ${
+                      className={`flex items-center gap-1 cursor-pointer sm:gap-2 px-3 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl font-medium text-sm sm:text-base transition-all duration-200 ${
                         currentPage === totalPages
                           ? `${themeClasses.muted} cursor-not-allowed opacity-50`
                           : `${themeClasses.buttonSecondary} text-white hover:scale-105 shadow-lg hover:shadow-xl`
