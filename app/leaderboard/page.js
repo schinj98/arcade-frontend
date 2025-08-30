@@ -20,7 +20,7 @@ export default function DashboardPage() {
       ...(apiKey && { "X-API-KEY": apiKey })
     };
   
-    fetch("https://arcade-backend-4oc3.onrender.com/api/v1/leaderboard", {
+    fetch("https://arcade-backend-7c9v.onrender.com/api/v1/leaderboard", {
       method: "GET",
       headers,
       credentials: "include"
