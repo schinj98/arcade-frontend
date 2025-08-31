@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import {React, useContext} from 'react';
 import ProfileCard from '@/components/HeroSection/profileCard';
 import BadgesSection from './BadgesSection';
 import RewardsSection from './RewardsSection';
@@ -10,10 +10,21 @@ import Facilitator_section from './Facilitator_section';
 import Total_progress from './Total_progress';
 import CompletedLabsSection from './CompletedLabsSection';
 import AdBanner from '../AdBanner';
+import { ThemeContext } from '@/context/ThemeContext'; 
 
-export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp, isDarkMode = false  }) {
+export default function HeroSection({ profileData, IncompleteBadges: incompleteBadgesProp}) {
   const user = profileData?.userDetails;
+  const { isDarkMode } = useContext(ThemeContext);
   const completed_totalPoints = profileData?.completed_totalPoints;
+
+  const adThemeClasses = {
+    cardBg: isDarkMode ? 'bg-slate-900/95' : 'bg-white',
+    border: isDarkMode ? 'border-slate-700/50' : 'border-gray-200',
+    topBg: isDarkMode ? 'bg-gradient-to-br from-slate-800 to-slate-900' : 'bg-gradient-to-br from-gray-50 to-gray-100',
+    labelBg: isDarkMode ? 'bg-slate-800 text-slate-300 border-slate-700' : 'bg-gray-50 text-gray-600 border-gray-200',
+    footerText: isDarkMode ? 'text-slate-400' : 'text-gray-500'
+  };
+  
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950' : 'bg-blue-50'} py-5 px-4 sm:px-6 lg:px-8 font-inter transition-colors duration-300`}>
@@ -27,7 +38,25 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <ProfileCard />
           <Total_progress />
           <ProgressGraph />
-          <AdBanner adSlot={1818726897}/>
+          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+            {/* Top section with Sponsored label */}
+            <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
+              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
+                📢 Sponsored
+              </div>
+
+              {/* Impact iframe ad */}
+              <iframe id="iframe_937" src="//a.impactradius-go.com/gen-ad-code/3880074/2331419/555/" width="300" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+            </div>
+
+            {/* Footer text */}
+            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
+              Advertisement
+            </div>
+          </div>
+
+
+
         </div>
 
         {/* Right Column (2/3rds width on md and up) */}

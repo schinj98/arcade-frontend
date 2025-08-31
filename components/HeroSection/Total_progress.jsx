@@ -5,7 +5,7 @@ import {
   ChevronRight, Activity, Users, Shield
 } from 'lucide-react';
 import { ProfileContext } from '@/context/ProfileContext';
-import { ThemeContext } from '@/context/ThemeContext'; // adjust path if needed
+import { ThemeContext } from '@/context/ThemeContext'; 
 
 export default function TotalProgress() {
   const { profileData } = useContext(ProfileContext);
