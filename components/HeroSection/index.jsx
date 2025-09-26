@@ -37,6 +37,22 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
         <div className="space-y-6 flex flex-col">
           <ProfileCard />
           <Total_progress />
+          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+            {/* Top section with Sponsored label */}
+            <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
+              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
+                📢 Sponsored
+              </div>
+
+              {/* Impact iframe ad */}
+              <iframe id="iframe_895" src="//a.impactradius-go.com/gen-ad-code/2669430/2784319/13624/" width="640" height="100" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+            </div>
+
+            {/* Footer text */}
+            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
+              Advertisement
+            </div>
+          </div>
           <ProgressGraph />
           <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
             {/* Top section with Sponsored label */}
