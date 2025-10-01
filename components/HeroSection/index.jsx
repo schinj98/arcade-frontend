@@ -89,7 +89,7 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
               </div>
 
               {/* Impact iframe ad */}
-              <iframe id="iframe_145" src="//a.impactradius-go.com/gen-ad-code/2669430/866714/4464/" width="250" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              <iframe id="iframe_728" src="//a.impactradius-go.com/gen-ad-code/2669430/866721/4464/" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
             </div>
 
             {/* Footer text */}
