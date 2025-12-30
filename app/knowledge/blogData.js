@@ -49,7 +49,7 @@ export const blogPosts = [
         </ul>
         <h2>📌 Final Words</h2>
         <p>Whether you're a student, cloud enthusiast, or developer, ArcadeTrack simplifies the way you <strong>track and calculate Google Cloud Arcade Points</strong>. Start tracking now and never miss out on rewards!</p>
-        <p><em>Built with ❤️ by a developer who’s walked the same journey as you!</em></p>      
+        <p><em>Built with ❤️ by a developer who’s walked the same journey as you! </em></p>
   `
     },
     // add more posts 

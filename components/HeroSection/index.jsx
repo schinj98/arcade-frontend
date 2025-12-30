@@ -64,6 +64,7 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
               {/* Impact iframe ad */}
               <iframe id="iframe_937" src="//a.impactradius-go.com/gen-ad-code/3880074/2331419/555/" width="300" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
             </div>
+            
 
             {/* Footer text */}
             <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
@@ -90,6 +91,23 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
 
               {/* Impact iframe ad */}
               <iframe id="iframe_728" src="//a.impactradius-go.com/gen-ad-code/2669430/866721/4464/" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+            </div>
+
+            {/* Footer text */}
+            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
+              Advertisement
+            </div>
+          </div>
+          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+            {/* Top section with Sponsored label */}
+            <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
+              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
+                📢 Sponsored
+              </div>
+
+              {/* Impact iframe ad */}
+              {/* <iframe id="iframe_728" src="//a.impactradius-go.com/gen-ad-code/2669430/866721/4464/" width="728" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe> */}
+              <iframe id="iframe_784" src="//a.impactradius-go.com/gen-ad-code/2669430/1385120/15393/" width="468" height="60" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
             </div>
 
             {/* Footer text */}
