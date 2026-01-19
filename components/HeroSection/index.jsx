@@ -62,7 +62,8 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
               </div>
 
               {/* Impact iframe ad */}
-              <iframe id="iframe_937" src="//a.impactradius-go.com/gen-ad-code/3880074/2331419/555/" width="300" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              
+              <iframe id="iframe_318" src="//a.impactradius-go.com/gen-ad-code/3880074/2331427/555/?u=https%3A%2F%2Fwww.networksolutions.com%2Fhosting" width="970" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
             </div>
             
 
