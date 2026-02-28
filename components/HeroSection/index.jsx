@@ -104,56 +104,31 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <Facilitator_section />
           <AdBanner  adSlot={7539641648}/>
           <BadgesSection />
-          {/* Moved CompletedLabsSection here */}
-          <div
-            className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}
-          >
-            {/* Top section */}
+          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+            {/* Top section with Sponsored label */}
             <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
-              
-              {/* Sponsored label */}
-              <div
-                className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}
-              >
+              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
                 📢 Sponsored
               </div>
 
-              {/* Affiliate Clickable Ad */}
-              <a
-                href="https://liquidweb.i3f2.net/c/2669430/2053787/4464?adgroup=Nexcess"
-                rel="sponsored noopener noreferrer"
-                target="_blank"
-                className="w-full flex flex-col items-center justify-center text-center gap-2"
-              >
-                {/* Ad title */}
-                <h3 className="text-lg font-semibold">
-                  Nexcess – Magento Hosting
-                </h3>
-
-                {/* Optional CTA */}
-                <button className="mt-2 px-4 py-2 text-sm rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition">
-                  View Plans
-                </button>
-              </a>
-
-              {/* Impact Impression Tracking Pixel */}
-              <img
-                src="https://liquidweb.i3f2.net/i/2669430/2053787/4464"
-                height="0"
-                width="0"
-                style={{ position: "absolute", visibility: "hidden" }}
-                alt=""
-              />
+              {/* Impact iframe ad */}
+              
+              <iframe id="iframe_125" src="//a.impactradius-go.com/gen-ad-code/2669430/362715/4464/" width="970" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
             </div>
+            
 
-            {/* Footer */}
+            {/* Footer text */}
             <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
               Advertisement
             </div>
           </div>
-
+          
+          
         </div>
+        
       </div>
+
+      
 
       {/* These sections will remain full max-w-7xl width, outside the grid */}
       <div className="mt-10 max-w-7xl mx-auto px-1 sm:px-6 lg:px-8">
