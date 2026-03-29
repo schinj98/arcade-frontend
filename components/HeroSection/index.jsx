@@ -114,6 +114,41 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
               {/* Impact iframe ad */}
               
               <iframe id="iframe_125" src="//a.impactradius-go.com/gen-ad-code/2669430/362715/4464/" width="970" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              {/* Kamatera Ad Banner */}
+                <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+                  {/* Top section with Sponsored label */}
+                  <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
+                    <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
+                      📢 Sponsored
+                    </div>
+
+                    {/* Kamatera Ad */}
+                    <div className="text-center">
+                      <h3 id="3018040">
+                        <a
+                          rel="sponsored"
+                          href="https://kamatera.sjv.io/c/2669430/3018040/36439"
+                          className="text-blue-500 font-semibold hover:underline"
+                        >
+                          Kamatera - Fast Cloud Servers
+                        </a>
+                      </h3>
+                      <img
+                        height="0"
+                        width="0"
+                        src="https://imp.pxf.io/i/2669430/3018040/36439"
+                        style={{ position: 'absolute', visibility: 'hidden' }}
+                        border="0"
+                        alt=""
+                      />
+                    </div>
+                  </div>
+
+                  {/* Footer */}
+                  <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
+                    Advertisement
+                  </div>
+                </div>
             </div>
             
 
