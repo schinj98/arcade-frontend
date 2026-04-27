@@ -685,67 +685,58 @@ function DashboardContent() {
     }
   };
 
-  // ========== REPLACE THIS OLD LOADING WITH NEW FUTURISTIC LOADER ==========
-  if (!isReady || isLoading) {
-    return <FuturisticLoader isDarkMode={isDarkMode} />;
-  }
-
   return (
     <div className={`relative ${themeClasses.bg} transition-colors duration-300`}>
-      {/* Hero Section */}
+      {/* Slim loading bar at the top - non-blocking */}
+      {isLoading && (
+        <div className="fixed top-0 left-0 right-0 z-50 h-1 overflow-hidden">
+          <div
+            className="h-full w-full"
+            style={{
+              background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4)',
+              animation: 'loading-bar 1.8s ease-in-out infinite',
+            }}
+          />
+          <style>{`
+            @keyframes loading-bar {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(100%); }
+            }
+          `}</style>
+        </div>
+      )}
+
+      {/* Hero Section - always rendered so ads are always visible */}
       <HeroSection
         profileData={profileData}
         incompleteBadges={profileData?.incompleteBadges}
         isDarkMode={isDarkMode}
       />
 
-      {/* Modal if profile ID not found or data is missing */}
-      {!profileData && showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-8">
-          <div className={`absolute inset-0 ${themeClasses.cardGradient} ${themeClasses.cardBorder} backdrop-blur-md`} />
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/20 rounded-full animate-ping"></div>
-            <div className="absolute top-3/4 right-1/4 w-1 h-1 bg-blue-400/30 rounded-full animate-pulse delay-300"></div>
-            <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-purple-400/20 rounded-full animate-bounce delay-500"></div>
-          </div>
-
-          <div
-            className={`relative ${isDarkMode ? "bg-slate-900/80" : "bg-white/10"} backdrop-blur-2xl ${themeClasses.cardBorder} rounded-3xl shadow-2xl w-full max-w-lg transform transition-all duration-500 hover:scale-[1.03] hover:shadow-3xl`}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-blue-500/10 rounded-3xl"></div>
-            <div className="absolute inset-0 bg-gradient-to-tl from-purple-500/5 via-transparent to-pink-500/5 rounded-3xl"></div>
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 blur-sm animate-pulse"></div>
-
-            <div className="relative p-8 text-center">
-              <h2 className="text-3xl font-bold mb-3" style={{ color: isDarkMode ? "#e6eef8" : undefined }}>
-                Enter Your Arcade Profile
-              </h2>
-              <p className={`${isDarkMode ? "text-slate-300" : "text-white/70"} text-sm mb-8 leading-relaxed`}>
-                Connect your Google Arcade profile to get started
-              </p>
-
-              <div className="relative mb-8 group overflow-hidden">
-                <input
-                  type="text"
-                  placeholder="eg. https://www.cloudskillsboost.google/public_profiles/....."
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  className={`w-full px-5 py-4 ${themeClasses.inputBg} ${themeClasses.inputBorder} rounded-2xl ${isDarkMode ? "text-slate-100 placeholder-slate-400" : "text-gray-700 placeholder-gray-400"} focus:outline-none focus:ring-2 focus:ring-blue-400/60 focus:border-blue-400/50 transition-all duration-300 hover:bg-white/15 hover:border-white/40 text-sm`}
-                />
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none blur-sm"></div>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-transparent via-white/10 to-transparent transform -skew-x-12 -translate-x-full group-focus-within:translate-x-full transition-transform duration-700 pointer-events-none"></div>
-              </div>
-
+      {/* Compact top banner prompt - does not cover the page */}
+      {!profileData && showModal && !isLoading && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-lg px-4">
+          <div className={`relative ${isDarkMode ? "bg-slate-900/95" : "bg-white/95"} backdrop-blur-xl rounded-2xl shadow-2xl border ${isDarkMode ? "border-slate-700/50" : "border-gray-200"} p-5`}>
+            <h2 className={`text-base font-bold mb-1 ${isDarkMode ? "text-slate-100" : "text-gray-800"}`}>
+              Enter Your Arcade Profile
+            </h2>
+            <p className={`text-xs mb-3 ${isDarkMode ? "text-slate-400" : "text-gray-500"}`}>
+              Paste your Google Cloud Skills Boost public profile URL to view your progress
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="https://www.cloudskillsboost.google/public_profiles/..."
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                className={`flex-1 px-3 py-2.5 rounded-xl text-sm border focus:outline-none focus:ring-2 focus:ring-blue-500/40 ${isDarkMode ? "bg-slate-800 border-slate-700 text-slate-100 placeholder-slate-500" : "bg-gray-50 border-gray-200 text-gray-800 placeholder-gray-400"}`}
+              />
               <button
                 onClick={handleSubmit}
-                className="w-full cursor-pointer relative overflow-hidden text-white font-semibold px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-[1.02] border border-white/20 hover:border-white/30"
-                style={{
-                  background: isDarkMode ? "linear-gradient(90deg,#1e3a8a,#6d28d9)" : undefined,
-                }}
+                className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 cursor-pointer whitespace-nowrap"
               >
-                <span className="relative z-10 text-sm tracking-wide">Submit</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-600"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-2xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                View Profile
               </button>
             </div>
           </div>
