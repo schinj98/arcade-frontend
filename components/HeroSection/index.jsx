@@ -44,8 +44,11 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
                 📢 Sponsored
               </div>
 
-              {/* Impact iframe ad */}
-              <iframe id="iframe_895" src="//a.impactradius-go.com/gen-ad-code/2669430/2784319/13624/" width="640" height="100" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              {/* Site123 ad */}
+              <a rel="sponsored" href="https://site123ltd.sjv.io/c/2669430/2088282/26011" target="_top" id="2088282">
+                <img src="//a.impactradius-go.com/display-ad/26011-2088282" border="0" alt="" width="180" height="150"/>
+              </a>
+              <img height="0" width="0" src="https://imp.pxf.io/i/2669430/2088282/26011" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
             </div>
 
             {/* Footer text */}
@@ -61,9 +64,11 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
                 📢 Sponsored
               </div>
 
-              {/* Impact iframe ad */}
-              
-              <iframe id="iframe_318" src="//a.impactradius-go.com/gen-ad-code/3880074/2331427/555/?u=https%3A%2F%2Fwww.networksolutions.com%2Fhosting" width="970" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              {/* Network Solutions ad */}
+              <a rel="sponsored" href="https://network-solutions.7eer.net/c/3880074/2331412/555" target="_top" id="2331412">
+                <img src="//a.impactradius-go.com/display-ad/555-2331412" border="0" alt="" width="250" height="250"/>
+              </a>
+              <img height="0" width="0" src="https://network-solutions.7eer.net/i/3880074/2331412/555" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
             </div>
             
 
@@ -83,9 +88,11 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
                 📢 Sponsored
               </div>
 
-              {/* Impact iframe ad */}
-              
-              <iframe id="iframe_567" src="//a.impactradius-go.com/gen-ad-code/3880074/3796929/9560/" width="300" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
+              {/* Domain.com ad */}
+              <a rel="sponsored" href="https://domain.mno8.net/c/3880074/3796917/9560" target="_top" id="3796917">
+                <img src="//a.impactradius-go.com/display-ad/9560-3796917" border="0" alt="" width="250" height="250"/>
+              </a>
+              <img height="0" width="0" src="https://imp.pxf.io/i/3880074/3796917/9560" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
             </div>
             
 
@@ -105,56 +112,15 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <AdBanner  adSlot={7539641648}/>
           <BadgesSection />
           <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
-            {/* Top section with Sponsored label */}
-            <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
+            <div className="relative">
               <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
                 📢 Sponsored
               </div>
-
-              {/* Impact iframe ad */}
-              
-              <iframe id="iframe_125" src="//a.impactradius-go.com/gen-ad-code/2669430/362715/4464/" width="970" height="90" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
-              {/* Kamatera Ad Banner */}
-                <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
-                  {/* Top section with Sponsored label */}
-                  <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
-                    <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
-                      📢 Sponsored
-                    </div>
-
-                    {/* Kamatera Ad */}
-                    <div className="text-center">
-                      <h3 id="3018040">
-                        <a
-                          rel="sponsored"
-                          href="https://kamatera.sjv.io/c/2669430/3018040/36439"
-                          className="text-blue-500 font-semibold hover:underline"
-                        >
-                          Kamatera - Fast Cloud Servers
-                        </a>
-                      </h3>
-                      <img
-                        height="0"
-                        width="0"
-                        src="https://imp.pxf.io/i/2669430/3018040/36439"
-                        style={{ position: 'absolute', visibility: 'hidden' }}
-                        border="0"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-
-                  {/* Footer */}
-                  <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
-                    Advertisement
-                  </div>
-                </div>
-            </div>
-            
-
-            {/* Footer text */}
-            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
-              Advertisement
+              {/* LiquidWeb ad */}
+              <a rel="sponsored" href="https://liquidweb.i3f2.net/c/2669430/3862117/4464" target="_top" id="3862117">
+                <img src="//a.impactradius-go.com/display-ad/4464-3862117" border="0" alt="" style={{ display: 'block', width: '100%', height: 'auto' }}/>
+              </a>
+              <img height="0" width="0" src="https://liquidweb.i3f2.net/i/2669430/3862117/4464" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
             </div>
           </div>
           
