@@ -80,30 +80,25 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           
 
 
-          {/* staart  */}
+          {/* domain.com ad  */}
           <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
             {/* Top section with Sponsored label */}
             <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
               <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
-                📢 Sponsored
+                📢 Sponsored For Domain.com
               </div>
 
-              {/* Domain.com ad */}
-              <a rel="sponsored" href="https://domain.mno8.net/c/3880074/2176614/9560" target="_top" id="3796917">
-                <img src="//a.impactradius-go.com/display-ad/9560-3796917" border="0" alt="" width="250" height="250"/>
-              </a>
-              <img height="0" width="0" src="https://imp.pxf.io/i/3880074/2176614/9560" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
+              {/* Impact iframe ad */}
+
+              <iframe id="iframe_567" src="//a.impactradius-go.com/gen-ad-code/3880074/3796929/9560/" width="300" height="250" scrolling="no" frameborder="0" marginheight="0" marginwidth="0"></iframe>
             </div>
-            
+
 
             {/* Footer text */}
             <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
-              Advertisement
+              Advertisement for Domain.com
             </div>
           </div>
-
-
-
         </div>
 
         {/* Right Column (2/3rds width on md and up) */}
