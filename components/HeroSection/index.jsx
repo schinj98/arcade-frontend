@@ -89,10 +89,10 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
               </div>
 
               {/* Domain.com ad */}
-              <a rel="sponsored" href="https://domain.mno8.net/c/3880074/3796917/9560" target="_top" id="3796917">
+              <a rel="sponsored" href="https://domain.mno8.net/c/3880074/2176614/9560" target="_top" id="3796917">
                 <img src="//a.impactradius-go.com/display-ad/9560-3796917" border="0" alt="" width="250" height="250"/>
               </a>
-              <img height="0" width="0" src="https://imp.pxf.io/i/3880074/3796917/9560" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
+              <img height="0" width="0" src="https://imp.pxf.io/i/3880074/2176614/9560" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
             </div>
             
 
