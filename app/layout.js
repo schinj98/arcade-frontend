@@ -66,6 +66,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/images/logo.png" type="image/png" />
         <meta name="google-adsense-account" content="ca-pub-5183171666938196"></meta>
         <meta name="google-site-verification" content="JOyjc_CM0VPz54VOGFsxreNldPVnZVuZXJv9qIl0Vjc" />
+        <meta name='impact-site-verification' value='5627d396-77fa-4732-a02a-5248a2d99070'></meta>
         
         
         {/* Google Analytics Script */}
