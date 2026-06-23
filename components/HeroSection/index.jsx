@@ -99,18 +99,18 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <Facilitator_section />
           <AdBanner  adSlot={7539641648}/>
           <BadgesSection />
-          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
-            <div className="relative">
-              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
-                📢 Sponsored
-              </div>
+          {/* <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}> */}
+            {/* <div className="relative"> */}
+              {/* <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}> */}
+                {/* 📢 Sponsored */}
+              {/* </div> */}
               {/* LiquidWeb ad */}
-              <a rel="sponsored" href="https://liquidweb.i3f2.net/c/2669430/3862117/4464" target="_top" id="3862117">
-                <img src="//a.impactradius-go.com/display-ad/4464-3862117" border="0" alt="" style={{ display: 'block', width: '100%', height: 'auto' }}/>
-              </a>
-              <img height="0" width="0" src="https://liquidweb.i3f2.net/i/2669430/3862117/4464" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
-            </div>
-          </div>
+              {/* <a rel="sponsored" href="https://liquidweb.i3f2.net/c/2669430/3862117/4464" target="_top" id="3862117"> */}
+                {/* <img src="//a.impactradius-go.com/display-ad/4464-3862117" border="0" alt="" style={{ display: 'block', width: '100%', height: 'auto' }}/> */}
+              {/* </a> */}
+              {/* <img height="0" width="0" src="https://liquidweb.i3f2.net/i/2669430/3862117/4464" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/> */}
+            {/* </div> */}
+          {/* </div> */}
           
           
         </div>
