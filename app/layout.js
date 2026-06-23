@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import Script from 'next/script';
 import { ProfileProvider } from "@/context/ProfileContext";
 import { ThemeProvider } from '../context/ThemeContext';
+import { AuthProvider } from '../context/AuthContext';
 
 
 export const metadata = {
@@ -95,6 +96,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="bg-blue-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
         <ThemeProvider>
+          <AuthProvider>
           <ProfileProvider>
             <Navbar />
             {/* <CountdownNotificationBar /> */}
@@ -103,6 +105,7 @@ export default function RootLayout({ children }) {
             </main>
             <Footer />
           </ProfileProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ProfileContext } from "/context/ProfileContext"
 import { ThemeContext } from '@/context/ThemeContext'
+import { useAuth } from '@/context/AuthContext'
 import ThemeToggleButton from '@/components/ThemeToggleButton';
 
 import {
@@ -19,8 +20,9 @@ export default function Navbar() {
   const pathname = usePathname()
   const { profileData } = useContext(ProfileContext)
   const { isDarkMode } = useContext(ThemeContext)
+  const { user, logout } = useAuth()
   const profileImage = profileData?.userDetails?.profileImage
-  const profileName = profileData?.userDetails?.fullName || profileData?.userDetails?.name || "Guest"
+  const profileName = profileData?.userDetails?.fullName || profileData?.userDetails?.name || (user ? user.first_name : "Guest")
   const dropdownRef = useRef()
 
   const themeClasses = {
@@ -48,9 +50,8 @@ export default function Navbar() {
   ]
 
   const handleLogout = () => {
-    localStorage.clear()
     sessionStorage.clear()
-    window.location.href = "/"
+    logout()
   }
 
   useEffect(() => {
@@ -184,9 +185,49 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
+            ) : user ? (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsDropdownOpen(prev => !prev)}
+                  className="relative group focus:outline-none cursor-pointer"
+                >
+                  <div className={`w-10 h-10 rounded-xl border-2 border-white shadow-md hover:shadow-[0_6px_16px_rgba(0,0,0,0.35)] transition-all duration-200 overflow-hidden flex items-center justify-center font-bold text-sm text-white`}
+                    style={{ backgroundColor: `hsl(${user.first_name.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 360}, 65%, 50%)` }}>
+                    {user.first_name[0].toUpperCase()}
+                  </div>
+                  <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"></div>
+                </button>
+                {isDropdownOpen && (
+                  <div className={`${themeClasses.cardBg} border ${themeClasses.borderLight} rounded-xl shadow-xl z-50 p-4 text-sm space-y-3 w-56 absolute right-0 mt-3`}>
+                    <div>
+                      <div className={`font-medium ${themeClasses.text}`}>{user.first_name}</div>
+                      <div className={`text-xs truncate ${themeClasses.textMuted}`}>{user.email}</div>
+                    </div>
+                    <hr className={themeClasses.borderLight} />
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 w-full text-left px-3 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-medium transition-all duration-200 cursor-pointer"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
-              <div className={`w-10 h-10 flex items-center justify-center rounded-xl border-2 border-white shadow-md ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
-                <User size={24} className={themeClasses.textMuted} />
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/auth/login"
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${themeClasses.textSecondary} ${themeClasses.hoverBg}`}
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/auth/register"
+                  className="px-4 py-2 rounded-xl text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200"
+                >
+                  Register
+                </Link>
               </div>
             )}
           </div>
@@ -282,12 +323,39 @@ export default function Navbar() {
                   )}
                 </div>
               </div>
-            ) : (
-              <div className="flex items-center gap-3 px-4 mt-4">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDarkMode ? 'bg-slate-800' : 'bg-gray-100'}`}>
-                  <User size={36} className={themeClasses.textMuted} />
+            ) : user ? (
+              <div className="flex items-center justify-between px-4 pb-4 mt-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm text-white"
+                    style={{ backgroundColor: `hsl(${user.first_name.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % 360}, 65%, 50%)` }}>
+                    {user.first_name[0].toUpperCase()}
+                  </div>
+                  <span className={`text-sm font-medium ${themeClasses.text}`}>{user.first_name}</span>
                 </div>
-                <span className={`text-sm font-medium ${themeClasses.textSecondary}`}>Guest</span>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm rounded-lg transition"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-4 pb-4 mt-4">
+                <Link
+                  href="/auth/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`flex-1 text-center px-4 py-2.5 rounded-xl text-sm font-medium border transition-all duration-200 ${themeClasses.textSecondary} ${isDarkMode ? 'border-slate-700' : 'border-gray-200'} ${themeClasses.hoverBg}`}
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/auth/register"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex-1 text-center px-4 py-2.5 rounded-xl text-sm font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200"
+                >
+                  Register
+                </Link>
               </div>
             )}
           </div>
