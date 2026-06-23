@@ -37,25 +37,25 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
         <div className="space-y-6 flex flex-col">
           <ProfileCard />
           <Total_progress />
-          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+          {/* <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}> */}
             {/* Top section with Sponsored label */}
-            <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
-              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
-                📢 Sponsored
-              </div>
+            {/* <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}> */}
+              {/* <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}> */}
+                {/* 📢 Sponsored */}
+              {/* </div> */}
 
               {/* Site123 ad */}
-              <a rel="sponsored" href="https://site123ltd.sjv.io/c/2669430/2088282/26011" target="_top" id="2088282">
-                <img src="//a.impactradius-go.com/display-ad/26011-2088282" border="0" alt="" width="180" height="150"/>
-              </a>
-              <img height="0" width="0" src="https://imp.pxf.io/i/2669430/2088282/26011" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
-            </div>
+              {/* <a rel="sponsored" href="https://site123ltd.sjv.io/c/2669430/2088282/26011" target="_top" id="2088282"> */}
+                {/* <img src="//a.impactradius-go.com/display-ad/26011-2088282" border="0" alt="" width="180" height="150"/> */}
+              {/* </a> */}
+              {/* <img height="0" width="0" src="https://imp.pxf.io/i/2669430/2088282/26011" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/> */}
+            {/* </div> */}
 
             {/* Footer text */}
-            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
-              Advertisement
-            </div>
-          </div>
+            {/* <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}> */}
+              {/* Advertisement */}
+            {/* </div> */}
+          {/* </div> */}
           <ProgressGraph />
           <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
             {/* Top section with Sponsored label */}
