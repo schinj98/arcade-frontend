@@ -99,6 +99,22 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
           <Facilitator_section />
           <AdBanner  adSlot={7539641648}/>
           <BadgesSection />
+
+          {/* Bluehost affiliate ad */}
+          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+            <div className={`relative flex justify-center items-center p-4 pt-10 ${adThemeClasses.topBg}`}>
+              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
+                📢 Sponsored
+              </div>
+              <a rel="sponsored" href="https://bluehost.sjv.io/c/3880074/840619/11352" target="_top" id="840619">
+                <img src="//a.impactradius-go.com/display-ad/11352-840619" border="0" alt="Bluehost" width="512" height="128" style={{ maxWidth: '100%', height: 'auto' }}/>
+              </a>
+              <img height="0" width="0" src="https://imp.pxf.io/i/3880074/840619/11352" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
+            </div>
+            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
+              Advertisement
+            </div>
+          </div>
           {/* <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}> */}
             {/* <div className="relative"> */}
               {/* <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}> */}
