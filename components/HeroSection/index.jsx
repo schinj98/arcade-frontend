@@ -92,6 +92,22 @@ export default function HeroSection({ profileData, IncompleteBadges: incompleteB
               </a>
               <img height="0" width="0" src="https://imp.pxf.io/i/3880074/2176614/9560" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
           </div>
+
+          {/* Scala Hosting affiliate ad */}
+          <div className={`rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col ${adThemeClasses.cardBg} border ${adThemeClasses.border}`}>
+            <div className={`relative flex justify-center items-center p-4 ${adThemeClasses.topBg}`}>
+              <div className={`absolute top-3 left-3 px-3 py-1.5 text-xs font-medium rounded-lg border z-10 ${adThemeClasses.labelBg}`}>
+                📢 Sponsored
+              </div>
+              <a rel="sponsored" href="https://imp.scalahosting.com/c/2669430/1793413/18135" target="_top" id="1793413">
+                <img src="//a.impactradius-go.com/display-ad/18135-1793413" border="0" alt="Scala Hosting" width="200" height="200"/>
+              </a>
+              <img height="0" width="0" src="https://imp.pxf.io/i/2669430/1793413/18135" style={{ position: 'absolute', visibility: 'hidden' }} border="0" alt=""/>
+            </div>
+            <div className={`p-4 text-center text-sm ${adThemeClasses.footerText}`}>
+              Advertisement
+            </div>
+          </div>
         </div>
 
         {/* Right Column (2/3rds width on md and up) */}
